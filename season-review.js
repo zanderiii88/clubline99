@@ -1,9 +1,9 @@
-import {DIVISIONS,divisionOf,divisionLeague,divisionTable,seasonReady,seasonPrize} from './divisions.js?v=1.62.2';
-import {assessSeason} from './season-board.js?v=1.62.2';
-import {CUP_ID,CUP_ROUNDS} from './league-cup.js?v=1.62.2';
-import {FA_ID,FA_ROUNDS} from './fa-cup.js?v=1.62.2';
-import {CL_ID,clSlots,clQualified,clFixtures,clGroupTable} from './champions-league.js?v=1.62.2';
-import {UC_ID,ucQualified} from './uefa-cup.js?v=1.62.2';
+import {DIVISIONS,divisionOf,divisionLeague,divisionTable,seasonReady,seasonPrize} from './divisions.js?v=1.65.0';
+import {assessSeason} from './season-board.js?v=1.65.0';
+import {CUP_ID,CUP_ROUNDS} from './league-cup.js?v=1.65.0';
+import {FA_ID,FA_ROUNDS} from './fa-cup.js?v=1.65.0';
+import {CL_ID,clSlots,clQualified,clFixtures,clGroupTable} from './champions-league.js?v=1.65.0';
+import {UC_ID,ucQualified} from './uefa-cup.js?v=1.65.0';
 export function upcomingFormats(year){return {championsLeague:year<1999?'24 clubs · six groups · six group winners and two best runners-up reach the quarter-finals.':year<2003?'32 clubs · eight first-stage groups · four second-stage groups · quarter-finals.':'32 clubs · eight groups · round of 16 replaces the second group stage.',uefaCup:year<1999?'64 clubs · six knockout rounds · single neutral final.':'96 first-round clubs · eight CL third-place transfers join the third round · single neutral final.',changes:[...(year===1999?[{competition:CL_ID,text:'Champions League expands to 32 clubs and introduces a second group stage.'},{competition:UC_ID,text:'UEFA Cup expands to 96 first-round clubs. Eight Champions League third-place clubs join round three; domestic cup winners enter the UEFA Cup.'}]:[]),...(year===2003?[{competition:CL_ID,text:'Champions League replaces the second group stage with a two-legged round of 16.'}]:[])]};}
 function cupOutcome(c,cup,id){
  if(!cup||cup.status==='deferred')return 'Not played this season';

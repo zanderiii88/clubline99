@@ -13,6 +13,6 @@ export function fixedSiteError(club,layout){
  for(const side of sides)if((side==='W'&&20-d<r.x)||(side==='E'&&52+d>r.x+r.w)||(side==='N'&&20-d<r.y)||(side==='S'&&40+d>r.y+r.d))return 'This stand or roof extends beyond this ground’s fixed buildable site. Choose a smaller option.';
  }return null;
 }
-export function surroundingsLayer(site,layer,evening=false){const [x,y,w,h]=site.box;return `<image data-surroundings-layer="${layer}" href="assets/surroundings/${site.assetStem||Object.keys(FIXED_SURROUNDINGS).find(id=>FIXED_SURROUNDINGS[id]===site)}-${layer}.${site.assetExtension||'webp'}?v=1.62.2" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" ${evening?'style="filter:brightness(.60) saturate(.9)"':''}/>`;}
+export function surroundingsLayer(site,layer,evening=false){const [x,y,w,h]=site.box;return `<image data-surroundings-layer="${layer}" href="assets/surroundings/${site.assetStem||Object.keys(FIXED_SURROUNDINGS).find(id=>FIXED_SURROUNDINGS[id]===site)}-${layer}.${site.assetExtension||'webp'}?v=1.65.0" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" ${evening?'style="filter:brightness(.60) saturate(.9)"':''}/>`;}
 
 export function registerEuropeanSites(clubs){for(const c of clubs)EURO_SITES.set(c.id,{...FIXED_SURROUNDINGS.C06,id:'fixed-'+c.id,name:c.country+' ground preset',assetStem:'C06',seatColour:c.colour});}

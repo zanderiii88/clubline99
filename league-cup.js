@@ -1,5 +1,5 @@
-import {divisionOf} from './divisions.js?v=1.62.2';
-import {cupAfter as after,insertCupFixture as insert} from './cup-scheduling.js?v=1.62.2';
+import {divisionOf} from './divisions.js?v=1.65.0';
+import {cupAfter as after,insertCupFixture as insert} from './cup-scheduling.js?v=1.65.0';
 export const CUP_ID='league-cup';
 export const CUP_ROUNDS=[{name:'First round',month:'08-11',legs:2,prize:10000},{name:'Second round',month:'09-15',legs:2,prize:20000},{name:'Third round',month:'10-27',legs:1,prize:30000},{name:'Fourth round',month:'11-10',legs:1,prize:50000},{name:'Quarter-finals',month:'12-01',legs:1,prize:75000},{name:'Semi-finals',month:'01-26',legs:2,prize:125000},{name:'Final',month:'03-21',legs:1,prize:250000,neutral:true}];
 const rng=seed=>{let v=2166136261;for(const ch of seed)v=Math.imul(v^ch.charCodeAt(0),16777619);return()=>{v^=v<<13;v^=v>>>17;v^=v<<5;return (v>>>0)/4294967296;}};
@@ -12,7 +12,7 @@ function drawRound(c,index,entrants,name){
  const previous=cup.rounds.at(-1),previousEnd=previous?cupFixtures(c).filter(f=>f.cupRound===previous.index).map(f=>f.date).sort().at(-1):null;
  let date=year+'-'+config.month;for(const minimum of [after(c.date,1),previousEnd&&after(previousEnd,3)].filter(Boolean))if(date<minimum)date=minimum;
  const ties=[];for(let i=0;i<clubs.length;i+=2){const key=`LC-${cup.season}-${index}-${i/2}`,home=clubs[i],away=clubs[i+1];ties.push({id:key,home,away,winner:null});const fixture={home,away,competition:CUP_ID,kind:'cup',cupRound:index,tie:key,leg:1,legs:config.legs,neutral:!!config.neutral,kickoff:config.neutral?'15:00':'19:45',homeGoals:null,awayGoals:null};const first=insert(c,fixture,date);if(config.legs===2)insert(c,{...fixture,home:away,away:home,leg:2},after(first,index===5?21:7));}
- cup.rounds.push({index,name:config.name,entrants:[...entrants],ties,revealed:0,drawDate:c.date,completed:false});cup.current=index;
+ cup.rounds.push({index,name:config.name,entrants:[...entrants],ties,revealed:0,drawDate:index===0?after(c.seasonStart,1):c.date,completed:false});cup.current=index;
  const involved=entrants.includes(c.clubId);c.news.push({date:c.date,kind:'cup-draw',important:involved,text:`League Cup ${config.name.toLowerCase()} draw is ready.${involved?' Review your tie in Organiser → League Cup.':''}`,action:'league-cup'});
 }
 export function initialiseCup(c,league,name=id=>id){

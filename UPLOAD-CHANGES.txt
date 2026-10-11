@@ -1,1 +1,11 @@
-Complete release: read INSTALL-1.62.2.md. Upload all extracted contents into the GitHub Pages publishing folder. No prior release required.
+Clubline 99 v1.62.1 — complete release
+
+Extract all three ZIPs into one folder:
+Clubline-1.62.1-Part-1-Game.zip
+Clubline-1.62.1-Part-2-Audio.zip
+Clubline-1.62.1-Part-3-Menu-Assets.zip
+
+Export a career backup first. Upload the combined contents to your existing GitHub Pages folder, replacing matching files. No earlier release required. Nothing deployed.
+
+Crowd boos and cheers removed. Music/advance-time sound retained. Old crowd-cheer.mp3 and crowd-boo.mp3 files can be deleted from assets/audio if desired; this version no longer loads them.
+Read RELEASE-1.62.1.md.

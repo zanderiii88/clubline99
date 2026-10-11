@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "environment": "Chromium with emulated mobile viewport and touch input, plus Node VM application checks",
+  "sizes": [
+    "390x844",
+    "360x740",
+    "844x390"
+  ],
+  "checks": [
+    "welcome competitions and entry stages",
+    "guide does not launch draw",
+    "visible XI confirmation",
+    "tap bench-to-XI swap",
+    "touch drag bench-to-XI swap",
+    "immediate calendar tap after drag",
+    "unique lineup/bench players",
+    "one vertical lineup scroll surface",
+    "five destinations",
+    "calendar decisions and draws stop progression",
+    "no page overflow",
+    "no browser exceptions"
+  ],
+  "physicalAndroidTested": false
+}

@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "environment": "Chromium mobile emulation and Node VM application regression tests",
+  "viewports": [
+    "390x844",
+    "360x740",
+    "844x390"
+  ],
+  "checks": [
+    "cancel selection",
+    "specific lineup blockers",
+    "player screen and scroll restore",
+    "destination tab memory",
+    "optional tactics review",
+    "investment cost and outcome",
+    "calendar target persists on reload",
+    "review stopped journey and offer resume",
+    "pre-match tactics access",
+    "collapsed match report details expand",
+    "tap-to-swap",
+    "touch bench drag",
+    "immediate button after drag"
+  ],
+  "physicalAndroidTested": false
+}

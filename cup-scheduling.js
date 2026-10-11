@@ -1,4 +1,4 @@
-import {bookingWindow} from './club-events.js?v=1.62.2';
+import {bookingWindow} from './club-events.js?v=1.65.0';
 import {assignVenue,inferredVenueId,SEMI_HOSTS} from './venues.js';
 export const cupAfter=(s,n)=>new Date(Date.parse(s+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
 const sameGround=(a,b)=>a===b||['C20','C34'].includes(a)&&['C20','C34'].includes(b);

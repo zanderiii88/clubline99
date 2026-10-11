@@ -1,12 +1,12 @@
-import {validSeasonReviews} from './season-review.js?v=1.62.2';
-import {validUC} from './uefa-cup.js?v=1.62.2';
-import {validCL} from './champions-league.js?v=1.62.2';
-import {validVenue} from './venues.js?v=1.62.2';
-import {validFA} from './fa-cup.js?v=1.62.2';
-import {validMatchdays} from './matchday.js?v=1.62.2';
-import {validCup} from './league-cup.js?v=1.62.2';
-import {validDivisions,validPlayoffs} from './divisions.js?v=1.62.2';
-import {validClubLife} from './club-events.js?v=1.62.2';
+import {validSeasonReviews} from './season-review.js?v=1.65.0';
+import {validUC} from './uefa-cup.js?v=1.65.0';
+import {validCL} from './champions-league.js?v=1.65.0';
+import {validVenue} from './venues.js?v=1.65.0';
+import {validFA} from './fa-cup.js?v=1.65.0';
+import {validMatchdays} from './matchday.js?v=1.65.0';
+import {validCup} from './league-cup.js?v=1.65.0';
+import {validDivisions,validPlayoffs} from './divisions.js?v=1.65.0';
+import {validClubLife} from './club-events.js?v=1.65.0';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);

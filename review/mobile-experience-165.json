@@ -1,0 +1,25 @@
+{
+  "version": "1.65.0",
+  "passed": true,
+  "environment": "Chromium mobile emulation and Node application regressions",
+  "viewports": [
+    "390x844",
+    "360x740",
+    "844x390"
+  ],
+  "physicalAndroidTested": false,
+  "checks": [
+    "prior 1.63/1.64 mobile flows",
+    "confirmed and cancelled substitutions",
+    "full-list selection retains expansion",
+    "sent-off player and three-substitution restrictions",
+    "score and controls visible portrait and landscape",
+    "compatibility click does not inspect a player after drawer closes",
+    "deadline and all-proposal calendar stops",
+    "routine digest read preserves outstanding decisions",
+    "optional guidance dismissed",
+    "domestic and European cup regressions",
+    "full season and monthly backups",
+    "offline assets and unchanged roster"
+  ]
+}
