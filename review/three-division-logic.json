@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "seasonsCompleted": 12,
+  "checks": [
+    {
+      "start": "C01",
+      "division": "premier",
+      "fixtures": 380,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C01",
+      "division": "first",
+      "fixtures": 552,
+      "ends": "1999-05-16"
+    },
+    {
+      "start": "C01",
+      "division": "second",
+      "fixtures": 552,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C21",
+      "division": "premier",
+      "fixtures": 380,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C21",
+      "division": "first",
+      "fixtures": 552,
+      "ends": "1999-05-16"
+    },
+    {
+      "start": "C21",
+      "division": "second",
+      "fixtures": 552,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C45",
+      "division": "premier",
+      "fixtures": 380,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C45",
+      "division": "first",
+      "fixtures": 552,
+      "ends": "1999-05-16"
+    },
+    {
+      "start": "C45",
+      "division": "second",
+      "fixtures": 552,
+      "ends": "1999-05-15"
+    }
+  ],
+  "migration": true,
+  "awayGoals": true,
+  "penalties": true
+}

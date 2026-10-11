@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "environment": "Node VM with DOM stubs; real application/module logic, rendering not browser-tested",
+  "results": [
+    {
+      "club": "C01",
+      "started": true,
+      "match": true,
+      "backup": true,
+      "reload": true,
+      "organiser": true
+    },
+    {
+      "club": "C21",
+      "started": true,
+      "match": true,
+      "backup": true,
+      "reload": true,
+      "organiser": true
+    },
+    {
+      "club": "C45",
+      "started": true,
+      "match": true,
+      "backup": true,
+      "reload": true,
+      "organiser": true
+    },
+    {
+      "club": "C34",
+      "started": true,
+      "match": true,
+      "backup": true,
+      "reload": true,
+      "organiser": true
+    },
+    {
+      "club": "C68",
+      "started": true,
+      "match": true,
+      "backup": true,
+      "reload": true,
+      "organiser": true
+    },
+    {
+      "actualCupMatch": true,
+      "separateStatistics": true,
+      "cupBackupReload": true
+    },
+    {
+      "neutralFinal": true,
+      "noHomeGate": true
+    },
+    {
+      "club": "C21",
+      "rollover": true,
+      "backupAfterMovement": true
+    },
+    {
+      "club": "C45",
+      "rollover": true,
+      "backupAfterMovement": true
+    }
+  ]
+}

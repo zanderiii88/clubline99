@@ -1,0 +1,241 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "year": 1998,
+      "managed": "C02",
+      "fixtures": 125,
+      "rounds": [
+        64,
+        32,
+        16,
+        8,
+        4,
+        2
+      ],
+      "waitedForCL": false,
+      "winner": "EU022",
+      "englishQualification": {
+        "clubs": [
+          "C18",
+          "C48",
+          "C39"
+        ],
+        "routes": {
+          "C18": "League position",
+          "C48": "FA Cup winner",
+          "C39": "League Cup winner"
+        }
+      }
+    },
+    {
+      "year": 1998,
+      "managed": "C45",
+      "fixtures": 125,
+      "rounds": [
+        64,
+        32,
+        16,
+        8,
+        4,
+        2
+      ],
+      "waitedForCL": false,
+      "winner": "EU047",
+      "englishQualification": {
+        "clubs": [
+          "C08",
+          "C25",
+          "C11"
+        ],
+        "routes": {
+          "C08": "League position",
+          "C25": "FA Cup winner",
+          "C11": "League Cup winner"
+        }
+      }
+    },
+    {
+      "year": 1999,
+      "managed": "C02",
+      "fixtures": 205,
+      "rounds": [
+        96,
+        48,
+        32,
+        16,
+        8,
+        4,
+        2
+      ],
+      "waitedForCL": false,
+      "winner": "EU103",
+      "englishQualification": {
+        "clubs": [
+          "C02",
+          "C05",
+          "C45"
+        ],
+        "routes": {
+          "C02": "League position",
+          "C05": "FA Cup winner",
+          "C45": "League Cup winner"
+        }
+      }
+    },
+    {
+      "year": 1999,
+      "managed": "C45",
+      "fixtures": 205,
+      "rounds": [
+        96,
+        48,
+        32,
+        16,
+        8,
+        4,
+        2
+      ],
+      "waitedForCL": false,
+      "winner": "EU058",
+      "englishQualification": {
+        "clubs": [
+          "C07",
+          "C08",
+          "C55"
+        ],
+        "routes": {
+          "C07": "League position",
+          "C08": "FA Cup winner",
+          "C55": "League Cup winner"
+        }
+      }
+    },
+    {
+      "year": 2003,
+      "managed": "C02",
+      "fixtures": 205,
+      "rounds": [
+        96,
+        48,
+        32,
+        16,
+        8,
+        4,
+        2
+      ],
+      "waitedForCL": true,
+      "winner": "EU072",
+      "englishQualification": {
+        "clubs": [
+          "C01",
+          "C42",
+          "C23"
+        ],
+        "routes": {
+          "C01": "League position",
+          "C42": "FA Cup winner",
+          "C23": "League Cup winner"
+        }
+      }
+    },
+    {
+      "year": 2003,
+      "managed": "C45",
+      "fixtures": 205,
+      "rounds": [
+        96,
+        48,
+        32,
+        16,
+        8,
+        4,
+        2
+      ],
+      "waitedForCL": true,
+      "winner": "EU111",
+      "englishQualification": {
+        "clubs": [
+          "C04",
+          "C41",
+          "C35"
+        ],
+        "routes": {
+          "C04": "League position",
+          "C41": "FA Cup winner",
+          "C35": "League Cup winner"
+        }
+      }
+    },
+    {
+      "year": 2012,
+      "managed": "C02",
+      "fixtures": 205,
+      "rounds": [
+        96,
+        48,
+        32,
+        16,
+        8,
+        4,
+        2
+      ],
+      "waitedForCL": true,
+      "winner": "EU115",
+      "englishQualification": {
+        "clubs": [
+          "C09",
+          "C20",
+          "C68"
+        ],
+        "routes": {
+          "C09": "League position",
+          "C20": "FA Cup winner",
+          "C68": "League Cup winner"
+        }
+      }
+    },
+    {
+      "year": 2012,
+      "managed": "C45",
+      "fixtures": 205,
+      "rounds": [
+        96,
+        48,
+        32,
+        16,
+        8,
+        4,
+        2
+      ],
+      "waitedForCL": true,
+      "winner": "EU005",
+      "englishQualification": {
+        "clubs": [
+          "C11",
+          "C01",
+          "C25"
+        ],
+        "routes": {
+          "C11": "League position",
+          "C01": "FA Cup runner-up",
+          "C25": "League Cup winner"
+        }
+      }
+    }
+  ],
+  "clubs": 194,
+  "players": 4074,
+  "checks": [
+    "76 new foreign squads",
+    "Aberdeen researched and stronger",
+    "eight combined four-cup seasons",
+    "64/96 fields and 125/205 fixtures",
+    "CL transfer wait and no duplicates",
+    "qualification and lower division cup routes",
+    "away goals and penalties",
+    "minimum rest and shared venues",
+    "save roundtrips and malformed draw rejection",
+    "migration and period freeze"
+  ]
+}

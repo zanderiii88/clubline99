@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "environment": "Real application advance/match/event handlers in Node VM; DOM stubs",
+  "club": "C45",
+  "steps": 637,
+  "matches": 55,
+  "fixtureDays": 80,
+  "resultDays": 80,
+  "tables": 46,
+  "draws": 15,
+  "monthlyBackups": 11,
+  "ended": "1999-06-05",
+  "bothCupsComplete": true,
+  "allFixturesPlayed": true,
+  "reload": true
+}

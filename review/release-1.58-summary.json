@@ -1,0 +1,395 @@
+{
+  "version": "1.58.0",
+  "source": "Inspected Clubline-1.57.0 Game, Audio and Menu Assets ZIPs",
+  "implemented": [
+    "FA Cup",
+    "replays",
+    "FA Cup statistics and tying",
+    "shared matchday previews/results/tables",
+    "idle fixture days",
+    "saved domestic cup draw events",
+    "draw calendar markers"
+  ],
+  "checks": {
+    "fa-cup-logic": {
+      "passed": true,
+      "combinedSeasons": 9,
+      "financeSeasons": 6,
+      "checks": [
+        {
+          "clubId": "C01",
+          "year": 1998,
+          "faFixtures": 133,
+          "faReplays": 66,
+          "leagueCupFixtures": 105,
+          "allEntrants": true,
+          "restDays": true,
+          "leagueDatesUnchanged": true,
+          "prizesIdempotent": true,
+          "saveValidation": true
+        },
+        {
+          "clubId": "C01",
+          "year": 1999,
+          "faFixtures": 131,
+          "faReplays": 64,
+          "leagueCupFixtures": 105,
+          "allEntrants": true,
+          "restDays": true,
+          "leagueDatesUnchanged": true,
+          "prizesIdempotent": true,
+          "saveValidation": true
+        },
+        {
+          "clubId": "C01",
+          "year": 2000,
+          "faFixtures": 131,
+          "faReplays": 64,
+          "leagueCupFixtures": 105,
+          "allEntrants": true,
+          "restDays": true,
+          "leagueDatesUnchanged": true,
+          "prizesIdempotent": true,
+          "saveValidation": true
+        },
+        {
+          "clubId": "C21",
+          "year": 1998,
+          "faFixtures": 133,
+          "faReplays": 66,
+          "leagueCupFixtures": 105,
+          "allEntrants": true,
+          "restDays": true,
+          "leagueDatesUnchanged": true,
+          "prizesIdempotent": true,
+          "saveValidation": true
+        },
+        {
+          "clubId": "C21",
+          "year": 1999,
+          "faFixtures": 131,
+          "faReplays": 64,
+          "leagueCupFixtures": 105,
+          "allEntrants": true,
+          "restDays": true,
+          "leagueDatesUnchanged": true,
+          "prizesIdempotent": true,
+          "saveValidation": true
+        },
+        {
+          "clubId": "C21",
+          "year": 2000,
+          "faFixtures": 131,
+          "faReplays": 64,
+          "leagueCupFixtures": 105,
+          "allEntrants": true,
+          "restDays": true,
+          "leagueDatesUnchanged": true,
+          "prizesIdempotent": true,
+          "saveValidation": true
+        },
+        {
+          "clubId": "C45",
+          "year": 1998,
+          "faFixtures": 133,
+          "faReplays": 66,
+          "leagueCupFixtures": 105,
+          "allEntrants": true,
+          "restDays": true,
+          "leagueDatesUnchanged": true,
+          "prizesIdempotent": true,
+          "saveValidation": true
+        },
+        {
+          "clubId": "C45",
+          "year": 1999,
+          "faFixtures": 131,
+          "faReplays": 64,
+          "leagueCupFixtures": 105,
+          "allEntrants": true,
+          "restDays": true,
+          "leagueDatesUnchanged": true,
+          "prizesIdempotent": true,
+          "saveValidation": true
+        },
+        {
+          "clubId": "C45",
+          "year": 2000,
+          "faFixtures": 131,
+          "faReplays": 64,
+          "leagueCupFixtures": 105,
+          "allEntrants": true,
+          "restDays": true,
+          "leagueDatesUnchanged": true,
+          "prizesIdempotent": true,
+          "saveValidation": true
+        }
+      ],
+      "finance": [
+        {
+          "clubId": "C01",
+          "loseFinal": false,
+          "prize": 1030000,
+          "byesUnpaid": true
+        },
+        {
+          "clubId": "C01",
+          "loseFinal": true,
+          "prize": 780000,
+          "byesUnpaid": true
+        },
+        {
+          "clubId": "C21",
+          "loseFinal": false,
+          "prize": 1030000,
+          "byesUnpaid": true
+        },
+        {
+          "clubId": "C21",
+          "loseFinal": true,
+          "prize": 780000,
+          "byesUnpaid": true
+        },
+        {
+          "clubId": "C45",
+          "loseFinal": false,
+          "prize": 1045000,
+          "byesUnpaid": true
+        },
+        {
+          "clubId": "C45",
+          "loseFinal": true,
+          "prize": 795000,
+          "byesUnpaid": true
+        }
+      ],
+      "migrationDeferred": true,
+      "deciders": true
+    },
+    "fa-cup-app": {
+      "passed": true,
+      "environment": "Node VM with DOM stubs; application logic and generated markup, not an actual browser",
+      "results": [
+        {
+          "club": "C01",
+          "drawPauseRevealReload": true,
+          "previewBeforeScores": true,
+          "matchReportResultsTable": true,
+          "backupAtStages": true,
+          "backFinishesDay": true
+        },
+        {
+          "club": "C21",
+          "drawPauseRevealReload": true,
+          "previewBeforeScores": true,
+          "matchReportResultsTable": true,
+          "backupAtStages": true,
+          "backFinishesDay": true
+        },
+        {
+          "club": "C45",
+          "drawPauseRevealReload": true,
+          "previewBeforeScores": true,
+          "matchReportResultsTable": true,
+          "backupAtStages": true,
+          "backFinishesDay": true
+        },
+        {
+          "club": "C34",
+          "drawPauseRevealReload": true,
+          "previewBeforeScores": true,
+          "matchReportResultsTable": true,
+          "backupAtStages": true,
+          "backFinishesDay": true
+        },
+        {
+          "club": "C68",
+          "drawPauseRevealReload": true,
+          "previewBeforeScores": true,
+          "matchReportResultsTable": true,
+          "backupAtStages": true,
+          "backFinishesDay": true
+        },
+        {
+          "idleCupDay": true,
+          "correctCompetitions": true,
+          "noOwnIncome": true,
+          "noDuplicateStats": true,
+          "noCupOnlyTable": true
+        },
+        {
+          "idleLeagueDay": true,
+          "resultsThenTable": true
+        },
+        {
+          "actualFAWatchConfirm": true,
+          "replayScheduled": true,
+          "actualReplaySimulation": true,
+          "separateStatsAndTying": true,
+          "replayBackupReload": true
+        },
+        {
+          "club": "C21",
+          "rolloverBothCups": true,
+          "cleanStatistics": true
+        },
+        {
+          "club": "C45",
+          "rolloverBothCups": true,
+          "cleanStatistics": true
+        },
+        {
+          "scheduledNovemberDraw": true,
+          "drawNewsIdempotent": true,
+          "drawCalendar": true
+        },
+        {
+          "v157LateMigrationPreservesFixtures": true
+        }
+      ]
+    },
+    "fa-cup-career-season": {
+      "passed": true,
+      "environment": "Real application advance/match/event handlers in Node VM; DOM stubs",
+      "club": "C45",
+      "steps": 637,
+      "matches": 55,
+      "fixtureDays": 80,
+      "resultDays": 80,
+      "tables": 46,
+      "draws": 15,
+      "monthlyBackups": 11,
+      "ended": "1999-06-05",
+      "bothCupsComplete": true,
+      "allFixturesPlayed": true,
+      "reload": true
+    },
+    "fa-cup-assets": {
+      "passed": true,
+      "clubs": 68,
+      "players": 1428,
+      "allClubPlayerRecordsUnchanged": true,
+      "stadiumReserveChecks": 68,
+      "kits": 204,
+      "shirtAssets": 204,
+      "cachedAssetReferences": 969,
+      "syntaxCheckedModules": 38,
+      "missing": []
+    },
+    "league-cup-logic": {
+      "passed": true,
+      "cupSeasons": 15,
+      "checks": [
+        {
+          "clubId": "C01",
+          "year": 1998,
+          "winner": "C05",
+          "fixtures": 105,
+          "restDays": true,
+          "prizeIdempotent": true
+        },
+        {
+          "clubId": "C01",
+          "year": 1999,
+          "winner": "C05",
+          "fixtures": 105,
+          "restDays": true,
+          "prizeIdempotent": true
+        },
+        {
+          "clubId": "C01",
+          "year": 2000,
+          "winner": "C05",
+          "fixtures": 105,
+          "restDays": true,
+          "prizeIdempotent": true
+        },
+        {
+          "clubId": "C21",
+          "year": 1998,
+          "winner": "C57",
+          "fixtures": 105,
+          "restDays": true,
+          "prizeIdempotent": true
+        },
+        {
+          "clubId": "C21",
+          "year": 1999,
+          "winner": "C57",
+          "fixtures": 105,
+          "restDays": true,
+          "prizeIdempotent": true
+        },
+        {
+          "clubId": "C21",
+          "year": 2000,
+          "winner": "C57",
+          "fixtures": 105,
+          "restDays": true,
+          "prizeIdempotent": true
+        },
+        {
+          "clubId": "C45",
+          "year": 1998,
+          "winner": "C23",
+          "fixtures": 105,
+          "restDays": true,
+          "prizeIdempotent": true
+        },
+        {
+          "clubId": "C45",
+          "year": 1999,
+          "winner": "C23",
+          "fixtures": 105,
+          "restDays": true,
+          "prizeIdempotent": true
+        },
+        {
+          "clubId": "C45",
+          "year": 2000,
+          "winner": "C23",
+          "fixtures": 105,
+          "restDays": true,
+          "prizeIdempotent": true
+        }
+      ],
+      "migrationDeferred": true,
+      "financeChecks": [
+        {
+          "clubId": "C01",
+          "loseFinal": false,
+          "prize": 530000
+        },
+        {
+          "clubId": "C01",
+          "loseFinal": true,
+          "prize": 380000
+        },
+        {
+          "clubId": "C21",
+          "loseFinal": false,
+          "prize": 550000
+        },
+        {
+          "clubId": "C21",
+          "loseFinal": true,
+          "prize": 400000
+        },
+        {
+          "clubId": "C45",
+          "loseFinal": false,
+          "prize": 560000
+        },
+        {
+          "clubId": "C45",
+          "loseFinal": true,
+          "prize": 410000
+        }
+      ]
+    }
+  },
+  "divisionRegressionSeasons": 12,
+  "browserOrPhoneTested": false,
+  "deployed": false,
+  "wembleySceneImplemented": false
+}

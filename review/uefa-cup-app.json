@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "environment": "Node VM and DOM stubs, not a browser",
+  "results": [
+    {
+      "club": "C02",
+      "ucEntered": true,
+      "drawAndBothLegFlows": true
+    },
+    {
+      "club": "C03",
+      "ucEntered": true,
+      "drawAndBothLegFlows": true
+    },
+    {
+      "club": "C09",
+      "ucEntered": true,
+      "drawAndBothLegFlows": true
+    },
+    {
+      "club": "C11",
+      "ucEntered": true,
+      "drawAndBothLegFlows": true
+    },
+    {
+      "club": "C45",
+      "ucEntered": false,
+      "drawAndBothLegFlows": false
+    }
+  ],
+  "migrationPreserved": true,
+  "rolloverBothEurope": true
+}

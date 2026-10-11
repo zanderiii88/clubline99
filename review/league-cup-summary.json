@@ -1,0 +1,11 @@
+{
+  "version": "1.57.0",
+  "leagueCupImplemented": true,
+  "faCupImplemented": false,
+  "deployed": false,
+  "phoneTested": false,
+  "cupSeasonsChecked": 15,
+  "leagueRegressionSeasons": 12,
+  "clubs": 68,
+  "players": 1428
+}

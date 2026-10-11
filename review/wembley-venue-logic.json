@@ -1,0 +1,74 @@
+{
+  "passed": true,
+  "counts": {
+    "pavement": 16,
+    "Wembley Way": 2,
+    "entrance forecourt": 1,
+    "paving": 3,
+    "railway corridor": 1,
+    "station platform": 1,
+    "office": 9,
+    "platform canopy": 10,
+    "tree": 397,
+    "arena estate": 1,
+    "arena": 1,
+    "parking": 6,
+    "car": 105,
+    "exhibition estate": 1,
+    "warehouse": 9,
+    "loading apron": 1,
+    "truck": 3,
+    "coach": 12,
+    "shops": 7,
+    "loading yard": 1,
+    "container yard": 1,
+    "container": 6,
+    "garden": 68,
+    "house": 68,
+    "lamp": 10,
+    "fence": 43,
+    "approach supporter": 95,
+    "wayfinding sign": 3
+  },
+  "wholeFootprintChecks": 881,
+  "collisions": [],
+  "standReserve": true,
+  "frames": [
+    {
+      "width": 360,
+      "height": 640,
+      "vw": 1023.2793489479759,
+      "vh": 1819.1632870186236,
+      "stadiumWidthFraction": 0.8928571428571428
+    },
+    {
+      "width": 390,
+      "height": 760,
+      "vw": 1023.2793489479759,
+      "vh": 1994.0828338473375,
+      "stadiumWidthFraction": 0.8928571428571428
+    },
+    {
+      "width": 430,
+      "height": 900,
+      "vw": 1023.2793489479759,
+      "vh": 2141.747474542275,
+      "stadiumWidthFraction": 0.8928571428571428
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "vw": 1413.671038498915,
+      "vh": 653.2366173158495,
+      "stadiumWidthFraction": 0.6462905803153073
+    }
+  ],
+  "scheduling": [
+    "single national venue per day",
+    "independent semi host",
+    "host home-game conflict",
+    "shared-ground conflict",
+    "replay retains venue"
+  ],
+  "browserTested": false
+}

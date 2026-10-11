@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "environment": "Node VM and DOM stubs; physical phone/browser untested",
+  "outcomes": [
+    {
+      "club": "C02",
+      "league": "premier",
+      "movement": "Stayed in division",
+      "prizes": 1830000,
+      "backupAndArchive": true
+    },
+    {
+      "club": "C21",
+      "league": "first",
+      "movement": "Relegated",
+      "prizes": 415000,
+      "backupAndArchive": true
+    },
+    {
+      "club": "C45",
+      "league": "second",
+      "movement": "Stayed in division",
+      "prizes": 240000,
+      "backupAndArchive": true
+    },
+    {
+      "club": "C46",
+      "league": "second",
+      "movement": "Promoted",
+      "prizes": 290000,
+      "backupAndArchive": true
+    }
+  ],
+  "idempotent": true,
+  "legacy": true,
+  "qualification": true,
+  "formatFreeze": true
+}

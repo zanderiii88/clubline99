@@ -1,0 +1,32 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import * as fa from '../fa-cup.js';import * as lc from '../league-cup.js';import * as div from '../divisions.js';import * as day from '../matchday.js';
+const league=JSON.parse(fs.readFileSync(new URL('../data/league.json',import.meta.url))),checks=[];
+const base=(clubId,year=1998)=>({clubId,date:year+'-08-03',seasonStart:year+'-08-03',season:1,schedule:[],news:[],balance:100000,cupSeed:'FA-check-'+clubId});
+for(const clubId of ['C01','C21','C45'])for(const year of [1998,1999,2000]){
+ const c=base(clubId,year);div.initialiseDivisions(c,league);const original=c.schedule.flatMap(r=>r.fixtures.map(f=>({date:r.date,...f})));lc.initialiseCup(c,league);fa.initialiseFA(c,league);day.initialiseMatchdays(c);let loops=0;
+ while(!div.seasonReady(c)){
+  const r=c.schedule.find(r=>r.fixtures.some(f=>f.homeGoals===null));assert(r);c.date=r.date;
+  for(const f of [...r.fixtures]){if(f.homeGoals!==null)continue;f.homeGoals=1;f.awayGoals=1;fa.resolveFA(c,f,()=>[0,0],()=>.4);lc.resolveCup(c,f,()=>[0,0],()=>.4);div.resolvePlayoff(c,f,()=>[0,0],()=>.4);}
+  fa.progressFA(c,league);lc.progressCup(c,league);div.progressPlayoffs(c,league);assert(fa.validFA(c,league));assert(lc.validCup(c,league));assert(++loops<500);
+ }
+ const cup=c.faCup;assert.deepEqual(cup.rounds.map(r=>r.entrants.length),[24,16,52,32,16,8,4,2]);assert.deepEqual(cup.rounds.map(r=>r.byes.length),[8,0,12,0,0,0,0,0]);const ties=cup.rounds.flatMap(r=>r.ties);assert.equal(ties.length,67);const losers=ties.flatMap(t=>[t.home,t.away].filter(x=>x!==t.winner));assert.equal(new Set(losers).size,67);assert.equal(new Set([...losers,cup.winner]).size,68);assert(cup.rounds.every(r=>r.completed));
+ const fixtures=fa.faFixtures(c),replays=fixtures.filter(f=>f.replay);assert.equal(fixtures.length,year===1998?133:131);assert.equal(replays.length,year===1998?66:64);assert(!fixtures.find(f=>f.cupRound===7).replayRequired);
+ for(const f of replays){const first=fixtures.find(x=>x.tie===f.tie&&!x.replay);assert.equal(f.home,first.neutral?first.home:first.away);assert.equal(f.away,first.neutral?first.away:first.home);assert(f.winner);assert(f.penalties);assert((Date.parse(f.date)-Date.parse(first.date))/86400000>=(f.cupRound===6?3:10));}
+ assert.equal(fixtures.filter(f=>f.neutral).length,year===1998?5:3);assert(cup.rounds[2].entrants.includes('C01'));assert(!cup.rounds[0].entrants.includes('C01'));assert(!cup.rounds[1].entrants.includes('C21'));
+ for(const x of original)assert(c.schedule.some(r=>r.date===x.date&&r.fixtures.some(f=>f.kind==='league'&&f.competition===x.competition&&f.home===x.home&&f.away===x.away)));
+ for(const id of league.clubs.map(x=>x.id)){const dates=c.schedule.filter(r=>r.fixtures.some(f=>f.home===id||f.away===id)).map(r=>r.date);for(let i=1;i<dates.length;i++)assert((Date.parse(dates[i])-Date.parse(dates[i-1]))/86400000>=3,'Rest: '+id);}
+ const cash=c.balance;fa.progressFA(c,league);lc.progressCup(c,league);assert.equal(c.balance,cash);
+ const mutate=structuredClone(c);mutate.faCup.rounds[2].byes[0]=mutate.faCup.rounds[2].byes[1];assert(!fa.validFA(mutate,league));const bad=structuredClone(c);bad.schedule.flatMap(r=>r.fixtures).find(f=>f.competition===fa.FA_ID&&f.replay).home='C01';assert(!fa.validFA(bad,league));
+ checks.push({clubId,year,faFixtures:fixtures.length,faReplays:replays.length,leagueCupFixtures:lc.cupFixtures(c).length,allEntrants:true,restDays:true,leagueDatesUnchanged:true,prizesIdempotent:true,saveValidation:true});
+}
+const finance=[];for(const clubId of ['C01','C21','C45'])for(const loseFinal of [false,true]){
+ const c=base(clubId);c.balance=0;div.initialiseDivisions(c,league);fa.initialiseFA(c,league);
+ while(!fa.faComplete(c)){const r=c.schedule.find(r=>r.fixtures.some(f=>f.homeGoals===null));c.date=r.date;for(const f of [...r.fixtures]){if(f.homeGoals!==null)continue;const ours=[f.home,f.away].includes(clubId),win=ours&&!(loseFinal&&f.cupRound===7);f.homeGoals=ours?(win===(f.home===clubId)?4:0):1;f.awayGoals=ours?(win===(f.away===clubId)?4:0):0;fa.resolveFA(c,f,()=>[0,0]);}fa.progressFA(c,league);}
+ const expected=c.faCup.rounds.reduce((n,r)=>n+(r.ties.some(t=>t.winner===clubId)?fa.FA_ROUNDS[r.index].prize:0),0)+(loseFinal?250000:0);assert.equal(c.balance,expected);assert.equal(c.faCup.winner===clubId,!loseFinal);const before=c.balance;fa.progressFA(c,league);assert.equal(c.balance,before);finance.push({clubId,loseFinal,prize:expected,byesUnpaid:true});
+}
+for(const date of ['1998-11-08','1999-01-05']){const c=base('C01');c.date=date;div.initialiseDivisions(c,league);const schedule=JSON.stringify(c.schedule);fa.initialiseFA(c,league);assert.equal(c.faCup.status,'deferred');assert.equal(JSON.stringify(c.schedule),schedule);assert(fa.validFA(c,league));}
+// First match/replay/ET winners and shootouts each resolve once; League Cup ignores FA ties.
+const c=base('C45');div.initialiseDivisions(c,league);fa.initialiseFA(c,league);const f=c.schedule.flatMap(r=>r.fixtures).find(f=>f.competition===fa.FA_ID);f.homeGoals=0;f.awayGoals=0;lc.resolveCup(c,f,()=>[6,0]);assert.equal(f.homeGoals,0);fa.resolveFA(c,f,()=>[6,0]);assert(f.replayRequired&&!f.extraTime&&!f.winner);const replay=c.schedule.flatMap(r=>r.fixtures).find(x=>x.tie===f.tie&&x.replay);const count=fa.faFixtures(c).length;fa.resolveFA(c,f,()=>[0,0]);assert.equal(fa.faFixtures(c).length,count);replay.homeGoals=0;replay.awayGoals=0;fa.resolveFA(c,replay,()=>[4,0]);assert.equal(replay.winner,replay.home);assert.equal(replay.homeGoals,2);assert.equal(replay.decision,'extra time');
+for(const [year,round,et,expected]of [[1998,6,[4,0],'extra time'],[1998,6,[0,0],'replay'],[1999,6,[0,0],'penalties'],[1998,7,[0,0],'penalties']]){
+ const c=base('C01',year),f={home:'C01',away:'C02',competition:fa.FA_ID,kind:'cup',cupRound:round,tie:'decider',replay:false,neutral:true,homeGoals:0,awayGoals:0};c.schedule=[{date:(year+1)+'-04-11',fixtures:[f]}];fa.resolveFA(c,f,()=>et,()=>.3);assert.equal(f.decision,expected);assert.equal(!!f.replayRequired,expected==='replay');assert.equal(c.schedule.flatMap(r=>r.fixtures).length,expected==='replay'?2:1);
+}
+fs.writeFileSync(new URL('../review/fa-cup-logic.json',import.meta.url),JSON.stringify({passed:true,combinedSeasons:9,financeSeasons:6,checks,finance,migrationDeferred:true,deciders:true},null,2));console.log('FA Cup: 9 combined seasons, 6 finance seasons, all 68 entrants, replays/rest/migration/deciders/validation passed');

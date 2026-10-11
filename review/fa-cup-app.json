@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "environment": "Node VM with DOM stubs; application logic and generated markup, not an actual browser",
+  "results": [
+    {
+      "club": "C01",
+      "drawPauseRevealReload": true,
+      "previewBeforeScores": true,
+      "matchReportResultsTable": true,
+      "backupAtStages": true,
+      "backFinishesDay": true
+    },
+    {
+      "club": "C21",
+      "drawPauseRevealReload": true,
+      "previewBeforeScores": true,
+      "matchReportResultsTable": true,
+      "backupAtStages": true,
+      "backFinishesDay": true
+    },
+    {
+      "club": "C45",
+      "drawPauseRevealReload": true,
+      "previewBeforeScores": true,
+      "matchReportResultsTable": true,
+      "backupAtStages": true,
+      "backFinishesDay": true
+    },
+    {
+      "club": "C34",
+      "drawPauseRevealReload": true,
+      "previewBeforeScores": true,
+      "matchReportResultsTable": true,
+      "backupAtStages": true,
+      "backFinishesDay": true
+    },
+    {
+      "club": "C68",
+      "drawPauseRevealReload": true,
+      "previewBeforeScores": true,
+      "matchReportResultsTable": true,
+      "backupAtStages": true,
+      "backFinishesDay": true
+    },
+    {
+      "idleCupDay": true,
+      "correctCompetitions": true,
+      "noOwnIncome": true,
+      "noDuplicateStats": true,
+      "noCupOnlyTable": true
+    },
+    {
+      "idleLeagueDay": true,
+      "resultsThenTable": true
+    },
+    {
+      "actualFAWatchConfirm": true,
+      "replayScheduled": true,
+      "actualReplaySimulation": true,
+      "separateStatsAndTying": true,
+      "replayBackupReload": true
+    },
+    {
+      "club": "C21",
+      "rolloverBothCups": true,
+      "cleanStatistics": true
+    },
+    {
+      "club": "C45",
+      "rolloverBothCups": true,
+      "cleanStatistics": true
+    },
+    {
+      "scheduledNovemberDraw": true,
+      "drawNewsIdempotent": true,
+      "drawCalendar": true
+    },
+    {
+      "v157LateMigrationPreservesFixtures": true
+    }
+  ]
+}

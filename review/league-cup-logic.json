@@ -1,0 +1,111 @@
+{
+  "passed": true,
+  "cupSeasons": 15,
+  "checks": [
+    {
+      "clubId": "C01",
+      "year": 1998,
+      "winner": "C05",
+      "fixtures": 105,
+      "restDays": true,
+      "prizeIdempotent": true
+    },
+    {
+      "clubId": "C01",
+      "year": 1999,
+      "winner": "C05",
+      "fixtures": 105,
+      "restDays": true,
+      "prizeIdempotent": true
+    },
+    {
+      "clubId": "C01",
+      "year": 2000,
+      "winner": "C05",
+      "fixtures": 105,
+      "restDays": true,
+      "prizeIdempotent": true
+    },
+    {
+      "clubId": "C21",
+      "year": 1998,
+      "winner": "C57",
+      "fixtures": 105,
+      "restDays": true,
+      "prizeIdempotent": true
+    },
+    {
+      "clubId": "C21",
+      "year": 1999,
+      "winner": "C57",
+      "fixtures": 105,
+      "restDays": true,
+      "prizeIdempotent": true
+    },
+    {
+      "clubId": "C21",
+      "year": 2000,
+      "winner": "C57",
+      "fixtures": 105,
+      "restDays": true,
+      "prizeIdempotent": true
+    },
+    {
+      "clubId": "C45",
+      "year": 1998,
+      "winner": "C23",
+      "fixtures": 105,
+      "restDays": true,
+      "prizeIdempotent": true
+    },
+    {
+      "clubId": "C45",
+      "year": 1999,
+      "winner": "C23",
+      "fixtures": 105,
+      "restDays": true,
+      "prizeIdempotent": true
+    },
+    {
+      "clubId": "C45",
+      "year": 2000,
+      "winner": "C23",
+      "fixtures": 105,
+      "restDays": true,
+      "prizeIdempotent": true
+    }
+  ],
+  "migrationDeferred": true,
+  "financeChecks": [
+    {
+      "clubId": "C01",
+      "loseFinal": false,
+      "prize": 530000
+    },
+    {
+      "clubId": "C01",
+      "loseFinal": true,
+      "prize": 380000
+    },
+    {
+      "clubId": "C21",
+      "loseFinal": false,
+      "prize": 550000
+    },
+    {
+      "clubId": "C21",
+      "loseFinal": true,
+      "prize": 400000
+    },
+    {
+      "clubId": "C45",
+      "loseFinal": false,
+      "prize": 560000
+    },
+    {
+      "clubId": "C45",
+      "loseFinal": true,
+      "prize": 410000
+    }
+  ]
+}

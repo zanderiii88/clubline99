@@ -1,0 +1,155 @@
+{
+  "passed": true,
+  "combinedSeasons": 9,
+  "financeSeasons": 6,
+  "checks": [
+    {
+      "clubId": "C01",
+      "year": 1998,
+      "faFixtures": 133,
+      "faReplays": 66,
+      "leagueCupFixtures": 105,
+      "allEntrants": true,
+      "restDays": true,
+      "leagueDatesUnchanged": true,
+      "prizesIdempotent": true,
+      "saveValidation": true
+    },
+    {
+      "clubId": "C01",
+      "year": 1999,
+      "faFixtures": 131,
+      "faReplays": 64,
+      "leagueCupFixtures": 105,
+      "allEntrants": true,
+      "restDays": true,
+      "leagueDatesUnchanged": true,
+      "prizesIdempotent": true,
+      "saveValidation": true
+    },
+    {
+      "clubId": "C01",
+      "year": 2000,
+      "faFixtures": 131,
+      "faReplays": 64,
+      "leagueCupFixtures": 105,
+      "allEntrants": true,
+      "restDays": true,
+      "leagueDatesUnchanged": true,
+      "prizesIdempotent": true,
+      "saveValidation": true
+    },
+    {
+      "clubId": "C21",
+      "year": 1998,
+      "faFixtures": 133,
+      "faReplays": 66,
+      "leagueCupFixtures": 105,
+      "allEntrants": true,
+      "restDays": true,
+      "leagueDatesUnchanged": true,
+      "prizesIdempotent": true,
+      "saveValidation": true
+    },
+    {
+      "clubId": "C21",
+      "year": 1999,
+      "faFixtures": 131,
+      "faReplays": 64,
+      "leagueCupFixtures": 105,
+      "allEntrants": true,
+      "restDays": true,
+      "leagueDatesUnchanged": true,
+      "prizesIdempotent": true,
+      "saveValidation": true
+    },
+    {
+      "clubId": "C21",
+      "year": 2000,
+      "faFixtures": 131,
+      "faReplays": 64,
+      "leagueCupFixtures": 105,
+      "allEntrants": true,
+      "restDays": true,
+      "leagueDatesUnchanged": true,
+      "prizesIdempotent": true,
+      "saveValidation": true
+    },
+    {
+      "clubId": "C45",
+      "year": 1998,
+      "faFixtures": 133,
+      "faReplays": 66,
+      "leagueCupFixtures": 105,
+      "allEntrants": true,
+      "restDays": true,
+      "leagueDatesUnchanged": true,
+      "prizesIdempotent": true,
+      "saveValidation": true
+    },
+    {
+      "clubId": "C45",
+      "year": 1999,
+      "faFixtures": 131,
+      "faReplays": 64,
+      "leagueCupFixtures": 105,
+      "allEntrants": true,
+      "restDays": true,
+      "leagueDatesUnchanged": true,
+      "prizesIdempotent": true,
+      "saveValidation": true
+    },
+    {
+      "clubId": "C45",
+      "year": 2000,
+      "faFixtures": 131,
+      "faReplays": 64,
+      "leagueCupFixtures": 105,
+      "allEntrants": true,
+      "restDays": true,
+      "leagueDatesUnchanged": true,
+      "prizesIdempotent": true,
+      "saveValidation": true
+    }
+  ],
+  "finance": [
+    {
+      "clubId": "C01",
+      "loseFinal": false,
+      "prize": 1030000,
+      "byesUnpaid": true
+    },
+    {
+      "clubId": "C01",
+      "loseFinal": true,
+      "prize": 780000,
+      "byesUnpaid": true
+    },
+    {
+      "clubId": "C21",
+      "loseFinal": false,
+      "prize": 1030000,
+      "byesUnpaid": true
+    },
+    {
+      "clubId": "C21",
+      "loseFinal": true,
+      "prize": 780000,
+      "byesUnpaid": true
+    },
+    {
+      "clubId": "C45",
+      "loseFinal": false,
+      "prize": 1045000,
+      "byesUnpaid": true
+    },
+    {
+      "clubId": "C45",
+      "loseFinal": true,
+      "prize": 795000,
+      "byesUnpaid": true
+    }
+  ],
+  "migrationDeferred": true,
+  "deciders": true
+}

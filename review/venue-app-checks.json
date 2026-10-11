@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "checks": [
+    "C01, managed home slot: club host, Wembley final, independent semi host, preview and live markup, participant identity preserved",
+    "C01, managed away slot: club host, Wembley final, independent semi host, preview and live markup, participant identity preserved",
+    "C21, managed home slot: club host, Wembley final, independent semi host, preview and live markup, participant identity preserved",
+    "C21, managed away slot: club host, Wembley final, independent semi host, preview and live markup, participant identity preserved",
+    "C45, managed home slot: club host, Wembley final, independent semi host, preview and live markup, participant identity preserved",
+    "C45, managed away slot: club host, Wembley final, independent semi host, preview and live markup, participant identity preserved",
+    "neutral home slot: 80,000 capacity, 60,000 attendance, no home gate/concession/shop credit; correct goals/stat slots; report/save/backup/reload/close",
+    "neutral away slot: 80,000 capacity, 60,000 attendance, no home gate/concession/shop credit; correct goals/stat slots; report/save/backup/reload/close",
+    "home: watch → lineup confirmation → paused live save → reload/backup retains venue and participants",
+    "away: watch → lineup confirmation → paused live save → reload/backup retains venue and participants",
+    "neutral-home: watch → lineup confirmation → paused live save → reload/backup retains venue and participants",
+    "neutral-away: watch → lineup confirmation → paused live save → reload/backup retains venue and participants",
+    "legacy live neutral metadata migrated once; original schedule and scores unchanged"
+  ],
+  "browserTested": false
+}

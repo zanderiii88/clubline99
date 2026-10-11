@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "environment": "Node VM with audio and DOM stubs; real device untested",
+  "crowdCallsAndAssetsRemoved": true,
+  "musicTracks": 7,
+  "existingPreferencesPreserved": true,
+  "musicPlaybackAndAdvanceEffect": true,
+  "effectsMuteRespected": true
+}

@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "clubs": 194,
+  "players": 4074,
+  "newClubs": 76,
+  "newPlayers": 1596,
+  "researchedAberdeenPlayers": 21,
+  "aberdeenKilmarnockStJohnstoneAverage": {
+    "EU051": 70.38,
+    "EU052": 68.0,
+    "EU053": 66.95
+  },
+  "unchanged": [
+    {
+      "file": "data/league.json",
+      "sha256": "8a25cc85663a425248ec7d077839d6b30638ae3cabdbac5de32a114684ef4bb2"
+    },
+    {
+      "file": "data/europe-cl.json",
+      "sha256": "6bf880e414f1f14ce06cedaebc63645165b901fc785010a3558e39bd6fd3af07"
+    }
+  ],
+  "ranges": "Original English lower-division ratings retained (including below 60). New foreign overall 60-91; ages 16-40; slot numbers 1-21. Existing English shirt numbers may exceed 21.",
+  "uniqueIDsAndNames": true,
+  "newSquadSizeAndCoverage": true,
+  "excluded": "Scottish Rangers; Queensbridge Rangers (English QPR parody) is retained."
+}

@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "rosterFiles": [
+    {
+      "file": "data/league.json",
+      "unchanged": true,
+      "sha256": "8a25cc85663a425248ec7d077839d6b30638ae3cabdbac5de32a114684ef4bb2"
+    },
+    {
+      "file": "data/europe-cl.json",
+      "unchanged": true,
+      "sha256": "6bf880e414f1f14ce06cedaebc63645165b901fc785010a3558e39bd6fd3af07"
+    },
+    {
+      "file": "data/europe-uc.json",
+      "unchanged": true,
+      "sha256": "09138a3fbed4ab9d073f23f17013c942715267fa0689788b4f03ae5be8da5fc2"
+    }
+  ]
+}

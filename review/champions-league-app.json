@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "environment": "Node VM and DOM stubs, not a browser",
+  "results": [
+    {
+      "club": "C01",
+      "englishOnlySelection": true,
+      "clBrowse": true,
+      "drawAndMatchFlows": true
+    },
+    {
+      "club": "C12",
+      "englishOnlySelection": true,
+      "clBrowse": true,
+      "drawAndMatchFlows": true
+    },
+    {
+      "club": "C21",
+      "englishOnlySelection": true,
+      "clBrowse": true,
+      "drawAndMatchFlows": false
+    },
+    {
+      "club": "C45",
+      "englishOnlySelection": true,
+      "clBrowse": true,
+      "drawAndMatchFlows": false
+    }
+  ],
+  "legacySavePreserved": true
+}

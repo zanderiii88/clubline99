@@ -1,0 +1,171 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "year": 1998,
+      "managed": "C01",
+      "clFixtures": 85,
+      "stages": [
+        "Group stage",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU046"
+    },
+    {
+      "year": 1998,
+      "managed": "C21",
+      "clFixtures": 85,
+      "stages": [
+        "Group stage",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU034"
+    },
+    {
+      "year": 1999,
+      "managed": "C01",
+      "clFixtures": 157,
+      "stages": [
+        "Group stage",
+        "Second group stage",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU016"
+    },
+    {
+      "year": 1999,
+      "managed": "C21",
+      "clFixtures": 157,
+      "stages": [
+        "Group stage",
+        "Second group stage",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU032"
+    },
+    {
+      "year": 2000,
+      "managed": "C01",
+      "clFixtures": 157,
+      "stages": [
+        "Group stage",
+        "Second group stage",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU004"
+    },
+    {
+      "year": 2000,
+      "managed": "C21",
+      "clFixtures": 157,
+      "stages": [
+        "Group stage",
+        "Second group stage",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU045"
+    },
+    {
+      "year": 2002,
+      "managed": "C01",
+      "clFixtures": 157,
+      "stages": [
+        "Group stage",
+        "Second group stage",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU026"
+    },
+    {
+      "year": 2002,
+      "managed": "C21",
+      "clFixtures": 157,
+      "stages": [
+        "Group stage",
+        "Second group stage",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU048"
+    },
+    {
+      "year": 2003,
+      "managed": "C01",
+      "clFixtures": 125,
+      "stages": [
+        "Group stage",
+        "Round of 16",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU025"
+    },
+    {
+      "year": 2003,
+      "managed": "C21",
+      "clFixtures": 125,
+      "stages": [
+        "Group stage",
+        "Round of 16",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU023"
+    },
+    {
+      "year": 2004,
+      "managed": "C01",
+      "clFixtures": 125,
+      "stages": [
+        "Group stage",
+        "Round of 16",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "EU049"
+    },
+    {
+      "year": 2004,
+      "managed": "C21",
+      "clFixtures": 125,
+      "stages": [
+        "Group stage",
+        "Round of 16",
+        "Quarter-finals",
+        "Semi-finals",
+        "Final"
+      ],
+      "winner": "C09"
+    }
+  ],
+  "checks": [
+    "118 clubs / 2478 players",
+    "50 foreign squads of 21",
+    "12 combined domestic and European seasons",
+    "period formats",
+    "away goals before ET",
+    "minimum rest",
+    "venue validation",
+    "save roundtrip",
+    "late migration",
+    "idempotent payments"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "version": "1.56.0",
+  "source": "Clubline-Release-1.55.0-Navigation-Checklist.zip",
+  "draft": "Clubline-English-Lower-Divisions-Draft.zip",
+  "automatedChecksPassed": true,
+  "browserTested": false,
+  "deployed": false,
+  "clubs": 68,
+  "players": 1428
+}

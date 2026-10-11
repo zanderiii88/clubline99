@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "clubs": 68,
+  "players": 1428,
+  "existingClubPlayerRecordsUnchanged": true,
+  "stadiumReserveChecks": 68,
+  "kits": 204,
+  "shirtAssets": 204,
+  "cachedAssetReferences": 966,
+  "syntaxCheckedModules": 35,
+  "missing": []
+}

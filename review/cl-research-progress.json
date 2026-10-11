@@ -1,0 +1,365 @@
+[
+  {
+    "clubId": "EU001",
+    "realClub": "Celtic",
+    "fictionalClub": "Glasgow Clover",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU002",
+    "realClub": "Barcelona",
+    "fictionalClub": "Barceluna FC",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU003",
+    "realClub": "Deportivo La Coruna",
+    "fictionalClub": "Deportivo Corunna",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU004",
+    "realClub": "Real Madrid",
+    "fictionalClub": "Royal Madrigal",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU005",
+    "realClub": "Valencia",
+    "fictionalClub": "Valentia CF",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU006",
+    "realClub": "Athletic Bilbao",
+    "fictionalClub": "Athletic Bilbora",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU007",
+    "realClub": "AC Milan",
+    "fictionalClub": "AC Milanto",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU008",
+    "realClub": "Fiorentina",
+    "fictionalClub": "Florentia Viola",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU009",
+    "realClub": "Inter Milan",
+    "fictionalClub": "Internazionale Milanto",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU010",
+    "realClub": "Juventus",
+    "fictionalClub": "Juventara",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU011",
+    "realClub": "Lazio",
+    "fictionalClub": "Laziale Roma",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU012",
+    "realClub": "Bayer Leverkusen",
+    "fictionalClub": "Werkstadt Leverkern",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU013",
+    "realClub": "Bayern Munich",
+    "fictionalClub": "Bavaria Munchen",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU014",
+    "realClub": "Borussia Dortmund",
+    "fictionalClub": "Borussia Dortheim",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU015",
+    "realClub": "Hamburg",
+    "fictionalClub": "Hanseburg SV",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU016",
+    "realClub": "Hertha Berlin",
+    "fictionalClub": "Hertha Berlitz",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU017",
+    "realClub": "Kaiserslautern",
+    "fictionalClub": "Kaiserlautern FC",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU018",
+    "realClub": "Bordeaux",
+    "fictionalClub": "Girondins Bordelle",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU019",
+    "realClub": "Lens",
+    "fictionalClub": "RC Lenso",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU020",
+    "realClub": "Lyon",
+    "fictionalClub": "Olympique Lyone",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU021",
+    "realClub": "Marseille",
+    "fictionalClub": "Olympique Marseaux",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU022",
+    "realClub": "Monaco",
+    "fictionalClub": "AS Montecarlo",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU023",
+    "realClub": "Paris Saint-Germain",
+    "fictionalClub": "Paris Saint-Germainet",
+    "pool": "CL",
+    "status": "researched CL batch 2"
+  },
+  {
+    "clubId": "EU024",
+    "realClub": "Ajax",
+    "fictionalClub": "Ajora Amsterdam",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU025",
+    "realClub": "Feyenoord",
+    "fictionalClub": "Feyenhaven",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 4
+  },
+  {
+    "clubId": "EU026",
+    "realClub": "Heerenveen",
+    "fictionalClub": "Heerendal",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  },
+  {
+    "clubId": "EU027",
+    "realClub": "PSV Eindhoven",
+    "fictionalClub": "PSV Eindhorst",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU028",
+    "realClub": "Willem II",
+    "fictionalClub": "Wilhelm Tilburg",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  },
+  {
+    "clubId": "EU029",
+    "realClub": "Benfica",
+    "fictionalClub": "Benfaro Lisbon",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU030",
+    "realClub": "Boavista",
+    "fictionalClub": "Boavela Porto",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  },
+  {
+    "clubId": "EU031",
+    "realClub": "Porto",
+    "fictionalClub": "FC Portora",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU032",
+    "realClub": "Sporting CP",
+    "fictionalClub": "Sporting Lisbona",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU033",
+    "realClub": "Olympiacos",
+    "fictionalClub": "Olympiakos Pireon",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU034",
+    "realClub": "Panathinaikos",
+    "fictionalClub": "Panathenikos",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU035",
+    "realClub": "Besiktas",
+    "fictionalClub": "Besiklar Istanbul",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU036",
+    "realClub": "Galatasaray",
+    "fictionalClub": "Galatasera",
+    "pool": "CL",
+    "status": "researched CL batch 1"
+  },
+  {
+    "clubId": "EU037",
+    "realClub": "Anderlecht",
+    "fictionalClub": "Anderwick",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU038",
+    "realClub": "Sturm Graz",
+    "fictionalClub": "Storm Grazfeld",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  },
+  {
+    "clubId": "EU039",
+    "realClub": "Spartak Moscow",
+    "fictionalClub": "Spartak Moskara",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU040",
+    "realClub": "Dynamo Kyiv",
+    "fictionalClub": "Dynamo Kyivan",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 4
+  },
+  {
+    "clubId": "EU041",
+    "realClub": "Shakhtar Donetsk",
+    "fictionalClub": "Shakhtar Donetska",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 2
+  },
+  {
+    "clubId": "EU042",
+    "realClub": "Sparta Prague",
+    "fictionalClub": "Sparta Prava",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU043",
+    "realClub": "Dinamo Zagreb",
+    "fictionalClub": "Dinamo Zagora",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU044",
+    "realClub": "Molde",
+    "fictionalClub": "Moldevik FK",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  },
+  {
+    "clubId": "EU045",
+    "realClub": "Rosenborg",
+    "fictionalClub": "Rosenfjord BK",
+    "pool": "CL",
+    "status": "mixed CL stars batch 3",
+    "researchedPlayers": 3
+  },
+  {
+    "clubId": "EU046",
+    "realClub": "Brondby",
+    "fictionalClub": "Brondholm IF",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  },
+  {
+    "clubId": "EU047",
+    "realClub": "AIK",
+    "fictionalClub": "AIK Solvik",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  },
+  {
+    "clubId": "EU048",
+    "realClub": "Helsingborgs IF",
+    "fictionalClub": "Helsingdal IF",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  },
+  {
+    "clubId": "EU049",
+    "realClub": "Maribor",
+    "fictionalClub": "Maribora NK",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  },
+  {
+    "clubId": "EU050",
+    "realClub": "HJK Helsinki",
+    "fictionalClub": "HJK Helsinka",
+    "pool": "CL",
+    "status": "retain fictional squad"
+  }
+]

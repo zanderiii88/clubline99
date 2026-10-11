@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "clubs": 118,
+  "players": 2478,
+  "newClubs": 50,
+  "newPlayers": 1050,
+  "EnglishLeagueSHA256": "8a25cc85663a425248ec7d077839d6b30638ae3cabdbac5de32a114684ef4bb2",
+  "rangeChecks": true,
+  "positionsAndSquadSizes": true,
+  "uniqueForeignNamesAndAllIDs": true,
+  "rangersExcluded": true
+}
