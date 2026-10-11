@@ -1,5 +1,5 @@
-import {insertCupFixture} from './cup-scheduling.js?v=1.65.0';
-import {seasonSchedule} from './season-calendar.js?v=1.65.0';
+import {insertCupFixture} from './cup-scheduling.js?v=1.66.0';
+import {seasonSchedule} from './season-calendar.js?v=1.66.0';
 export const DIVISIONS=[{id:'premier',name:'Premier Division',size:20,relegation:3},{id:'first',name:'First Division',size:24,relegation:3},{id:'second',name:'Second Division',size:24,relegation:0}];
 const after=(s,n)=>new Date(Date.parse(s+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
 export const domesticClub=id=>/^C\d{2}$/.test(id);

@@ -1,5 +1,5 @@
-import {divisionOf} from './divisions.js?v=1.65.0';
-import {cupAfter,insertCupFixture} from './cup-scheduling.js?v=1.65.0';
+import {divisionOf} from './divisions.js?v=1.66.0';
+import {cupAfter,insertCupFixture} from './cup-scheduling.js?v=1.66.0';
 export const FA_ID='fa-cup';
 export const FA_ROUNDS=[
  {name:'First round',month:'11-14',byes:8,prize:10000},

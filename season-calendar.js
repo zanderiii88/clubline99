@@ -1,4 +1,4 @@
-import {bookingWindow} from './club-events.js?v=1.65.0';
+import {bookingWindow} from './club-events.js?v=1.66.0';
 // Football order is deliberately independent of alphabetical position names.
 export const POSITION_ORDER=['GK','LB','CB','RB','LWB','RWB','DM','CM','LM','RM','AM','LW','RW','CF','ST'];
 export const positionRank=pos=>{const i=POSITION_ORDER.indexOf(pos);return i<0?99:i};

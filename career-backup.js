@@ -1,12 +1,12 @@
-import {validSeasonReviews} from './season-review.js?v=1.65.0';
-import {validUC} from './uefa-cup.js?v=1.65.0';
-import {validCL} from './champions-league.js?v=1.65.0';
-import {validVenue} from './venues.js?v=1.65.0';
-import {validFA} from './fa-cup.js?v=1.65.0';
-import {validMatchdays} from './matchday.js?v=1.65.0';
-import {validCup} from './league-cup.js?v=1.65.0';
-import {validDivisions,validPlayoffs} from './divisions.js?v=1.65.0';
-import {validClubLife} from './club-events.js?v=1.65.0';
+import {validSeasonReviews} from './season-review.js?v=1.66.0';
+import {validUC} from './uefa-cup.js?v=1.66.0';
+import {validCL} from './champions-league.js?v=1.66.0';
+import {validVenue} from './venues.js?v=1.66.0';
+import {validFA} from './fa-cup.js?v=1.66.0';
+import {validMatchdays} from './matchday.js?v=1.66.0';
+import {validCup} from './league-cup.js?v=1.66.0';
+import {validDivisions,validPlayoffs} from './divisions.js?v=1.66.0';
+import {validClubLife} from './club-events.js?v=1.66.0';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -16,6 +16,7 @@ export function parseBackup(text,league,formations,styles){
  const walk=(x,depth=0)=>{if(depth>80)fail();if(x&&typeof x==='object')for(const [k,v]of Object.entries(x)){if(['__proto__','prototype','constructor'].includes(k))fail();walk(v,depth+1)}};walk(data);
  if(data?.format!=='clubline-career-backup'||data.formatVersion!==1||!object(data.save)||!object(data.save.career))fail();
  const save=structuredClone(data.save),c=save.career,clubs=new Set(league.clubs.map(c=>c.id));
+ if(c.managementMode!==undefined&&!['streamlined','in-depth'].includes(c.managementMode))fail();
  if(c.rosterEdition!==league.rosterEdition||c.version!==1||!clubs.has(c.clubId)||!Number.isFinite(c.balance)||!/^\d{4}-\d{2}-\d{2}$/.test(c.date)||!Number.isFinite(Date.parse(c.date))||!formations.includes(c.formation)||!styles.includes(c.style)||!object(c.players)||!object(c.stadium)||!Array.isArray(c.reports)||!Array.isArray(c.news)||!Array.isArray(c.schedule)||!c.schedule.length)fail();
  if(c.schedule.some(r=>r.fixtures.some(f=>!validVenue(f,league)))||save.match&&!validVenue(save.match,league))fail();
  for(const field of ['youthFunding','trainingFunding'])if(c[field]!==undefined&&(!Number.isInteger(c[field])||c[field]<0||c[field]>8))fail();

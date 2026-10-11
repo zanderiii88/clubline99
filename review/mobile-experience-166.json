@@ -1,0 +1,23 @@
+{
+  "version": "1.66.0",
+  "passed": true,
+  "environment": "Chromium mobile emulation and Node application regressions",
+  "viewports": ["390x844", "360x740", "844x390"],
+  "physicalAndroidTested": false,
+  "checks": [
+    "explicit management mode selection and preserved existing career",
+    "three Streamlined destinations and simplified settings/calendar",
+    "Continue stops for decisions and managed fixtures",
+    "deferred decisions reappear after a match and survive reload",
+    "normal Monday payroll accounting",
+    "single preparation screen and simplified live tactics",
+    "direct report closure without results walkthrough",
+    "sale offers require a decision and decline does not sell",
+    "investment preview cancellation spends nothing",
+    "portrait and landscape controls/overflow",
+    "In-depth mobile regression including real touch drag and substitutions",
+    "domestic and European application regressions",
+    "full Streamlined season with backups and reloads",
+    "offline assets, JavaScript syntax and unchanged roster"
+  ]
+}

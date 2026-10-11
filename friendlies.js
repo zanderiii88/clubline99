@@ -1,4 +1,4 @@
-import {stadiumDateConflict} from './club-events.js?v=1.65.0';
+import {stadiumDateConflict} from './club-events.js?v=1.66.0';
 // Invitations are career-owned. Only accepted invitations become fixtures.
 const after=(date,n)=>new Date(Date.parse(date+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
 export function offerFriendlies(career,league){
