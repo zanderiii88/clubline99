@@ -9,9 +9,9 @@ export function initialiseExpectations(c,league){
  return c.expectations;
 }
 export function assessSeason(c,league,table){
- const plan=initialiseExpectations(c,league),row=table.find(x=>x.id===c.clubId)||{P:0,Pts:0},position=table.findIndex(x=>x.id===c.clubId)+1,played=row.P,complete=(c.schedule||[]).length>0&&c.schedule.every(r=>r.fixtures.filter(f=>f.home===c.clubId||f.away===c.clubId).every(f=>f.homeGoals!==null&&f.awayGoals!==null));
+ const plan=initialiseExpectations(c,league),row=table.find(x=>x.id===c.clubId)||{P:0,Pts:0},position=table.findIndex(x=>x.id===c.clubId)+1,played=row.P,complete=(c.schedule||[]).length>0&&c.schedule.every(r=>r.fixtures.filter(f=>!f.friendly&&f.kind!=='playoff'&&f.kind!=='cup'&&(f.home===c.clubId||f.away===c.clubId)).every(f=>f.homeGoals!==null&&f.awayGoals!==null));
  const weekly=league.players.filter(p=>(c.owners?.[p.id]||p.clubId)===c.clubId&&!c.players?.[p.id]?.retired&&!c.players?.[p.id]?.unregistered).reduce((n,p)=>n+(p.wage||0),0),forecast=c.balance-(weekly-(league.clubs.find(x=>x.id===c.clubId)?.commercialWeekly||0))*4;
- const results=(c.reports||[]).filter(r=>!r.friendly),recent=results.slice(-5),recentPoints=recent.reduce((n,r)=>n+(r.us>r.them?3:r.us===r.them?1:0),0),expected=played*plan.expectedPointsPerGame;
+ const results=(c.reports||[]).filter(r=>!r.friendly&&r.kind!=='playoff'&&r.kind!=='cup'),recent=results.slice(-5),recentPoints=recent.reduce((n,r)=>n+(r.us>r.them?3:r.us===r.them?1:0),0),expected=played*plan.expectedPointsPerGame;
  const performance=played?clamp((row.Pts-expected)*2,-28,28):0,positionEffect=played>=4?clamp((plan.targetPosition-position)*2,-12,12)*Math.min(1,played/12):0,financeEffect=c.balance<0?-25:forecast<0?-10:0;
  const board=Math.round(clamp(65+performance+positionEffect+financeEffect,5,95));
  const formEffect=recent.length?clamp((recentPoints-recent.length*plan.expectedPointsPerGame)*4,-24,24):0,goals=recent.length?clamp(recent.reduce((n,r)=>n+r.us-r.them,0),-6,6):0;

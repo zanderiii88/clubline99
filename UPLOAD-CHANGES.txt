@@ -1,4 +1,1 @@
-FULL v1.49.0 APPLICATION — upload all extracted contents to the repository root.
-Do not upload this ZIP as a site file.
-Start a new career for the 20-club 1998–99 edition.
-Audio and notification settings remain independent of career saves.
+Complete release: read INSTALL-1.62.2.md. Upload all extracted contents into the GitHub Pages publishing folder. No prior release required.

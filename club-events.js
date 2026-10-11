@@ -43,7 +43,7 @@ export function bookingConflict(c,b,ignoreId=b.id){
  if(t.seasonal&&!['05','06','07','08'].includes(b.date.slice(5,7)))return 'Outdoor concerts are offered from May to August.';
  const window=bookingWindow(b);
  if(window.start<c.date)return 'There is no longer enough time for setup.';
- for(const r of c.schedule||[])if(r.fixtures.some(f=>f.home===c.clubId)&&r.date>=window.start&&r.date<=window.end)return 'A home fixture falls inside the setup, event or recovery period.';
+ for(const r of c.schedule||[])if(r.fixtures.some(f=>f.home===c.clubId&&!f.neutral)&&r.date>=window.start&&r.date<=window.end)return 'A home fixture falls inside the setup, event or recovery period.';
  for(const other of c.clubLife?.bookings||[])if(other.id!==ignoreId&&['accepted','completed'].includes(other.status)&&overlaps(window,bookingWindow(other)))return 'Another stadium booking occupies these dates.';
  for(const job of c.construction||[])if(overlaps(window,{start:job.starts||job.started||c.date,end:job.opens}))return 'Stadium construction overlaps these dates.';
  return null;

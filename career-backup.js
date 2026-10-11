@@ -1,4 +1,12 @@
-import {validClubLife} from './club-events.js?v=1.55.0';
+import {validSeasonReviews} from './season-review.js?v=1.62.2';
+import {validUC} from './uefa-cup.js?v=1.62.2';
+import {validCL} from './champions-league.js?v=1.62.2';
+import {validVenue} from './venues.js?v=1.62.2';
+import {validFA} from './fa-cup.js?v=1.62.2';
+import {validMatchdays} from './matchday.js?v=1.62.2';
+import {validCup} from './league-cup.js?v=1.62.2';
+import {validDivisions,validPlayoffs} from './divisions.js?v=1.62.2';
+import {validClubLife} from './club-events.js?v=1.62.2';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -9,6 +17,7 @@ export function parseBackup(text,league,formations,styles){
  if(data?.format!=='clubline-career-backup'||data.formatVersion!==1||!object(data.save)||!object(data.save.career))fail();
  const save=structuredClone(data.save),c=save.career,clubs=new Set(league.clubs.map(c=>c.id));
  if(c.rosterEdition!==league.rosterEdition||c.version!==1||!clubs.has(c.clubId)||!Number.isFinite(c.balance)||!/^\d{4}-\d{2}-\d{2}$/.test(c.date)||!Number.isFinite(Date.parse(c.date))||!formations.includes(c.formation)||!styles.includes(c.style)||!object(c.players)||!object(c.stadium)||!Array.isArray(c.reports)||!Array.isArray(c.news)||!Array.isArray(c.schedule)||!c.schedule.length)fail();
+ if(c.schedule.some(r=>r.fixtures.some(f=>!validVenue(f,league)))||save.match&&!validVenue(save.match,league))fail();
  for(const field of ['youthFunding','trainingFunding'])if(c[field]!==undefined&&(!Number.isInteger(c[field])||c[field]<0||c[field]>8))fail();
  const ids=new Set(league.players.map(p=>p.id));
  if(c.generatedPlayers!==undefined&&!Array.isArray(c.generatedPlayers))fail();for(const p of c.generatedPlayers||[]){if(!object(p)||typeof p.id!=='string'||ids.has(p.id)||typeof p.name!=='string'||!clubs.has(p.clubId)||!Number.isFinite(p.overall)||!Number.isFinite(p.wage)||!object(p.positions))fail();ids.add(p.id)}
@@ -16,7 +25,11 @@ export function parseBackup(text,league,formations,styles){
  if(c.contracts!==undefined){if(!object(c.contracts))fail();for(const [id,t]of Object.entries(c.contracts))if(!ids.has(id)||!object(t)||typeof t.end!=='string'||!/^\d{4}-06-30$/.test(t.end)||!Number.isFinite(Date.parse(t.end)))fail();}
  if(c.training!==undefined){const t=c.training,pos=['LB','CB','RB','DM','CM','AM','LW','RW','ST'];if(!object(t)||!['Balanced','Fitness','Development'].includes(t.mode)||typeof t.assistant!=='boolean'||!object(t.assignments)||!Array.isArray(t.reports)||!object(t.focusDays)||!Array.isArray(t.recentDays)||t.recentDays.some(d=>!object(d)||typeof d.date!=='string'||!['Balanced','Fitness','Development'].includes(d.mode)))fail();if(!['lastDay','lastReportDate'].every(k=>typeof t[k]==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(t[k])&&Number.isFinite(Date.parse(t[k]))))fail();for(const n of Object.values(t.focusDays))if(!Number.isInteger(n)||n<0)fail();for(const [id,a]of Object.entries(t.assignments))if(!ids.has(id)||!object(a)||!pos.includes(a.position)||!Number.isFinite(a.progress)||a.progress<0||a.progress>=1)fail();for(const r of t.reports){if(!object(r)||typeof r.date!=='string'||!object(r.focusDays)||!Array.isArray(r.rows))fail();for(const row of r.rows)if(!object(row)||!ids.has(row.id)||typeof row.name!=='string'||!Number.isFinite(row.overall)||!Number.isFinite(row.delta)||!Number.isFinite(row.condition)||!Number.isFinite(row.conditionChange)||!Array.isArray(row.positionChanges)||row.positionChanges.some(x=>!object(x)||typeof x.position!=='string'||!Number.isFinite(x.delta)))fail();}if(!object(t.baseline))fail();for(const [id,b]of Object.entries(t.baseline))if(!ids.has(id)||!object(b)||!Number.isFinite(b.overall)||!Number.isFinite(b.fitness)||!object(b.positions))fail();}
  const selection=(x,length)=>{if(!Array.isArray(x)||length!==undefined&&x.length!==length||x.some(id=>id!==null&&!ids.has(id)))fail()};selection(c.lineup,11);selection(c.bench,7);if(new Set([...c.lineup,...c.bench].filter(Boolean)).size!==[...c.lineup,...c.bench].filter(Boolean).length)fail();
- for(const id of ids){const p=c.players[id];if(!object(p)||!Number.isFinite(p.fitness)||!Array.isArray(p.form)||p.form.some(n=>!Number.isFinite(n)))fail()}
+ if(!validSeasonReviews(c,league)||!validCL(c,league)||!validUC(c,league)||!validCup(c,league)||!validFA(c,league)||!validMatchdays(c))fail();if(c.faPlayedFor!==undefined&&(!object(c.faPlayedFor)||Object.entries(c.faPlayedFor).some(([id,team])=>!ids.has(id)||!clubs.has(team))))fail();if(c.cupPlayedFor!==undefined&&(!object(c.cupPlayedFor)||Object.entries(c.cupPlayedFor).some(([id,team])=>!ids.has(id)||!clubs.has(team))))fail();
+ if(c.divisions!==undefined&&(!validDivisions(c,league)||!validPlayoffs(c,league)))fail();
+ if(c.ucPlayedFor!==undefined&&(!object(c.ucPlayedFor)||Object.entries(c.ucPlayedFor).some(([id,team])=>!ids.has(id)||!clubs.has(team))))fail();
+ if(c.clPlayedFor!==undefined&&(!object(c.clPlayedFor)||Object.entries(c.clPlayedFor).some(([id,team])=>!ids.has(id)||!clubs.has(team))))fail();
+ for(const id of ids){if(!c.players[id]&&league.players.find(p=>p.id===id)?.clubId.startsWith('EU')&&(!c.championsLeague||!c.uefaCup&&!league.clubs.find(x=>x.id===league.players.find(p=>p.id===id)?.clubId)?.clEligible))continue;if(!c.divisions&&!c.players[id]&&Number(league.players.find(p=>p.id===id)?.clubId?.slice(1))>20)continue;const p=c.players[id];if(!object(p)||!Number.isFinite(p.fitness)||!Array.isArray(p.form)||p.form.some(n=>!Number.isFinite(n)))fail()}
  for(const r of c.schedule){if(!object(r)||typeof r.date!=='string'||!Array.isArray(r.fixtures)||r.fixtures.some(f=>!object(f)||!clubs.has(f.home)||!clubs.has(f.away)||f.home===f.away||![f.homeGoals,f.awayGoals].every(g=>g===null||Number.isInteger(g)&&g>=0)))fail()}
  for(const team of Object.values(c.owners||{}))if(!clubs.has(team))fail();for(const o of c.offers||[])if(!object(o)||!ids.has(o.id)||!clubs.has(o.clubId)||!Number.isFinite(o.fee)||o.fee<0)fail();
  if(save.match){const m=save.match;if(!object(m)||!['choice','confirm','live','report'].includes(m.phase)||!clubs.has(m.home)||!clubs.has(m.away)||m.home===m.away)fail();if(m.lineup)selection(m.lineup,11);if(m.bench)selection(m.bench);if(m.oppLineup)selection(m.oppLineup,11);if(m.phase==='live'&&(!Number.isFinite(m.minute)||!Array.isArray(m.events)||!m.lineup||!m.bench))fail()}

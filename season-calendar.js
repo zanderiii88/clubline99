@@ -1,4 +1,4 @@
-import {bookingWindow} from './club-events.js?v=1.55.0';
+import {bookingWindow} from './club-events.js?v=1.62.2';
 // Football order is deliberately independent of alphabetical position names.
 export const POSITION_ORDER=['GK','LB','CB','RB','LWB','RWB','DM','CM','LM','RM','AM','LW','RW','CF','ST'];
 export const positionRank=pos=>{const i=POSITION_ORDER.indexOf(pos);return i<0?99:i};
@@ -11,12 +11,12 @@ export function seasonSchedule(ids,year=1998,season=1){
   legs.push(Array.from({length:n/2},(_,i)=>r%2?[rotation[n-1-i],rotation[i]]:[rotation[i],rotation[n-1-i]]));
   rotation.splice(1,0,rotation.pop());
  }
- let start=`${year}-08-15`;start=after(start,(6-new Date(start+'T12:00:00Z').getUTCDay()+7)%7);
+ let start=`${year}-08-${n===24?'08':'15'}`;start=after(start,(6-new Date(start+'T12:00:00Z').getUTCDay()+7)%7);
  // Two meetings per opponent, with midweek rounds and international/holiday gaps.
  const offsets=[];for(let week=0;offsets.length<2*(n-1);week++){
-  if([6,12,18,25,30,35].includes(week))continue;
+  if((n===24?[6,12,18,25,30]:[6,12,18,25,30,35]).includes(week))continue;
   offsets.push(week*7);
-  if([2,15,21,33].includes(week)&&offsets.length<2*(n-1))offsets.push(week*7+4);
+  if((n===24?[2,5,8,11,15,20,23,28,32,35]:[2,15,21,33]).includes(week)&&offsets.length<2*(n-1))offsets.push(week*7+4);
  }
  return offsets.map((offset,round)=>({date:after(start,offset),fixtures:legs[round%(n-1)].map(([a,b])=>({home:round<n-1?a:b,away:round<n-1?b:a,kickoff:offset%7===0?'15:00':'19:45',homeGoals:null,awayGoals:null}))}));
 }
@@ -39,6 +39,9 @@ export function monthDays(month){
 export function shiftMonth(month,delta){const d=new Date(month+'-01T12:00:00Z');d.setUTCMonth(d.getUTCMonth()+delta);return d.toISOString().slice(0,7)}
 export function calendarEvents(career){
  const events=new Map(),add=(date,event)=>{if(!date)return;if(!events.has(date))events.set(date,[]);events.get(date).push(event)};
+ for(const round of career.uefaCup?.rounds||[])add(round.drawDate,{kind:'draw',competition:'uefa-cup',round});
+ for(const round of career.championsLeague?.stages||[])add(round.drawDate,{kind:'draw',competition:'champions-league',round});
+ for(const [competition,cup]of [['league-cup',career.leagueCup],['fa-cup',career.faCup]])for(const round of cup?.rounds||[])add(round.drawDate,{kind:'draw',competition,round});
  let index=0;
  for(const r of career.schedule)for(const f of r.fixtures)if(f.home===career.clubId||f.away===career.clubId)add(r.date,{kind:'fixture',fixture:f,index:index++});
  for(const n of career.news||[])if(['development','youth','scouting','training','wages','stadium'].includes(n.kind))add(n.date,{kind:n.kind==='wages'?'wages':n.kind==='stadium'?'stadium':'report',news:n});

@@ -1,0 +1,140 @@
+{
+  "suppliedByUser": true,
+  "tracks": [
+    {
+      "file": "melodyayresgriffiths-1994-techno-ballroom-retrowave-90s-electronic-synthwave-141578.mp3",
+      "bytes": 6927255,
+      "sha256": "98e24feaae5607490880eeff493f55d89bba55a69dee793a10bfed27cc2cb183",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "216.476719"
+        }
+      },
+      "asset": "assets/audio/clubline-1994-techno-ballroom.mp3",
+      "title": "1994 Techno Ballroom",
+      "creator": "melodyayresgriffiths",
+      "pixabayId": 141578,
+      "sourceUrl": null,
+      "sourceVerification": "User-supplied Pixabay download; page unavailable during verification",
+      "licence": "Pixabay Content License",
+      "licenceUrl": "https://pixabay.com/service/terms/",
+      "contentIdStatus": "Not independently verified; no certificate supplied"
+    },
+    {
+      "file": "lofidreams-90x27s-synthwave-music-384110.mp3",
+      "bytes": 7190784,
+      "sha256": "34ee5630d9b40a563edf5697061fb062d6718f390440640f399dfce1dc8273a6",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "48000",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "224.712000"
+        }
+      },
+      "asset": "assets/audio/clubline-90s-synthwave.mp3",
+      "title": "90s Synthwave",
+      "creator": "lofidreams",
+      "pixabayId": 384110,
+      "sourceUrl": "https://pixabay.com/music/synthwave-90x27s-synthwave-music-384110/",
+      "sourceVerification": "Pixabay page checked",
+      "licence": "Pixabay Content License",
+      "licenceUrl": "https://pixabay.com/service/terms/",
+      "contentIdStatus": "Not independently verified; no certificate supplied"
+    },
+    {
+      "file": "marvrix-synth-wave-200494.mp3",
+      "bytes": 8864078,
+      "sha256": "7dabae1e0808b3fd4c56a1936e863678ba1423f38772c689345ea9072d558c51",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "277.002438"
+        }
+      },
+      "asset": "assets/audio/clubline-synth-wave.mp3",
+      "title": "Synth Wave",
+      "creator": "Marvrix",
+      "pixabayId": 200494,
+      "sourceUrl": "https://pixabay.com/music/synthwave-synth-wave-200494/",
+      "sourceVerification": "Pixabay page checked",
+      "licence": "Pixabay Content License",
+      "licenceUrl": "https://pixabay.com/service/terms/",
+      "contentIdStatus": "Not independently verified; no certificate supplied"
+    },
+    {
+      "file": "poorartistt-90s-game-music-no-copyright-352850.mp3",
+      "bytes": 5035008,
+      "sha256": "6472ead8d72d05f6e2ff0871415ebfc20430e8b6b53d1113ad3566e0cc2802d9",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "48000",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "157.344000"
+        }
+      },
+      "asset": "assets/audio/clubline-90s-game-music.mp3",
+      "title": "90s Game Music",
+      "creator": "PoorArtistt",
+      "pixabayId": 352850,
+      "sourceUrl": "https://pixabay.com/music/video-games-90s-game-music-no-copyright-352850/",
+      "sourceVerification": "Pixabay page checked",
+      "licence": "Pixabay Content License",
+      "licenceUrl": "https://pixabay.com/service/terms/",
+      "contentIdStatus": "Not independently verified; no certificate supplied"
+    },
+    {
+      "file": "berrydeep-back-to-90s-579460.mp3",
+      "bytes": 4690338,
+      "sha256": "d5f483b7a0e3bc16f80759117be6bc485d2ab1463690c79eb2272af91af1fda9",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "codec_name": "mp3",
+            "sample_rate": "44100",
+            "channels": 2
+          }
+        ],
+        "format": {
+          "duration": "146.573063"
+        }
+      },
+      "asset": "assets/audio/clubline-back-to-90s.mp3",
+      "title": "Back to 90s",
+      "creator": "berrydeep",
+      "pixabayId": 579460,
+      "sourceUrl": null,
+      "sourceVerification": "User-supplied Pixabay download; page unavailable during verification",
+      "licence": "Pixabay Content License",
+      "licenceUrl": "https://pixabay.com/service/terms/",
+      "contentIdStatus": "Not independently verified; no certificate supplied"
+    }
+  ]
+}
