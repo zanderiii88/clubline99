@@ -1,12 +1,12 @@
-import {validSeasonReviews} from './season-review.js?v=1.66.0';
-import {validUC} from './uefa-cup.js?v=1.66.0';
-import {validCL} from './champions-league.js?v=1.66.0';
-import {validVenue} from './venues.js?v=1.66.0';
-import {validFA} from './fa-cup.js?v=1.66.0';
-import {validMatchdays} from './matchday.js?v=1.66.0';
-import {validCup} from './league-cup.js?v=1.66.0';
-import {validDivisions,validPlayoffs} from './divisions.js?v=1.66.0';
-import {validClubLife} from './club-events.js?v=1.66.0';
+import {validSeasonReviews} from './season-review.js?v=1.67.0';
+import {validUC} from './uefa-cup.js?v=1.67.0';
+import {validCL} from './champions-league.js?v=1.67.0';
+import {validVenue} from './venues.js?v=1.67.0';
+import {validFA} from './fa-cup.js?v=1.67.0';
+import {validMatchdays} from './matchday.js?v=1.67.0';
+import {validCup} from './league-cup.js?v=1.67.0';
+import {validDivisions,validPlayoffs} from './divisions.js?v=1.67.0';
+import {validClubLife} from './club-events.js?v=1.67.0';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -32,7 +32,7 @@ export function parseBackup(text,league,formations,styles){
  if(c.clPlayedFor!==undefined&&(!object(c.clPlayedFor)||Object.entries(c.clPlayedFor).some(([id,team])=>!ids.has(id)||!clubs.has(team))))fail();
  for(const id of ids){if(!c.players[id]&&league.players.find(p=>p.id===id)?.clubId.startsWith('EU')&&(!c.championsLeague||!c.uefaCup&&!league.clubs.find(x=>x.id===league.players.find(p=>p.id===id)?.clubId)?.clEligible))continue;if(!c.divisions&&!c.players[id]&&Number(league.players.find(p=>p.id===id)?.clubId?.slice(1))>20)continue;const p=c.players[id];if(!object(p)||!Number.isFinite(p.fitness)||!Array.isArray(p.form)||p.form.some(n=>!Number.isFinite(n)))fail()}
  for(const r of c.schedule){if(!object(r)||typeof r.date!=='string'||!Array.isArray(r.fixtures)||r.fixtures.some(f=>!object(f)||!clubs.has(f.home)||!clubs.has(f.away)||f.home===f.away||![f.homeGoals,f.awayGoals].every(g=>g===null||Number.isInteger(g)&&g>=0)))fail()}
- for(const team of Object.values(c.owners||{}))if(!clubs.has(team))fail();for(const o of c.offers||[])if(!object(o)||!ids.has(o.id)||!clubs.has(o.clubId)||!Number.isFinite(o.fee)||o.fee<0)fail();
+ for(const team of Object.values(c.owners||{}))if(team!=='FREE'&&!clubs.has(team))fail();for(const o of c.offers||[])if(!object(o)||!ids.has(o.id)||!clubs.has(o.clubId)||!Number.isFinite(o.fee)||o.fee<0)fail();
  if(save.match){const m=save.match;if(!object(m)||!['choice','confirm','live','report'].includes(m.phase)||!clubs.has(m.home)||!clubs.has(m.away)||m.home===m.away)fail();if(m.lineup)selection(m.lineup,11);if(m.bench)selection(m.bench);if(m.oppLineup)selection(m.oppLineup,11);if(m.phase==='live'&&(!Number.isFinite(m.minute)||!Array.isArray(m.events)||!m.lineup||!m.bench))fail()}
  return save;
 }

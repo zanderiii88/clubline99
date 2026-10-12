@@ -1,5 +1,5 @@
-import {divisionOf} from './divisions.js?v=1.66.0';
-import {cupAfter as after,insertCupFixture as insert} from './cup-scheduling.js?v=1.66.0';
+import {divisionOf} from './divisions.js?v=1.67.0';
+import {cupAfter as after,insertCupFixture as insert} from './cup-scheduling.js?v=1.67.0';
 export const CUP_ID='league-cup';
 export const CUP_ROUNDS=[{name:'First round',month:'08-11',legs:2,prize:10000},{name:'Second round',month:'09-15',legs:2,prize:20000},{name:'Third round',month:'10-27',legs:1,prize:30000},{name:'Fourth round',month:'11-10',legs:1,prize:50000},{name:'Quarter-finals',month:'12-01',legs:1,prize:75000},{name:'Semi-finals',month:'01-26',legs:2,prize:125000},{name:'Final',month:'03-21',legs:1,prize:250000,neutral:true}];
 const rng=seed=>{let v=2166136261;for(const ch of seed)v=Math.imul(v^ch.charCodeAt(0),16777619);return()=>{v^=v<<13;v^=v>>>17;v^=v<<5;return (v>>>0)/4294967296;}};

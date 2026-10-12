@@ -1,0 +1,26 @@
+{
+  "version": "1.67.0",
+  "passed": true,
+  "environment": "Chromium mobile emulation and Node application/module regressions",
+  "viewports": ["390x844", "360x740", "844x390"],
+  "physicalAndroidTested": false,
+  "checks": [
+    "briefing links open and Back returns without advancing/draw consumption",
+    "European tabs exclude domestic division buttons",
+    "Champions League tables, fixture/result views and 24-club inspection",
+    "undrawn groups and fixtures hidden",
+    "mini-table top/bottom boundaries and league-only form",
+    "free-agent name/fee filters and confirmed zero-fee signing",
+    "youth call-up, reserve dropdown swap, reload, return and backup",
+    "explicit corner controls and preview without spending",
+    "mid-season stadium decision and season-end deferral",
+    "visible live action and main Next event/Half-time/Full-time controls",
+    "goals/red cards and minutes immediately below score",
+    "centred club card, portrait/landscape controls and no horizontal overflow",
+    "In-depth mobile regressions including real touch drag and confirmed/cancelled substitutions",
+    "Champions League and UEFA Cup application regressions",
+    "full Streamlined season, backups and reloads",
+    "free-agent generation, registration caps and reversible/permanent youth handling",
+    "offline assets, syntax and unchanged original roster"
+  ]
+}

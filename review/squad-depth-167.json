@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "free agents persist without duplication",
+    "separate fee/value/name/status filters",
+    "five development-place limit",
+    "temporary call-up and return clear XI/bench",
+    "return preserves fitness/form/development/appearances",
+    "recall preserves player identity",
+    "permanent promotion has no temporary return",
+    "season rollover returns temporary academy players",
+    "new season free-agent intake"
+  ]
+}

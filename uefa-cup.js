@@ -1,6 +1,6 @@
-import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.66.0';
-import {divisionTable,domesticClub} from './divisions.js?v=1.66.0';
-import {clQualified} from './champions-league.js?v=1.66.0';
+import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.67.0';
+import {divisionTable,domesticClub} from './divisions.js?v=1.67.0';
+import {clQualified} from './champions-league.js?v=1.67.0';
 export const UC_ID='uefa-cup';
 export const UC_OPENING_ENGLISH=['C02','C03','C09','C11'];
 export const ucFixtures=c=>c.schedule.flatMap(r=>r.fixtures.filter(f=>f.competition===UC_ID).map(f=>({...f,date:r.date})));
