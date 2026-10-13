@@ -1,4 +1,4 @@
-# CLUBLINE 99 — 1.71.0
+# CLUBLINE 99 — 1.72.0
 
 Complete cumulative release built from the verified 1.70.0 ZIP. Extract the entire archive before uploading its contents. No deployment was performed.
 

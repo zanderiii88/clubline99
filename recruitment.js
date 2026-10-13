@@ -1,6 +1,6 @@
-import {playerValue,transferFee} from './transfer-search.js?v=1.71.0';
-import {scoutEstimate} from './scouting.js?v=1.71.0';
-import {contractStatus,squadCover} from './contracts.js?v=1.71.0';
+import {playerValue,transferFee} from './transfer-search.js?v=1.72.0';
+import {scoutEstimate} from './scouting.js?v=1.72.0';
+import {contractStatus,squadCover} from './contracts.js?v=1.72.0';
 export const estimatedBid=transferFee;
 const owner=(c,p)=>c.owners?.[p.id]||p.clubId;
 const active=(c,p)=>!c.players?.[p.id]?.retired&&!c.players?.[p.id]?.unregistered;

@@ -1,8 +1,8 @@
-import {initialiseNationalities} from './nationalities.js?v=1.71.0';
-import {worldRollover,youthReadiness} from './world-development.js?v=1.71.0';
-import {returnLoan} from './loans.js?v=1.71.0';
-import {facilityLevel} from './club-investment.js?v=1.71.0';
-import {trainingDevelopmentFactor} from './training.js?v=1.71.0';
+import {initialiseNationalities} from './nationalities.js?v=1.72.0';
+import {worldRollover,youthReadiness} from './world-development.js?v=1.72.0';
+import {returnLoan} from './loans.js?v=1.72.0';
+import {facilityLevel} from './club-investment.js?v=1.72.0';
+import {trainingDevelopmentFactor} from './training.js?v=1.72.0';
 // Career-owned youth and development data; saved with the existing career.
 const POS=['GK','LB','CB','RB','DM','CM','AM','LW','RW','ST'];
 const SECOND={LB:'CB',RB:'CB',CB:'DM',DM:'CM',CM:'AM',AM:'CM',LW:'RW',RW:'LW',ST:'AM'};

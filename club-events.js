@@ -4,6 +4,7 @@ const hash=s=>{let n=2166136261;for(const c of s){n^=c.charCodeAt(0);n=Math.imul
 const clamp=(n,min=0,max=100)=>Math.max(min,Math.min(max,n));
 const choice=(id,label,effects,result)=>({id,label,effects,result});
 export const CLUB_STORIES=[
+ {id:'mascot-mischief',title:'The mascot wins the training session',text:'The club mascot joined the crossbar challenge after training. Three attempts, three hits. The captain has asked the kit staff to check whether there is a professional hiding inside the costume.',effects:{clubMorale:1,squadHappiness:1},result:'The mascot won the crossbar challenge and celebrated with a lap of honour. The squad are demanding a rematch. Club morale +1; squad happiness +1. No money spent.'},
  {id:'charity',title:'A visit to the children’s ward',text:'A local charity asks whether a few players can visit the children’s ward after training.',choices:[choice('visit','Arrange the visit',{cash:-1500,clubMorale:2,supporters:3,squadHappiness:1},'The players made time for the visit. The families and supporters appreciated it.'),choice('later','Politely postpone',{},'The charity understands and hopes to arrange another visit later.')]},
  {id:'disagreement',title:'A training-ground disagreement',text:'Two senior players have had a disagreement during training. The coach suggests a quiet conversation.',choices:[choice('talk','Bring them together',{clubMorale:2,squadHappiness:2},'A calm conversation cleared the air.'),choice('leave','Let them settle it',{clubMorale:-2,squadHappiness:-1},'The tension lingered around the training ground.')]},
  {id:'fundraiser',title:'Supporters rally round',text:'The supporters’ association has organised a small fundraiser for the club.',effects:{cash:4500,supporters:2,clubMorale:1},result:'The supporters handed over their donation. A welcome gesture from the community.'},
@@ -106,6 +107,13 @@ export function advanceClubLife(c,league,{generate=true}={}){
  life.lastProcessed=c.date;
  for(const b of life.bookings){if(b.status==='offered'&&c.date>b.deadline)b.status='expired';else settleBooking(c,league,b)}
  for(const s of life.stories.filter(s=>s.status==='pending'&&c.date>s.deadline)){s.status='resolved';s.expired=true;s.resolvedOn=c.date;s.effects={cash:0,clubMorale:0,supporters:0,players:[]};s.result='No decision was recorded before the deadline. The matter was deferred without additional spending.';c.news.push({date:c.date,kind:'club-story',eventId:s.id,text:`${s.title}: ${s.result}`})}
+ // Temporary testing guarantee: one cheerful story on day three of the first season,
+ // including Streamlined mode. Existing careers past the first week are unaffected.
+ const start=c.seasonStart,openingWeek=start&&c.date>=eventAfter(start,2)&&c.date<=eventAfter(start,6);
+ if(openingWeek&&(c.season||1)===1&&!life.firstWeekEvent){
+  const story=createClubStory(c,league,'mascot-mischief');
+  if(story){life.firstWeekEvent={id:story.id,read:false};c.news.at(-1).important=true;}
+ }
  if(!generate)return;
  const matchday=(c.schedule||[]).some(r=>r.date===c.date&&r.fixtures.some(f=>f.home===c.clubId||f.away===c.clubId));
  if(!matchday&&c.date>=life.nextStory&&!life.stories.some(s=>s.status==='pending')){

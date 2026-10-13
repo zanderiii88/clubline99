@@ -1,5 +1,5 @@
-import {hash} from './player-attributes.js?v=1.71.0';
-import {generatedIdentity} from './nationalities.js?v=1.71.0';
+import {hash} from './player-attributes.js?v=1.72.0';
+import {generatedIdentity} from './nationalities.js?v=1.72.0';
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n)),days=(a,b)=>Math.floor((Date.parse(b)-Date.parse(a))/86400000);
 const strength=t=>(t.attack+t.defence)/2;
 const emptyRecord=()=>({played:0,won:0,drawn:0,lost:0,gf:0,ga:0});

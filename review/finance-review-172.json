@@ -1,0 +1,549 @@
+{
+  "decision": "Keep existing starting cash. Cash funds all operations, not a ring-fenced transfer allowance. Transfer reviews now show advisory cash after four payrolls and wage headroom. No claim of historically exact bank balances or new season-long balance validation.",
+  "clubs": [
+    {
+      "club": "Armoury FC",
+      "cash": 7600000,
+      "weeklyWages": 206600,
+      "fourPayrollReserve": 826400,
+      "cashAfterReserve": 6773600,
+      "commercialWeekly": 124000
+    },
+    {
+      "club": "Aston Vale",
+      "cash": 4950000,
+      "weeklyWages": 87050,
+      "fourPayrollReserve": 348200,
+      "cashAfterReserve": 4601800,
+      "commercialWeekly": 52000
+    },
+    {
+      "club": "Roseburn Rovers",
+      "cash": 4650000,
+      "weeklyWages": 76350,
+      "fourPayrollReserve": 305400,
+      "cashAfterReserve": 4344600,
+      "commercialWeekly": 46000
+    },
+    {
+      "club": "Charldon Athletic",
+      "cash": 3650000,
+      "weeklyWages": 48650,
+      "fourPayrollReserve": 194600,
+      "cashAfterReserve": 3455400,
+      "commercialWeekly": 29000
+    },
+    {
+      "club": "Chelsey FC",
+      "cash": 7500000,
+      "weeklyWages": 196450,
+      "fourPayrollReserve": 785800,
+      "cashAfterReserve": 6714200,
+      "commercialWeekly": 118000
+    },
+    {
+      "club": "Coventon City",
+      "cash": 3900000,
+      "weeklyWages": 55950,
+      "fourPayrollReserve": 223800,
+      "cashAfterReserve": 3676200,
+      "commercialWeekly": 34000
+    },
+    {
+      "club": "Darby County",
+      "cash": 4500000,
+      "weeklyWages": 72150,
+      "fourPayrollReserve": 288600,
+      "cashAfterReserve": 4211400,
+      "commercialWeekly": 43000
+    },
+    {
+      "club": "Everdon FC",
+      "cash": 4700000,
+      "weeklyWages": 77400,
+      "fourPayrollReserve": 309600,
+      "cashAfterReserve": 4390400,
+      "commercialWeekly": 46000
+    },
+    {
+      "club": "Leedham United",
+      "cash": 5750000,
+      "weeklyWages": 110650,
+      "fourPayrollReserve": 442600,
+      "cashAfterReserve": 5307400,
+      "commercialWeekly": 66000
+    },
+    {
+      "club": "Lester City",
+      "cash": 3450000,
+      "weeklyWages": 43450,
+      "fourPayrollReserve": 173800,
+      "cashAfterReserve": 3276200,
+      "commercialWeekly": 26000
+    },
+    {
+      "club": "Riverpool FC",
+      "cash": 7300000,
+      "weeklyWages": 180950,
+      "fourPayrollReserve": 723800,
+      "cashAfterReserve": 6576200,
+      "commercialWeekly": 109000
+    },
+    {
+      "club": "Mancaster United",
+      "cash": 8400000,
+      "weeklyWages": 264350,
+      "fourPayrollReserve": 1057400,
+      "cashAfterReserve": 7342600,
+      "commercialWeekly": 159000
+    },
+    {
+      "club": "Middleborough FC",
+      "cash": 3950000,
+      "weeklyWages": 61450,
+      "fourPayrollReserve": 245800,
+      "cashAfterReserve": 3704200,
+      "commercialWeekly": 37000
+    },
+    {
+      "club": "Northcastle United",
+      "cash": 5300000,
+      "weeklyWages": 99050,
+      "fourPayrollReserve": 396200,
+      "cashAfterReserve": 4903800,
+      "commercialWeekly": 59000
+    },
+    {
+      "club": "Nottingham Grove",
+      "cash": 3600000,
+      "weeklyWages": 48250,
+      "fourPayrollReserve": 193000,
+      "cashAfterReserve": 3407000,
+      "commercialWeekly": 29000
+    },
+    {
+      "club": "Steel Wednesday",
+      "cash": 4500000,
+      "weeklyWages": 68650,
+      "fourPayrollReserve": 274600,
+      "cashAfterReserve": 4225400,
+      "commercialWeekly": 41000
+    },
+    {
+      "club": "Southport Saints",
+      "cash": 3950000,
+      "weeklyWages": 58450,
+      "fourPayrollReserve": 233800,
+      "cashAfterReserve": 3716200,
+      "commercialWeekly": 35000
+    },
+    {
+      "club": "Tottenham Falcons",
+      "cash": 5450000,
+      "weeklyWages": 102950,
+      "fourPayrollReserve": 411800,
+      "cashAfterReserve": 5038200,
+      "commercialWeekly": 62000
+    },
+    {
+      "club": "Westbridge United",
+      "cash": 5100000,
+      "weeklyWages": 85750,
+      "fourPayrollReserve": 343000,
+      "cashAfterReserve": 4757000,
+      "commercialWeekly": 51000
+    },
+    {
+      "club": "Wimbleton FC",
+      "cash": 4500000,
+      "weeklyWages": 70600,
+      "fourPayrollReserve": 282400,
+      "cashAfterReserve": 4217600,
+      "commercialWeekly": 42000
+    },
+    {
+      "club": "Wearside AFC",
+      "cash": 3000000,
+      "weeklyWages": 92050,
+      "fourPayrollReserve": 368200,
+      "cashAfterReserve": 2631800,
+      "commercialWeekly": 32000
+    },
+    {
+      "club": "Brackenford City",
+      "cash": 2000000,
+      "weeklyWages": 52600,
+      "fourPayrollReserve": 210400,
+      "cashAfterReserve": 1789600,
+      "commercialWeekly": 20000
+    },
+    {
+      "club": "Ipsford Town",
+      "cash": 2550000,
+      "weeklyWages": 58700,
+      "fourPayrollReserve": 234800,
+      "cashAfterReserve": 2315200,
+      "commercialWeekly": 23500
+    },
+    {
+      "club": "Brumford City",
+      "cash": 2500000,
+      "weeklyWages": 53150,
+      "fourPayrollReserve": 212600,
+      "cashAfterReserve": 2287400,
+      "commercialWeekly": 25500
+    },
+    {
+      "club": "Watley FC",
+      "cash": 1900000,
+      "weeklyWages": 44850,
+      "fourPayrollReserve": 179400,
+      "cashAfterReserve": 1720600,
+      "commercialWeekly": 20500
+    },
+    {
+      "club": "Boltonmere Wanderers",
+      "cash": 2500000,
+      "weeklyWages": 58500,
+      "fourPayrollReserve": 234000,
+      "cashAfterReserve": 2266000,
+      "commercialWeekly": 25000
+    },
+    {
+      "club": "Wolverton Wolves",
+      "cash": 2500000,
+      "weeklyWages": 63450,
+      "fourPayrollReserve": 253800,
+      "cashAfterReserve": 2246200,
+      "commercialWeekly": 25500
+    },
+    {
+      "club": "Steel United",
+      "cash": 2350000,
+      "weeklyWages": 58400,
+      "fourPayrollReserve": 233600,
+      "cashAfterReserve": 2116400,
+      "commercialWeekly": 25500
+    },
+    {
+      "club": "Norchester City",
+      "cash": 2050000,
+      "weeklyWages": 50350,
+      "fourPayrollReserve": 201400,
+      "cashAfterReserve": 1848600,
+      "commercialWeekly": 21500
+    },
+    {
+      "club": "Hudderfield Town",
+      "cash": 1900000,
+      "weeklyWages": 40750,
+      "fourPayrollReserve": 163000,
+      "cashAfterReserve": 1737000,
+      "commercialWeekly": 20500
+    },
+    {
+      "club": "Grimston Town",
+      "cash": 1100000,
+      "weeklyWages": 23250,
+      "fourPayrollReserve": 93000,
+      "cashAfterReserve": 1007000,
+      "commercialWeekly": 14000
+    },
+    {
+      "club": "Westborough Albion",
+      "cash": 2000000,
+      "weeklyWages": 37400,
+      "fourPayrollReserve": 149600,
+      "cashAfterReserve": 1850400,
+      "commercialWeekly": 22500
+    },
+    {
+      "club": "Barnsdale FC",
+      "cash": 2100000,
+      "weeklyWages": 45050,
+      "fourPayrollReserve": 180200,
+      "cashAfterReserve": 1919800,
+      "commercialWeekly": 22000
+    },
+    {
+      "club": "Croydon Eagles",
+      "cash": 2300000,
+      "weeklyWages": 59300,
+      "fourPayrollReserve": 237200,
+      "cashAfterReserve": 2062800,
+      "commercialWeekly": 24000
+    },
+    {
+      "club": "Merseybank Rovers",
+      "cash": 1500000,
+      "weeklyWages": 40150,
+      "fourPayrollReserve": 160600,
+      "cashAfterReserve": 1339400,
+      "commercialWeekly": 17500
+    },
+    {
+      "club": "Stockford County",
+      "cash": 1300000,
+      "weeklyWages": 32700,
+      "fourPayrollReserve": 130800,
+      "cashAfterReserve": 1169200,
+      "commercialWeekly": 15000
+    },
+    {
+      "club": "Swindale Town",
+      "cash": 1200000,
+      "weeklyWages": 27000,
+      "fourPayrollReserve": 108000,
+      "cashAfterReserve": 1092000,
+      "commercialWeekly": 16000
+    },
+    {
+      "club": "Railton Alexandra",
+      "cash": 1300000,
+      "weeklyWages": 34300,
+      "fourPayrollReserve": 137200,
+      "cashAfterReserve": 1162800,
+      "commercialWeekly": 15000
+    },
+    {
+      "club": "Portsea City",
+      "cash": 1600000,
+      "weeklyWages": 33650,
+      "fourPayrollReserve": 134600,
+      "cashAfterReserve": 1465400,
+      "commercialWeekly": 19000
+    },
+    {
+      "club": "Queensbridge Rangers",
+      "cash": 1550000,
+      "weeklyWages": 36650,
+      "fourPayrollReserve": 146600,
+      "cashAfterReserve": 1403400,
+      "commercialWeekly": 18500
+    },
+    {
+      "club": "Bursley Vale",
+      "cash": 1100000,
+      "weeklyWages": 23450,
+      "fourPayrollReserve": 93800,
+      "cashAfterReserve": 1006200,
+      "commercialWeekly": 17000
+    },
+    {
+      "club": "Burridge FC",
+      "cash": 850000,
+      "weeklyWages": 21350,
+      "fourPayrollReserve": 85400,
+      "cashAfterReserve": 764600,
+      "commercialWeekly": 13500
+    },
+    {
+      "club": "Oxbridge United",
+      "cash": 950000,
+      "weeklyWages": 22900,
+      "fourPayrollReserve": 91600,
+      "cashAfterReserve": 858400,
+      "commercialWeekly": 13500
+    },
+    {
+      "club": "Briston City",
+      "cash": 1450000,
+      "weeklyWages": 32150,
+      "fourPayrollReserve": 128600,
+      "cashAfterReserve": 1321400,
+      "commercialWeekly": 19000
+    },
+    {
+      "club": "Fulbrook FC",
+      "cash": 2500000,
+      "weeklyWages": 24300,
+      "fourPayrollReserve": 97200,
+      "cashAfterReserve": 2402800,
+      "commercialWeekly": 19000
+    },
+    {
+      "club": "Walsford Saddlers",
+      "cash": 1750000,
+      "weeklyWages": 14050,
+      "fourPayrollReserve": 56200,
+      "cashAfterReserve": 1693800,
+      "commercialWeekly": 13500
+    },
+    {
+      "club": "Mancaster City",
+      "cash": 2700000,
+      "weeklyWages": 26800,
+      "fourPayrollReserve": 107200,
+      "cashAfterReserve": 2592800,
+      "commercialWeekly": 24000
+    },
+    {
+      "club": "Gillington FC",
+      "cash": 1900000,
+      "weeklyWages": 15650,
+      "fourPayrollReserve": 62600,
+      "cashAfterReserve": 1837400,
+      "commercialWeekly": 13500
+    },
+    {
+      "club": "Prestford North End",
+      "cash": 2150000,
+      "weeklyWages": 19900,
+      "fourPayrollReserve": 79600,
+      "cashAfterReserve": 2070400,
+      "commercialWeekly": 17000
+    },
+    {
+      "club": "Wigston Athletic",
+      "cash": 1850000,
+      "weeklyWages": 17550,
+      "fourPayrollReserve": 70200,
+      "cashAfterReserve": 1779800,
+      "commercialWeekly": 12500
+    },
+    {
+      "club": "AFC Bourneford",
+      "cash": 1750000,
+      "weeklyWages": 15600,
+      "fourPayrollReserve": 62400,
+      "cashAfterReserve": 1687600,
+      "commercialWeekly": 13000
+    },
+    {
+      "club": "Stoketon City",
+      "cash": 2300000,
+      "weeklyWages": 14300,
+      "fourPayrollReserve": 57200,
+      "cashAfterReserve": 2242800,
+      "commercialWeekly": 21000
+    },
+    {
+      "club": "Chesterford FC",
+      "cash": 1400000,
+      "weeklyWages": 12100,
+      "fourPayrollReserve": 48400,
+      "cashAfterReserve": 1351600,
+      "commercialWeekly": 11000
+    },
+    {
+      "club": "Millbank Lions",
+      "cash": 1900000,
+      "weeklyWages": 16600,
+      "fourPayrollReserve": 66400,
+      "cashAfterReserve": 1833600,
+      "commercialWeekly": 17000
+    },
+    {
+      "club": "Readford FC",
+      "cash": 1950000,
+      "weeklyWages": 13050,
+      "fourPayrollReserve": 52200,
+      "cashAfterReserve": 1897800,
+      "commercialWeekly": 18500
+    },
+    {
+      "club": "Lutley Town",
+      "cash": 1600000,
+      "weeklyWages": 12400,
+      "fourPayrollReserve": 49600,
+      "cashAfterReserve": 1550400,
+      "commercialWeekly": 12500
+    },
+    {
+      "club": "Briston Rovers",
+      "cash": 1750000,
+      "weeklyWages": 16250,
+      "fourPayrollReserve": 65000,
+      "cashAfterReserve": 1685000,
+      "commercialWeekly": 13000
+    },
+    {
+      "club": "Blackshore FC",
+      "cash": 1450000,
+      "weeklyWages": 11700,
+      "fourPayrollReserve": 46800,
+      "cashAfterReserve": 1403200,
+      "commercialWeekly": 12000
+    },
+    {
+      "club": "Burnside FC",
+      "cash": 1600000,
+      "weeklyWages": 12150,
+      "fourPayrollReserve": 48600,
+      "cashAfterReserve": 1551400,
+      "commercialWeekly": 15500
+    },
+    {
+      "club": "Nottingham County",
+      "cash": 1600000,
+      "weeklyWages": 11750,
+      "fourPayrollReserve": 47000,
+      "cashAfterReserve": 1553000,
+      "commercialWeekly": 15500
+    },
+    {
+      "club": "Wrexford AFC",
+      "cash": 1300000,
+      "weeklyWages": 11450,
+      "fourPayrollReserve": 45800,
+      "cashAfterReserve": 1254200,
+      "commercialWeekly": 12000
+    },
+    {
+      "club": "Colchester Vale",
+      "cash": 1050000,
+      "weeklyWages": 10200,
+      "fourPayrollReserve": 40800,
+      "cashAfterReserve": 1009200,
+      "commercialWeekly": 9000
+    },
+    {
+      "club": "Wycombe Woods",
+      "cash": 1250000,
+      "weeklyWages": 10650,
+      "fourPayrollReserve": 42600,
+      "cashAfterReserve": 1207400,
+      "commercialWeekly": 11000
+    },
+    {
+      "club": "Oldford Athletic",
+      "cash": 1500000,
+      "weeklyWages": 12700,
+      "fourPayrollReserve": 50800,
+      "cashAfterReserve": 1449200,
+      "commercialWeekly": 13000
+    },
+    {
+      "club": "Yorchester City",
+      "cash": 950000,
+      "weeklyWages": 8050,
+      "fourPayrollReserve": 32200,
+      "cashAfterReserve": 917800,
+      "commercialWeekly": 9500
+    },
+    {
+      "club": "Northam Town",
+      "cash": 950000,
+      "weeklyWages": 8600,
+      "fourPayrollReserve": 34400,
+      "cashAfterReserve": 915600,
+      "commercialWeekly": 9000
+    },
+    {
+      "club": "Lindon City",
+      "cash": 950000,
+      "weeklyWages": 9200,
+      "fourPayrollReserve": 36800,
+      "cashAfterReserve": 913200,
+      "commercialWeekly": 10000
+    },
+    {
+      "club": "Macclesford Town",
+      "cash": 750000,
+      "weeklyWages": 8650,
+      "fourPayrollReserve": 34600,
+      "cashAfterReserve": 715400,
+      "commercialWeekly": 8000
+    }
+  ]
+}

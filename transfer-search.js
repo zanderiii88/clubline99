@@ -1,5 +1,5 @@
-import {playerAliases,normaliseName} from './player-aliases.js?v=1.71.0';
-import {contractStatus} from './contracts.js?v=1.71.0';
+import {playerAliases,normaliseName} from './player-aliases.js?v=1.72.0';
+import {contractStatus} from './contracts.js?v=1.72.0';
 // League-wide search uses current ownership and saved career availability.
 export const playerValue=p=>Math.round(Math.max(50000,Math.min(15000000,(p.overall-55)**3*320*(p.age>=32?.55:p.age>=29?.78:1)+Math.max(0,p.potential-p.overall)*75000))/10000)*10000;
 export const transferFee=(p,c)=>p.freeAgent?0:Math.round(playerValue(p)*1.1*(c?(contractStatus(c,p).days<=183?.55:contractStatus(c,p).days<=366?.8:1):1)/10000)*10000;

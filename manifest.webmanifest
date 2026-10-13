@@ -2,33 +2,37 @@
   "name": "Clubline 99",
   "short_name": "Clubline 99",
   "start_url": "./",
-  "display": "standalone",
-  "background_color": "#082754",
-  "theme_color": "#082754",
+  "display": "fullscreen",
+  "background_color": "#06162c",
+  "theme_color": "#06162c",
   "icons": [
     {
-      "src": "assets/icon-192.png?v=1.71.0",
+      "src": "assets/icon-192.png?v=1.72.0",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "assets/icon-512.png?v=1.71.0",
+      "src": "assets/icon-512.png?v=1.72.0",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "assets/icon-maskable-192.png?v=1.71.0",
+      "src": "assets/icon-maskable-192.png?v=1.72.0",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "assets/icon-maskable-512.png?v=1.71.0",
+      "src": "assets/icon-maskable-512.png?v=1.72.0",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "display_override": [
+    "fullscreen",
+    "standalone"
   ]
 }

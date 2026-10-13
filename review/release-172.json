@@ -1,0 +1,13 @@
+{
+  "version": "1.72.0",
+  "base": "1.71.0",
+  "mobileBrowser": "passed",
+  "historyAndTransfers": "passed",
+  "firstWeekEvent": "passed",
+  "managerAndBoard": "passed",
+  "loansAndRollover": "passed",
+  "worldRollovers": 12,
+  "historicalRecords": 520,
+  "budgetsChanged": false,
+  "deployed": false
+}
