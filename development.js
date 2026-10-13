@@ -1,5 +1,8 @@
-import {facilityLevel} from './club-investment.js?v=1.67.0';
-import {trainingDevelopmentFactor} from './training.js?v=1.67.0';
+import {initialiseNationalities} from './nationalities.js?v=1.71.0';
+import {worldRollover,youthReadiness} from './world-development.js?v=1.71.0';
+import {returnLoan} from './loans.js?v=1.71.0';
+import {facilityLevel} from './club-investment.js?v=1.71.0';
+import {trainingDevelopmentFactor} from './training.js?v=1.71.0';
 // Career-owned youth and development data; saved with the existing career.
 const POS=['GK','LB','CB','RB','DM','CM','AM','LW','RW','ST'];
 const SECOND={LB:'CB',RB:'CB',CB:'DM',DM:'CM',CM:'AM',AM:'CM',LW:'RW',RW:'LW',ST:'AM'};
@@ -14,13 +17,14 @@ function seeded(seed){let n=2166136261;for(const c of seed)n=Math.imul(n^c.charC
 export function youthLevel(c,league){return clamp((league.clubs.find(x=>x.id===c.clubId)?.youth||1)+(c.youthFunding||0)*.5,1,5)}
 export function estimatedStars(rating){return rating>=90?5:Math.min(4.5,Math.round(clamp((rating-40)/10,.5,4.5)*2)/2)}
 export function squadSpace(c,league){const active=league.players.filter(p=>(c.owners[p.id]||p.clubId)===c.clubId&&!c.players[p.id]?.retired&&!c.players[p.id]?.unregistered);const development=active.filter(p=>c.developmentIds.includes(p.id)&&p.age<20);return {senior:active.length-development.length,development:development.length,total:active.length}}
-export function canRegister(c,league,p){const s=squadSpace(c,league);return c.developmentIds.includes(p.id)&&p.age<20?s.development<5:s.senior<24}
+export function canRegister(c,league,p){const s=squadSpace(c,league);return s.total<30}
 export function initialiseDevelopment(c,league){
  c.season??=1;c.seasonStart??=c.date||'1998-08-03';c.youthFunding??=0;c.trainingFunding??=0;c.generatedPlayers??=[];c.playerChanges??={};c.developmentIds??=[];c.prospects??=[];c.developmentReports??=[];c.conversations??=[];c.archives??=[];
  for(const p of c.generatedPlayers)if(!league.players.some(x=>x.id===p.id))league.players.push(structuredClone(p));
  for(const [id,changes]of Object.entries(c.playerChanges)){const p=league.players.find(x=>x.id===id);if(p)Object.assign(p,structuredClone(changes))}
  for(const p of league.players)c.players[p.id]??={fitness:p.fitness,form:[],happiness:70,instruction:'Standard',reason:'Content with their squad role.'};
  if(c.intakeSeason!==c.season)generateIntake(c,league);
+ initialiseNationalities(c,league);
  c.lastReportRatings??=Object.fromEntries(league.players.map(p=>[p.id,p.overall]));
  c.lastReportPositions??=Object.fromEntries(league.players.map(p=>[p.id,structuredClone(p.positions)]));
 }
@@ -41,7 +45,7 @@ export function generateIntake(c,league){
 }
 export function callUpProspect(c,league,id){
  const prospect=c.prospects.find(p=>p.id===id);if(!prospect||prospect.promoted||prospect.calledUp)return 'That prospect is no longer available for a call-up.';
- const space=squadSpace(c,league);if(prospect.age<20?space.development>=5:space.senior>=24)return 'Free a squad registration place before calling up this player.';
+ const space=squadSpace(c,league);if(space.total>=30)return 'Free a squad registration place before calling up this player.';
  let p=league.players.find(p=>p.id===id);if(!p){p=structuredClone(prospect);p.number=Math.max(24,...league.players.filter(x=>(c.owners[x.id]||x.clubId)===c.clubId).map(x=>x.number||0))+1;league.players.push(p);c.generatedPlayers.push(structuredClone(p));}
  Object.assign(p,{age:prospect.age,overall:prospect.overall,potential:prospect.potential,positions:structuredClone(prospect.positions),academy:true});
  if(p.age<20&&!c.developmentIds.includes(id))c.developmentIds.push(id);
@@ -82,7 +86,7 @@ export function developmentDay(c,league,next){
    p.report=p.form>=7.3?'Consistently strong youth performances. Worth monitoring for a first-team opportunity.':p.form>=6.5?'Developing steadily; continue assessing their readiness.':'Still finding consistency. More time in the youth side is advised.';
   }
  }
- if(days>0&&days%21===0&&c.lastYouthReport!==c.date){c.lastYouthReport=c.date;const standout=c.prospects.filter(p=>!p.promoted&&p.form>=7.3).sort((a,b)=>b.form-a.form)[0];if(standout)c.news.push({date:c.date,kind:'youth',text:`Youth watch: ${standout.name} (${standout.primary}) is playing well. The youth coaches recommend monitoring their progress in Squad → Youth.`})}
+ if(days>0&&days%21===0&&c.lastYouthReport!==c.date){c.lastYouthReport=c.date;const standout=c.prospects.filter(p=>!p.promoted&&p.form>=7.3).sort((a,b)=>b.form-a.form)[0];if(standout)c.news.push({date:c.date,kind:'youth',text:`Youth watch: ${standout.name} (${standout.primary}) is playing well. Current readiness ${youthReadiness(c,league,standout).low}–${youthReadiness(c,league,standout).high}/100, ${youthReadiness(c,league,standout).label.toLowerCase()}. The youth coaches recommend monitoring their progress in Squad → Youth.`})}
  if(next&&elapsed(c.date,next.date)===3&&!c.developmentReports.some(r=>r.fixture===next.date)){
   const rows=league.players.filter(p=>(c.owners[p.id]||p.clubId)===c.clubId&&!c.players[p.id]?.retired).sort((a,b)=>POS.indexOf(a.primary)-POS.indexOf(b.primary)).map(p=>{const previous=c.lastReportRatings?.[p.id]??p.overall;const delta=p.overall-previous;return {id:p.id,name:p.name,position:p.primary,rating:p.overall,delta,positionChanges:POS.filter(pos=>p.positions[pos]!==c.lastReportPositions?.[p.id]?.[pos]&&c.lastReportPositions?.[p.id]?.[pos]!==undefined).map(pos=>`${pos}: ${p.positions[pos]-c.lastReportPositions[p.id][pos]>0?'+':''}${p.positions[pos]-c.lastReportPositions[p.id][pos]}`),reason:delta>0?'Progress from age, coaching and match experience.':delta<0?'Gradual age-related regression; recent form also considered.':'No confirmed attribute change since the last report.'}});
   c.developmentReports.push({date:c.date,fixture:next.date,rows});c.developmentReports=c.developmentReports.slice(-24);c.lastReportRatings=Object.fromEntries(rows.map(r=>[r.id,r.rating]));c.lastReportPositions=Object.fromEntries(league.players.map(p=>[p.id,structuredClone(p.positions)]));
@@ -97,14 +101,15 @@ export function developmentDay(c,league,next){
 }
 export function rolloverDevelopment(c,league,newStart){
  for(const p of c.prospects.filter(p=>p.calledUp))returnProspect(c,league,p.id);
- c.archives.push({season:c.season,reports:structuredClone(c.reports),schedule:structuredClone(c.schedule)});
- for(const [id,loan]of Object.entries(c.loans)){c.owners[id]=loan.parent;}c.loans={};
- for(const p of league.players){p.age++;const state=c.players[p.id];if(state.retirementAfterSeason&&c.season>=state.retirementAfterSeason){state.retired=true;c.news.push({date:newStart,text:`${p.name} has retired after their final season.`})}persist(c,p)}
+ c.archives.push({season:c.season,reports:structuredClone(c.reports)});
+ const previousDate=c.date;c.date=newStart;for(const [id,l]of Object.entries(c.loans))if((l.end||l.season||newStart)<=newStart)returnLoan(c,league,id);c.date=previousDate;c.archives=c.archives.slice(-3);
+ for(const p of league.players){if(c.players[p.id]?.retired)continue;p.age++;const state=c.players[p.id];if(state.retirementAfterSeason&&c.season>=state.retirementAfterSeason){state.retired=true;c.news.push({date:newStart,text:`${p.name} has retired after their final season.`})}persist(c,p)}
+ worldRollover(c,league,newStart);
  // Registration is checked again after loans return and players age out.
  let senior=0,junior=0;
  const priority=new Set([...c.lineup,...c.bench]);
  const owned=league.players.filter(p=>(c.owners[p.id]||p.clubId)===c.clubId&&!c.players[p.id].retired&&!c.players[p.id].academyOnly).sort((a,b)=>Number(priority.has(b.id))-Number(priority.has(a.id)));
- for(const p of owned){const development=c.developmentIds.includes(p.id)&&p.age<20,available=development?junior<5:senior<24;c.players[p.id].unregistered=!available;if(available){if(development)junior++;else senior++}if(!available)c.news.push({date:newStart,text:`${p.name} needs a free ${development?'under-20 development':'senior'} place before they can play. Arrange a loan or free a place in the squad.`});else if(c.developmentIds.includes(p.id)&&p.age===20)c.news.push({date:newStart,text:`${p.name} has turned 20 and now occupies a senior squad place.`})}
+ for(const p of owned){const development=c.developmentIds.includes(p.id)&&p.age<20,available=senior+junior<30;c.players[p.id].unregistered=!available;if(available){if(development)junior++;else senior++}if(!available)c.news.push({date:newStart,text:`${p.name} needs a free ${development?'under-20 development':'senior'} place before they can play. Arrange a loan or free a place in the squad.`});else if(c.developmentIds.includes(p.id)&&p.age===20)c.news.push({date:newStart,text:`${p.name} has turned 20 and now occupies a senior squad place.`})}
 
  for(const p of c.prospects)if(!p.promoted)p.age++;
  c.season++;c.seasonStart=newStart;c.date=newStart;c.lastReportRatings=Object.fromEntries(league.players.map(p=>[p.id,p.overall]));c.lastReportPositions=Object.fromEntries(league.players.map(p=>[p.id,structuredClone(p.positions)]));c.stats={};for(const state of Object.values(c.players)){state.form=[];state.positionTrial=null;state.fitness=Math.max(90,state.fitness)}

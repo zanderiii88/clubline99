@@ -1,27 +1,33 @@
-import {validSeasonReviews} from './season-review.js?v=1.67.0';
-import {validUC} from './uefa-cup.js?v=1.67.0';
-import {validCL} from './champions-league.js?v=1.67.0';
-import {validVenue} from './venues.js?v=1.67.0';
-import {validFA} from './fa-cup.js?v=1.67.0';
-import {validMatchdays} from './matchday.js?v=1.67.0';
-import {validCup} from './league-cup.js?v=1.67.0';
-import {validDivisions,validPlayoffs} from './divisions.js?v=1.67.0';
-import {validClubLife} from './club-events.js?v=1.67.0';
+import {validManagerState} from './managers.js?v=1.71.0';
+import {COUNTRIES} from './nationalities.js?v=1.71.0';
+import {validSeasonReviews} from './season-review.js?v=1.71.0';
+import {validUC} from './uefa-cup.js?v=1.71.0';
+import {validCL} from './champions-league.js?v=1.71.0';
+import {validVenue} from './venues.js?v=1.71.0';
+import {validFA} from './fa-cup.js?v=1.71.0';
+import {validMatchdays} from './matchday.js?v=1.71.0';
+import {validCup} from './league-cup.js?v=1.71.0';
+import {validDivisions,validPlayoffs} from './divisions.js?v=1.71.0';
+import {validClubLife} from './club-events.js?v=1.71.0';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 export function parseBackup(text,league,formations,styles){
  const fail=()=>{throw Error('This is not a compatible Clubline career backup.')};
- if(typeof text!=='string'||text.length>5*1024*1024)fail();let data;try{data=JSON.parse(text)}catch{throw Error('Could not read the JSON backup.')}
+ if(typeof text!=='string'||text.length>32*1024*1024)fail();let data;try{data=JSON.parse(text)}catch{throw Error('Could not read the JSON backup.')}
  const walk=(x,depth=0)=>{if(depth>80)fail();if(x&&typeof x==='object')for(const [k,v]of Object.entries(x)){if(['__proto__','prototype','constructor'].includes(k))fail();walk(v,depth+1)}};walk(data);
  if(data?.format!=='clubline-career-backup'||data.formatVersion!==1||!object(data.save)||!object(data.save.career))fail();
  const save=structuredClone(data.save),c=save.career,clubs=new Set(league.clubs.map(c=>c.id));
+ if(!validManagerState(c,league))fail();
+ if(c.playerIdentities!==undefined){if(!object(c.playerIdentities))fail();for(const x of Object.values(c.playerIdentities))if(!object(x)||typeof x.nationality!=='string'||x.nationality&&!COUNTRIES[x.nationality]||x.name!==undefined&&(typeof x.name!=='string'||x.name.length>100))fail();}
  if(c.managementMode!==undefined&&!['streamlined','in-depth'].includes(c.managementMode))fail();
  if(c.rosterEdition!==league.rosterEdition||c.version!==1||!clubs.has(c.clubId)||!Number.isFinite(c.balance)||!/^\d{4}-\d{2}-\d{2}$/.test(c.date)||!Number.isFinite(Date.parse(c.date))||!formations.includes(c.formation)||!styles.includes(c.style)||!object(c.players)||!object(c.stadium)||!Array.isArray(c.reports)||!Array.isArray(c.news)||!Array.isArray(c.schedule)||!c.schedule.length)fail();
  if(c.schedule.some(r=>r.fixtures.some(f=>!validVenue(f,league)))||save.match&&!validVenue(save.match,league))fail();
  for(const field of ['youthFunding','trainingFunding'])if(c[field]!==undefined&&(!Number.isInteger(c[field])||c[field]<0||c[field]>8))fail();
  const ids=new Set(league.players.map(p=>p.id));
  if(c.generatedPlayers!==undefined&&!Array.isArray(c.generatedPlayers))fail();for(const p of c.generatedPlayers||[]){if(!object(p)||typeof p.id!=='string'||ids.has(p.id)||typeof p.name!=='string'||!clubs.has(p.clubId)||!Number.isFinite(p.overall)||!Number.isFinite(p.wage)||!object(p.positions))fail();ids.add(p.id)}
+ if(c.loans!==undefined){if(!object(c.loans))fail();for(const [id,l]of Object.entries(c.loans))if(!ids.has(id)||!object(l)||!clubs.has(l.parent)||!clubs.has(l.to)||l.parent===l.to||l.contribution!==undefined&&![25,50,75,100].includes(l.contribution)||l.end!==undefined&&!/^\d{4}-\d{2}-\d{2}$/.test(l.end))fail();}
+ if(c.futureTransfers!==undefined&&(!Array.isArray(c.futureTransfers)||c.futureTransfers.some(t=>!object(t)||!ids.has(t.id)||!clubs.has(t.from)||!clubs.has(t.to)||!Number.isFinite(t.fee)||t.fee<0||!/^\d{4}-07-01$/.test(t.arrival)||!['agreed','completed','cancelled'].includes(t.status))))fail();
  if(c.clubLife!==undefined&&!validClubLife(c.clubLife,ids))fail();
  if(c.contracts!==undefined){if(!object(c.contracts))fail();for(const [id,t]of Object.entries(c.contracts))if(!ids.has(id)||!object(t)||typeof t.end!=='string'||!/^\d{4}-06-30$/.test(t.end)||!Number.isFinite(Date.parse(t.end)))fail();}
  if(c.training!==undefined){const t=c.training,pos=['LB','CB','RB','DM','CM','AM','LW','RW','ST'];if(!object(t)||!['Balanced','Fitness','Development'].includes(t.mode)||typeof t.assistant!=='boolean'||!object(t.assignments)||!Array.isArray(t.reports)||!object(t.focusDays)||!Array.isArray(t.recentDays)||t.recentDays.some(d=>!object(d)||typeof d.date!=='string'||!['Balanced','Fitness','Development'].includes(d.mode)))fail();if(!['lastDay','lastReportDate'].every(k=>typeof t[k]==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(t[k])&&Number.isFinite(Date.parse(t[k]))))fail();for(const n of Object.values(t.focusDays))if(!Number.isInteger(n)||n<0)fail();for(const [id,a]of Object.entries(t.assignments))if(!ids.has(id)||!object(a)||!pos.includes(a.position)||!Number.isFinite(a.progress)||a.progress<0||a.progress>=1)fail();for(const r of t.reports){if(!object(r)||typeof r.date!=='string'||!object(r.focusDays)||!Array.isArray(r.rows))fail();for(const row of r.rows)if(!object(row)||!ids.has(row.id)||typeof row.name!=='string'||!Number.isFinite(row.overall)||!Number.isFinite(row.delta)||!Number.isFinite(row.condition)||!Number.isFinite(row.conditionChange)||!Array.isArray(row.positionChanges)||row.positionChanges.some(x=>!object(x)||typeof x.position!=='string'||!Number.isFinite(x.delta)))fail();}if(!object(t.baseline))fail();for(const [id,b]of Object.entries(t.baseline))if(!ids.has(id)||!object(b)||!Number.isFinite(b.overall)||!Number.isFinite(b.fitness)||!object(b.positions))fail();}
