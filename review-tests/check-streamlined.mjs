@@ -20,7 +20,7 @@ let calls=0,matches=0,decisionStops=0,lastDate=g.get().career.date;
 while(!g.seasonReady()||g.get().match){
  const {career,match}=g.get();assert(career.date>=lastDate);lastDate=career.date;
  if(match){assert.equal(match.fixtureDate,career.date);if(match.phase==='choice'){g.auto();g.beginMatch('simulate');assert.equal(g.get().match.phase,'report');matches++;}else if(match.phase==='report'){g.click('close-report');assert.equal(g.get().career.matchday,null);}else assert.fail('Unexpected phase '+match.phase);}
- else {await g.streamlinedContinue();if(g.streamPending().length){decisionStops++;g.dismissAll();}}
+ else {await g.streamlinedContinue();if(g.pending()){g.click('draw-complete-choice');g.click('draw-event-finish');}if(g.streamPending().length){decisionStops++;g.dismissAll();}}
  assert(++calls<1800,'Streamlined Continue did not finish');if(calls%15===0){g.parse(g.backup());g.save();assert(g.load());}
 }
 const end=g.get().career;g.streamCollectDecisions();assert(end.ui.streamline.seen.includes('stadium:'+end.season+':mid'));assert(end.ui.streamline.seen.includes('stadium:'+end.season+':end'));const endReviews=end.ui.streamline.decisions.filter(d=>d.kind==='stadium-review'&&d.stage==='end').length;g.streamCollectDecisions();assert.equal(end.ui.streamline.decisions.filter(d=>d.kind==='stadium-review'&&d.stage==='end').length,endReviews);assert(end.schedule.every(r=>r.fixtures.every(f=>f.homeGoals!==null)));assert.equal(end.faCup.status,'complete');assert.equal(end.leagueCup.status,'complete');assert(matches>=46);assert(end.clubLife.bookings.length===0&&end.clubLife.stories.length===0);assert(calls<600);g.parse(g.backup());g.save();assert(g.load());assert.equal(g.get().career.managementMode,'streamlined');

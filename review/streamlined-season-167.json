@@ -1,8 +1,8 @@
 {
   "passed": true,
-  "calls": 183,
-  "matches": 53,
-  "decisionStops": 24,
+  "calls": 180,
+  "matches": 52,
+  "decisionStops": 20,
   "ended": "1999-06-05",
   "allFixturesPlayed": true,
   "bothCupsComplete": true,

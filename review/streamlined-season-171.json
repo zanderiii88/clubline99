@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "calls": 195,
+  "matches": 54,
+  "decisionStops": 28,
+  "ended": "1999-06-05",
+  "allFixturesPlayed": true,
+  "bothCupsComplete": true,
+  "saveReloadAndBackup": true,
+  "modeSwitchPreservesSeason": true,
+  "routineContractsCapped": true,
+  "offersRequireDecision": true,
+  "midAndEndStadiumReviewsOnce": true
+}
