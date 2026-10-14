@@ -1,6 +1,6 @@
 // Cache immutable stand geometry, retaining moving supporters with the same
 // roof/wall occlusion as the original SVG. Editable scenes remain SVG.
-const jobs=new WeakMap();let serial=0;
+const jobs=new WeakMap(),surfaces=new Map();let serial=0;
 const ns='http://www.w3.org/2000/svg';
 async function raster(markup,width,height,black=false){
  const url=URL.createObjectURL(new Blob([markup],{type:'image/svg+xml'}));
@@ -14,15 +14,17 @@ export function prepareStadiumSurface(svg){
   const box=layer.getBBox(),pad=12,x=box.x-pad,y=box.y-pad,w=box.width+pad*2,h=box.height+pad*2;if(!w||!h)continue;
   const clone=layer.cloneNode(true),fans=[...layer.querySelectorAll('.stand-fan')];clone.querySelectorAll('.stand-fan').forEach(n=>n.remove());
   const scale=Math.min(2,1500/w),width=Math.ceil(w*scale),height=Math.ceil(h*scale),wrap=content=>`<svg xmlns="${ns}" width="${width}" height="${height}" viewBox="${x} ${y} ${w} ${h}">${content}</svg>`;
-  const href=await raster(wrap(new XMLSerializer().serializeToString(clone)),width,height);
-  const bitmap=node('image',{x,y,width:w,height:h,href,'data-stadium-bitmap':layer.dataset.stadiumLayer});
+  const geometry=new XMLSerializer().serializeToString(clone);
   const blockers=[...clone.querySelectorAll('[data-fan-occluder="true"]')].map(n=>new XMLSerializer().serializeToString(n)).join('');
-  const blocked=await raster(wrap(blockers),width,height,true);
-  if(!svg.isConnected)return;
+  const key=[x,y,w,h,width,height,geometry,blockers].join('|');
+  let texture=surfaces.get(key);if(!texture){texture=Promise.all([raster(wrap(geometry),width,height),raster(wrap(blockers),width,height,true)]);surfaces.set(key,texture);while(surfaces.size>6)surfaces.delete(surfaces.keys().next().value);texture.catch(()=>surfaces.delete(key));}
+  const [href,blocked]=await texture;
+  const bitmap=node('image',{x,y,width:w,height:h,href,'data-stadium-bitmap':layer.dataset.stadiumLayer});
+  if(!svg.isConnected){jobs.delete(svg);return;}
   const id=`supporter-visibility-${++serial}`,defs=node('defs'),mask=node('mask',{id,maskUnits:'userSpaceOnUse',maskContentUnits:'userSpaceOnUse',x,y,width:w,height:h,'mask-type':'luminance'});
   mask.append(node('rect',{x,y,width:w,height:h,fill:'#fff'}),node('image',{x,y,width:w,height:h,href:blocked,'data-supporter-occlusion':layer.dataset.stadiumLayer}));defs.append(mask);
   const crowd=node('g',{'data-visible-supporters':layer.dataset.stadiumLayer,mask:`url(#${id})`});crowd.append(...fans);
   // Swap only after both decoded surfaces are ready. The SVG and animations stay mounted.
   layer.replaceChildren(bitmap,defs,crowd);layer.dataset.baked='true';
- }})().catch(error=>console.warn('Stadium surface retained as SVG:',error.message));jobs.set(svg,job);return job;
+ }})().catch(error=>{jobs.delete(svg);console.warn('Stadium surface retained as SVG:',error.message)});jobs.set(svg,job);return job;
 }
