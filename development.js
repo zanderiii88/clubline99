@@ -1,8 +1,8 @@
-import {initialiseNationalities} from './nationalities.js?v=1.72.0';
-import {worldRollover,youthReadiness} from './world-development.js?v=1.72.0';
-import {returnLoan} from './loans.js?v=1.72.0';
-import {facilityLevel} from './club-investment.js?v=1.72.0';
-import {trainingDevelopmentFactor} from './training.js?v=1.72.0';
+import {initialiseNationalities} from './nationalities.js?v=1.74.0';
+import {worldRollover,youthReadiness} from './world-development.js?v=1.74.0';
+import {returnLoan} from './loans.js?v=1.74.0';
+import {facilityLevel} from './club-investment.js?v=1.74.0';
+import {trainingDevelopmentFactor} from './training.js?v=1.74.0';
 // Career-owned youth and development data; saved with the existing career.
 const POS=['GK','LB','CB','RB','DM','CM','AM','LW','RW','ST'];
 const SECOND={LB:'CB',RB:'CB',CB:'DM',DM:'CM',CM:'AM',AM:'CM',LW:'RW',RW:'LW',ST:'AM'};
@@ -36,7 +36,7 @@ export function generateIntake(c,league){
  for(let i=0;i<8;i++){
   let name;do{name=pick(FIRST,rng)+' '+pick(LAST,rng)}while(used.has(name));used.add(name);
   const primary=pick(POS,rng),age=16+Math.floor(rng()*3),overall=Math.round(clamp(40+level*3+rng()*18+(age-16)*2,40,73));
-  const exceptional=rng()<.004+level*.001,potential=Math.round(clamp(exceptional?90+rng()*4:overall+10+level*1.8+rng()*12,overall,exceptional?94:89));
+  const exceptional=rng()<.004+level*.001,potential=Math.round(clamp(exceptional?90+rng()*4:overall+3+level*.8+rng()*22,overall,exceptional?94:89));
   const secondary=SECOND[primary]||null,positions=Object.fromEntries(POS.map(pos=>[pos,pos===primary?overall:pos===secondary?Math.round(overall*.8):Math.round(overall*.45)]));
   candidates.push({id:`Y${c.clubId}-${c.season}-${i}`,clubId:c.clubId,name,age,primary,secondary,overall,potential,positions,risk:1+Math.floor(rng()*4),fitness:95,contract:3,wage:(100+overall*6),number:25+i,traits:[pick(TRAITS,rng)],personality:pick(PERSONAL,rng),academy:true,form:6.3+rng()*1.5,progress:0,intake:c.season,report:'New intake: assessment will improve as they play youth matches.'});
  }

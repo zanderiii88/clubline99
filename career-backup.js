@@ -1,14 +1,14 @@
-import {validManagerState} from './managers.js?v=1.72.0';
-import {COUNTRIES} from './nationalities.js?v=1.72.0';
-import {validSeasonReviews} from './season-review.js?v=1.72.0';
-import {validUC} from './uefa-cup.js?v=1.72.0';
-import {validCL} from './champions-league.js?v=1.72.0';
-import {validVenue} from './venues.js?v=1.72.0';
-import {validFA} from './fa-cup.js?v=1.72.0';
-import {validMatchdays} from './matchday.js?v=1.72.0';
-import {validCup} from './league-cup.js?v=1.72.0';
-import {validDivisions,validPlayoffs} from './divisions.js?v=1.72.0';
-import {validClubLife} from './club-events.js?v=1.72.0';
+import {validManagerState} from './managers.js?v=1.74.0';
+import {COUNTRIES} from './nationalities.js?v=1.74.0';
+import {validSeasonReviews} from './season-review.js?v=1.74.0';
+import {validUC} from './uefa-cup.js?v=1.74.0';
+import {validCL} from './champions-league.js?v=1.74.0';
+import {validVenue} from './venues.js?v=1.74.0';
+import {validFA} from './fa-cup.js?v=1.74.0';
+import {validMatchdays} from './matchday.js?v=1.74.0';
+import {validCup} from './league-cup.js?v=1.74.0';
+import {validDivisions,validPlayoffs} from './divisions.js?v=1.74.0';
+import {validClubLife} from './club-events.js?v=1.74.0';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -18,6 +18,12 @@ export function parseBackup(text,league,formations,styles){
  const walk=(x,depth=0)=>{if(depth>80)fail();if(x&&typeof x==='object')for(const [k,v]of Object.entries(x)){if(['__proto__','prototype','constructor'].includes(k))fail();walk(v,depth+1)}};walk(data);
  if(data?.format!=='clubline-career-backup'||data.formatVersion!==1||!object(data.save)||!object(data.save.career))fail();
  const save=structuredClone(data.save),c=save.career,clubs=new Set(league.clubs.map(c=>c.id));
+ const calendarTypes=new Set(['club-event','board-review','recruitment','investment','stadium-review','youth','sale','draw','club-proposal','draw:league-cup','draw:fa-cup','draw:champions-league','draw:uefa-cup']);
+ if(c.ui?.calendarIgnoredPrompts!==undefined&&(!object(c.ui.calendarIgnoredPrompts)||Object.entries(c.ui.calendarIgnoredPrompts).some(([k,v])=>!calendarTypes.has(k)||typeof v!=='boolean')))fail();
+ if(c.ui?.calendarSkippedStops!==undefined&&(!Array.isArray(c.ui.calendarSkippedStops)||c.ui.calendarSkippedStops.length>200||c.ui.calendarSkippedStops.some(k=>typeof k!=='string'||k.length>300)))fail();
+
+ if(c.managerProfile!==undefined&&(!object(c.managerProfile)||['firstName','surname'].some(k=>typeof c.managerProfile[k]!=='string'||c.managerProfile[k].length>30)||typeof c.managerProfile.nationality!=='string'||c.managerProfile.nationality&&!COUNTRIES[c.managerProfile.nationality]))fail();
+ if(c.clubInvestment!==undefined){const x=c.clubInvestment,p=x?.pending,validDate=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFinite(Date.parse(d));if(!object(x)||!validDate(x.nextAvailable)||p!==null&&(!object(p)||!['training','youth'].includes(p.kind)||p.field!==(p.kind==='youth'?'youthFunding':'trainingFunding')||typeof p.title!=='string'||!Number.isFinite(p.target)||p.target<1||p.target>5||!validDate(p.completion)))fail();}
  if(!validManagerState(c,league))fail();
  if(c.playerIdentities!==undefined){if(!object(c.playerIdentities))fail();for(const x of Object.values(c.playerIdentities))if(!object(x)||typeof x.nationality!=='string'||x.nationality&&!COUNTRIES[x.nationality]||x.name!==undefined&&(typeof x.name!=='string'||x.name.length>100))fail();}
  if(c.managementMode!==undefined&&!['streamlined','in-depth'].includes(c.managementMode))fail();

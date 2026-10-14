@@ -1,5 +1,5 @@
-import {initialiseNationalities} from './nationalities.js?v=1.72.0';
-import {hash} from './player-attributes.js?v=1.72.0';
+import {initialiseNationalities} from './nationalities.js?v=1.74.0';
+import {hash} from './player-attributes.js?v=1.74.0';
 const own=(c,p)=>c.owners[p.id]||p.clubId;
 const roles=['GK','LB','CB','CB','RB','DM','CM','CM','LW','RW','ST','ST','GK','CB','LB','RB','CM','AM','LW','RW','ST'];
 const first=['Adam','Lewis','Rory','Jack','Tom','Daniel','Ben','Ryan','Callum','Jamie','Rhys','Euan','Sam','Aaron','Owen','Alex','Joel','Harry','Cameron','Nathan'];

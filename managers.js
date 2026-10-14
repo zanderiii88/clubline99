@@ -1,5 +1,5 @@
-import {hash} from './player-attributes.js?v=1.72.0';
-import {generatedIdentity} from './nationalities.js?v=1.72.0';
+import {hash} from './player-attributes.js?v=1.74.0';
+import {generatedIdentity} from './nationalities.js?v=1.74.0';
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n)),days=(a,b)=>Math.floor((Date.parse(b)-Date.parse(a))/86400000);
 const strength=t=>(t.attack+t.defence)/2;
 const emptyRecord=()=>({played:0,won:0,drawn:0,lost:0,gf:0,ga:0});
@@ -8,7 +8,7 @@ function makeManager(c,t,id,date,used){const identity=generatedIdentity(t,id,use
 export function initialiseManagers(c,league){
  if(c.managerWorld){c.managerReviewState??={anchor:c.date,lastMonth:'',reports:[],monthly:false};return;}
  const w=c.managerWorld={people:{},jobs:{},recorded:{},season:c.season,lastMonth:'',serial:0,events:[]},used=new Set();
- for(const t of league.clubs){const id='M-'+t.id,m=makeManager(c,t,id,c.date,used);if(t.id===c.clubId){m.name='You';m.nationality='';m.fictional=false;}w.people[id]=m;w.jobs[t.id]=id;}
+ for(const t of league.clubs){const id='M-'+t.id,m=makeManager(c,t,id,c.date,used);if(t.id===c.clubId){m.name=[c.managerProfile?.firstName,c.managerProfile?.surname].filter(Boolean).join(' ')||'You';m.nationality=c.managerProfile?.nationality||'';m.fictional=false;}w.people[id]=m;w.jobs[t.id]=id;}
  c.managerReviewState={anchor:c.date,lastMonth:'',reports:[],monthly:false};
 }
 export function managerFor(c,id){return c.managerWorld?.people[c.managerWorld.jobs[id]];}

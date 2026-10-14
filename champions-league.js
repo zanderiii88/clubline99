@@ -1,5 +1,5 @@
-import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.72.0';
-import {divisionTable} from './divisions.js?v=1.72.0';
+import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.74.0';
+import {divisionTable} from './divisions.js?v=1.74.0';
 export const CL_ID='champions-league';
 export const clSlots=year=>year<1999?2:year<2002?3:4;
 export const clFixtures=c=>c.schedule.flatMap(r=>r.fixtures.filter(f=>f.competition===CL_ID).map(f=>({...f,date:r.date})));

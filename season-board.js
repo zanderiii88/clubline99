@@ -1,4 +1,4 @@
-import {loanWageAdjustment} from './loans.js?v=1.72.0';
+import {loanWageAdjustment} from './loans.js?v=1.74.0';
 // Club expectations are fixed for a season; assessment is repeatable and contains no random rolls.
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 export function confidenceBand(score){return score>=75?{label:'Delighted',tone:'good',rank:3}:score>=50?{label:'Satisfied',tone:'good',rank:2}:score>=30?{label:'Concerned',tone:'watch',rank:1}:{label:'Under pressure',tone:'poor',rank:0}}
