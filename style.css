@@ -884,3 +884,11 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 @media(orientation:landscape) and (max-height:500px){.selection-candidate-list{display:grid;grid-auto-rows:max-content;align-content:start}.selection-candidate{min-height:max-content}}
 
 .country-card img{width:52px;height:34px;object-fit:contain;flex-shrink:0}.country-back img{width:24px;height:16px;vertical-align:middle}.country-card{min-height:110px}
+
+/* Club projects and live controls remain usable at narrow widths and low heights. */
+.investment-advice{padding:12px;border:1px solid #708e85;background:#173b3b;margin:12px 0}.investment-advice h3{margin:5px 0}.investment-advice p,.development-explanation{line-height:1.45;overflow-wrap:anywhere}.stream-investments{margin:12px 0}.stream-investments>summary{padding:10px 0;cursor:pointer}.funding-review-overlay{z-index:350}.funding-review-overlay .modal{overflow-y:auto;max-height:calc(100dvh - 24px);padding-bottom:max(16px,env(safe-area-inset-bottom))}.funding-review-overlay .modal-actions{position:sticky;bottom:0;background:#142f42;padding:10px 0;margin-bottom:0;display:flex;flex-wrap:wrap;gap:8px}.funding-review-overlay .modal-actions .btn{min-height:44px;flex:1;white-space:normal}.live-toolbar .btn{min-height:42px;touch-action:manipulation}.live-action-feed .red,.live-action-feed .injury{border-left:4px solid #ffcb73;padding-left:8px}.comparison-picker [data-action="comparison-more"]{min-height:42px}.investment-heading{flex-wrap:wrap}.investment-card button{white-space:normal;min-height:42px}
+@media(max-width:390px){.live-toolbar .playback-row,.live-toolbar .match-view-row,.live-toolbar .live-skip-controls{gap:4px}.live-toolbar .btn{padding-left:6px;padding-right:6px;font-size:.82rem}.investment-advice{padding:9px}.country-card{max-width:100%}}
+
+.match-personnel-status>b,.match-personnel-status>small{display:block}.match-personnel-status>small{margin-top:6px}
+/* An absolutely positioned drawer must not inherit a fifth grid row off screen. */
+@media(orientation:landscape) and (max-height:650px){.live-modal .live-decisions{grid-area:auto!important;grid-row:auto!important;grid-column:auto!important;inset:54px 0 0 auto!important;left:auto!important;width:62%!important;height:calc(100% - 54px)!important;max-height:calc(100% - 54px)!important;overflow:auto}}

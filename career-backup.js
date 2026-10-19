@@ -1,5 +1,5 @@
 import {validClubHistory} from './club-history.js?v=1.80.0';
-import {validPlayerProgress} from './player-progress.js?v=1.90.0';
+import {validPlayerProgress} from './player-progress.js?v=1.91.0';
 import {validNegotiations,SQUAD_ROLES} from './negotiations.js?v=1.90.0';
 import {validLoanReport} from './loans.js?v=1.80.0';
 import {validManagerState} from './managers.js?v=1.89.0';
@@ -27,7 +27,7 @@ export function parseBackup(text,league,formations,styles){
  if(c.ui?.calendarSkippedStops!==undefined&&(!Array.isArray(c.ui.calendarSkippedStops)||c.ui.calendarSkippedStops.length>200||c.ui.calendarSkippedStops.some(k=>typeof k!=='string'||k.length>300)))fail();
 
  if(c.managerProfile!==undefined&&(!object(c.managerProfile)||['firstName','surname'].some(k=>typeof c.managerProfile[k]!=='string'||c.managerProfile[k].length>30)||typeof c.managerProfile.nationality!=='string'||c.managerProfile.nationality&&!COUNTRIES[c.managerProfile.nationality]))fail();
- if(c.clubInvestment!==undefined){const x=c.clubInvestment,p=x?.pending,validDate=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFinite(Date.parse(d));if(!object(x)||!validDate(x.nextAvailable)||p!==null&&(!object(p)||!['training','youth'].includes(p.kind)||p.field!==(p.kind==='youth'?'youthFunding':'trainingFunding')||typeof p.title!=='string'||!Number.isFinite(p.target)||p.target<1||p.target>5||!validDate(p.completion)))fail();}
+ if(c.clubInvestment!==undefined){const x=c.clubInvestment,p=x?.pending,validDate=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFinite(Date.parse(d));if(x?.upkeepWeekly!==undefined&&(!Number.isFinite(x.upkeepWeekly)||x.upkeepWeekly<0||x.upkeepWeekly>1000000))fail();if(p?.weeklyCost!==undefined&&(!Number.isFinite(p.weeklyCost)||p.weeklyCost<0||p.weeklyCost>1000000))fail();if(!object(x)||!validDate(x.nextAvailable)||p!==null&&(!object(p)||!['training','youth'].includes(p.kind)||p.field!==(p.kind==='youth'?'youthFunding':'trainingFunding')||typeof p.title!=='string'||!Number.isFinite(p.target)||p.target<1||p.target>5||!validDate(p.completion)))fail();}
  if(!validManagerState(c,league))fail();
  if(c.playerIdentities!==undefined){if(!object(c.playerIdentities))fail();for(const x of Object.values(c.playerIdentities))if(!object(x)||typeof x.nationality!=='string'||x.nationality&&!COUNTRIES[x.nationality]||x.name!==undefined&&(typeof x.name!=='string'||x.name.length>100))fail();}
  if(c.managementMode!==undefined&&!['streamlined','in-depth'].includes(c.managementMode))fail();

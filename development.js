@@ -1,8 +1,7 @@
+import {developmentAssessment} from './development-context.js?v=1.91.0';
 import {initialiseNationalities} from './nationalities.js?v=1.89.0';
-import {worldRollover,youthReadiness} from './world-development.js?v=1.89.0';
+import {worldRollover,youthReadiness} from './world-development.js?v=1.91.0';
 import {returnLoan} from './loans.js?v=1.74.0';
-import {facilityLevel} from './club-investment.js?v=1.74.0';
-import {trainingDevelopmentFactor} from './training.js?v=1.74.0';
 // Career-owned youth and development data; saved with the existing career.
 const POS=['GK','LB','CB','RB','DM','CM','AM','LW','RW','ST'];
 const SECOND={LB:'CB',RB:'CB',CB:'DM',DM:'CM',CM:'AM',AM:'CM',LW:'RW',RW:'LW',ST:'AM'};
@@ -71,11 +70,10 @@ function persist(c,p){c.playerChanges[p.id]={...(c.playerChanges[p.id]||{}),age:
 export function developmentDay(c,league,next){
  const days=elapsed(c.seasonStart,c.date),rng=seeded(c.clubId+':'+c.date+':progress');
  if(days>0&&days%7===0&&c.lastDevelopmentDay!==c.date){
-  const trainingFactor=trainingDevelopmentFactor(c,league,next);
   c.lastDevelopmentDay=c.date;
   for(const p of league.players.filter(x=>(c.owners[x.id]||x.clubId)===c.clubId&&!c.players[x.id]?.retired&&!c.players[x.id]?.academyOnly)){
    const state=c.players[p.id],form=state.form.slice(-5),average=form.length?form.reduce((a,b)=>a+b,0)/form.length:6.5;
-   const young=p.age<=24&&p.overall<p.potential;const change=young?(state.injuryDays||state.unregistered?0:(.04+facilityLevel(c,league)*.01+Math.max(0,average-6.4)*.055+(form.length?.025:0))*trainingFactor):p.age>=32?-.055-Math.max(0,6-average)*.035:0;
+   const {change}=developmentAssessment(c,league,p,next);
    state.developmentProgress=(state.developmentProgress||0)+change;
    if(Math.abs(state.developmentProgress)>=1){const delta=Math.sign(state.developmentProgress);p.overall=clamp(p.overall+delta,40,p.potential);for(const pos of POS)p.positions[pos]=pos===p.primary?p.overall:clamp(p.positions[pos]+delta,10,p.overall);state.developmentProgress-=delta;persist(c,p)}
    if(state.positionTrial){const pos=state.positionTrial,used=(state.trialMinutes||0)-(state.trialStartMinutes||0);if(used>=180){p.positions[pos]=Math.max(p.positions[pos],Math.min(Math.round(p.overall*.9),p.positions[pos]+1));state.trialStartMinutes=state.trialMinutes||0;persist(c,p)}}
@@ -88,7 +86,7 @@ export function developmentDay(c,league,next){
  }
  if(days>0&&days%21===0&&c.lastYouthReport!==c.date){c.lastYouthReport=c.date;const standout=c.prospects.filter(p=>!p.promoted&&p.form>=7.3).sort((a,b)=>b.form-a.form)[0];if(standout)c.news.push({date:c.date,kind:'youth',text:`Youth watch: ${standout.name} (${standout.primary}) is playing well. Current readiness ${youthReadiness(c,league,standout).low}–${youthReadiness(c,league,standout).high}/100, ${youthReadiness(c,league,standout).label.toLowerCase()}. The youth coaches recommend monitoring their progress in Squad → Youth.`})}
  if(next&&elapsed(c.date,next.date)===3&&!c.developmentReports.some(r=>r.fixture===next.date)){
-  const rows=league.players.filter(p=>(c.owners[p.id]||p.clubId)===c.clubId&&!c.players[p.id]?.retired).sort((a,b)=>POS.indexOf(a.primary)-POS.indexOf(b.primary)).map(p=>{const previous=c.lastReportRatings?.[p.id]??p.overall;const delta=p.overall-previous;return {id:p.id,name:p.name,position:p.primary,rating:p.overall,delta,positionChanges:POS.filter(pos=>p.positions[pos]!==c.lastReportPositions?.[p.id]?.[pos]&&c.lastReportPositions?.[p.id]?.[pos]!==undefined).map(pos=>`${pos}: ${p.positions[pos]-c.lastReportPositions[p.id][pos]>0?'+':''}${p.positions[pos]-c.lastReportPositions[p.id][pos]}`),reason:delta>0?'Progress from age, coaching and match experience.':delta<0?'Gradual age-related regression; recent form also considered.':'No confirmed attribute change since the last report.'}});
+  const rows=league.players.filter(p=>(c.owners[p.id]||p.clubId)===c.clubId&&!c.players[p.id]?.retired).sort((a,b)=>POS.indexOf(a.primary)-POS.indexOf(b.primary)).map(p=>{const previous=c.lastReportRatings?.[p.id]??p.overall;const delta=p.overall-previous;return {id:p.id,name:p.name,position:p.primary,rating:p.overall,delta,positionChanges:POS.filter(pos=>p.positions[pos]!==c.lastReportPositions?.[p.id]?.[pos]&&c.lastReportPositions?.[p.id]?.[pos]!==undefined).map(pos=>`${pos}: ${p.positions[pos]-c.lastReportPositions[p.id][pos]>0?'+':''}${p.positions[pos]-c.lastReportPositions[p.id][pos]}`),reason:developmentAssessment(c,league,p,next).reason}});
   c.developmentReports.push({date:c.date,fixture:next.date,rows});c.developmentReports=c.developmentReports.slice(-24);c.lastReportRatings=Object.fromEntries(rows.map(r=>[r.id,r.rating]));c.lastReportPositions=Object.fromEntries(league.players.map(p=>[p.id,structuredClone(p.positions)]));
   c.news.push({date:c.date,kind:'development',text:'Squad development report available: review progress by position in Squad → Development.'});
  }
