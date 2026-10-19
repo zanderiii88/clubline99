@@ -774,3 +774,30 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 .player-panel,.match-insight-card{overscroll-behavior:contain;padding-bottom:max(14px,env(safe-area-inset-bottom))}
 @media(max-width:420px){.renewal-fields,.comparison-head,.designer-fields{grid-template-columns:1fr}.sub-confirm .journey-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.sub-confirm [data-action="subs-done"]{grid-column:1/-1}.section-blueprint{grid-template-columns:25px repeat(8,minmax(0,1fr)) 25px;gap:2px;padding:3px}.negotiation-counter{grid-template-columns:1fr}}
 @media(orientation:landscape) and (max-height:650px){.live-modal .live-toolbar .btn{min-height:36px!important}.live-action-feed.incident-paused{max-height:70px}.live-modal .live-toolbar{position:static}.live-modal .modal-head>div{overflow-y:auto}}
+
+/* v1.78 automatic match flow preferences and short-screen match layout */
+.notification-options .preference-row{display:flex;align-items:center;gap:10px;min-height:44px;line-height:1.35;white-space:normal}
+.notification-options .preference-row input{width:19px;height:19px;flex:none;margin:0}
+.day-event .modal-actions{position:sticky;bottom:0;background:#153b68;padding:10px 0 max(4px,env(safe-area-inset-bottom));z-index:3}
+.day-event .modal-actions .btn{min-height:44px;white-space:normal;width:100%}
+.day-event .cl-group{margin-bottom:12px}.day-event .cl-group h3{margin:8px 0}
+@media(orientation:landscape) and (max-height:650px) and (min-width:600px){
+ .live-modal .modal-head>div{display:grid!important;grid-template-columns:minmax(0,1.3fr) minmax(250px,1fr);grid-template-rows:auto auto minmax(0,1fr) auto;gap:5px;overflow:hidden}
+ .live-modal .live-head{grid-column:1/-1;grid-row:1}
+ .live-modal .live-overview{grid-column:1;grid-row:2/5;overflow:hidden;min-height:0}
+ .live-modal .live-action-feed{grid-column:2;grid-row:2;max-height:66px;min-height:32px}
+ .live-modal .live-toolbar{grid-column:2;grid-row:3;position:static;align-self:center;margin:0!important;padding:3px}
+ .live-modal .live-commentary-toggle{grid-column:2;grid-row:4;max-height:66px;overflow:auto}
+ .live-modal .live-stage.overview-backdrop{display:none}
+ .live-modal .live-stage.stadium-view{position:relative!important;inset:auto!important;grid-column:1;grid-row:2/5;height:100%!important;z-index:0}
+ .live-modal .live-possession{display:none}
+ .live-modal .decision-alert{grid-column:2;grid-row:2;z-index:6;margin:0;background:#663544;font-size:.8rem}
+ .live-modal .opposing-lineups{min-height:0}.live-modal .overview-team{min-width:0}.live-modal .overview-row{min-width:0}
+ .live-modal .live-decisions{z-index:10}
+}
+
+/* v1.79 player progress, academy advice and career records */
+.player-progress-card,.youth-advice,.loan-progress-comparison{background:#123449;border:1px solid #64849a;padding:12px;margin:12px 0;overflow-wrap:anywhere}.player-progress-card h3,.loan-progress-comparison h4{margin:0 0 8px}.progress-numbers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.progress-numbers>div{background:#1e4357;padding:8px;min-width:0}.progress-numbers small{display:block;font-size:.76rem;text-transform:none;letter-spacing:normal;line-height:1.4}.progress-numbers b{display:block;font-size:1.4rem}.progress-flat{color:#bed0d9}.player-season-record summary,.player-milestones summary{padding:10px 0;min-height:40px}.player-season-record table{width:100%;font-size:.82rem;min-width:310px}.player-season-record td,.player-season-record th{padding:8px 5px;text-align:left;white-space:normal}.player-season-record td:nth-child(n+3){text-align:right}.player-milestones p{font-size:.84rem}.player-milestones small,.youth-advice small,.loan-progress-comparison small{font-size:.76rem;letter-spacing:normal;text-transform:none;line-height:1.4}.youth-advice p{font-size:.86rem;line-height:1.4}.development-progress-list{display:grid;gap:5px;margin:12px 0}.development-progress-row{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;background:#153c58;color:#edf7fc;border:1px solid #527892;text-align:left;min-height:54px}.development-progress-row>span{min-width:0}.development-progress-row>span:last-child{text-align:right;flex:none}.development-progress-row small{display:block;font-size:.76rem;letter-spacing:normal;text-transform:none}.development-progress-row b{font-size:.9rem}.development-overview>.journey-actions{flex-wrap:wrap}.loan-progress-comparison p{font-size:.86rem;line-height:1.4}
+@media(max-width:380px){.progress-numbers{grid-template-columns:1fr}.player-progress-card,.youth-advice{padding:9px}.development-progress-row{padding:8px}}
+
+.comparison-overlay .panel-close{position:sticky;top:0;right:0;float:right;z-index:6;display:block;min-width:44px;min-height:44px;background:#173c59;border:1px solid #8bafc3}.comparison-overlay .modal>h2{padding-right:48px}
