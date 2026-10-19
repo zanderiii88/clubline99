@@ -1,4 +1,4 @@
-import {termsDemand,negotiateTerms,commitTerms} from './negotiations.js?v=1.76.0';
+import {termsDemand,negotiateTerms,commitTerms} from './negotiations.js?v=1.90.0';
 // Dated terms are career-owned; weekly wages remain part of the Monday payroll.
 const days=(a,b)=>Math.floor((Date.parse(b+'T12:00:00Z')-Date.parse(a+'T12:00:00Z'))/86400000);
 export function contractEnd(c,p){return c.contracts?.[p.id]?.end||`${Number((c.seasonStart||c.date).slice(0,4))+Math.max(1,Math.min(5,p.contract||1))}-06-30`}

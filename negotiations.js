@@ -4,8 +4,11 @@ const owner=(c,p)=>c.owners?.[p.id]||p.clubId,clamp=(n,a,b)=>Math.max(a,Math.min
 const days=(a,b)=>Math.floor((Date.parse(b+'T12:00:00Z')-Date.parse(a+'T12:00:00Z'))/86400000);
 const after=(date,n)=>new Date(Date.parse(date+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
 export function expectedRole(c,league,p){const peers=league.players.filter(x=>x.id!==p.id&&owner(c,x)===c.clubId&&!c.players?.[x.id]?.retired&&!x.academy&&x.primary===p.primary),best=Math.max(0,...peers.map(x=>x.overall));return p.overall>=best-3?'starter':p.age<=23&&p.overall<best-8?'prospect':'rotation';}
+// Renewals start from the existing wage. Incoming demands also reflect comparable
+// players at the destination; a move to a richer club cannot keep a bargain wage forever.
+function personalWageBase(c,league,p,mode){if(mode!=='signing')return Math.max(100,p.wage);const peers=league.players.filter(x=>x.id!==p.id&&owner(c,x)===c.clubId&&Math.abs(x.overall-p.overall)<=5&&!c.players?.[x.id]?.retired).map(x=>x.wage).sort((a,b)=>a-b);return Math.max(100,p.wage,Math.min(p.wage*2.2,peers.length?peers[Math.floor(peers.length/2)]*.85:0));}
 export function termsDemand(c,league,p,years,role,mode='renewal'){
- const state=c.players?.[p.id]||{},base=Math.max(p.wage,Math.max(0,p.overall-55)**2*15),increase=(mode==='renewal'&&state.happiness<35?.15:.05)+(years>=3?.05:0),expected=role?expectedRole(c,league,p):null,extra=expected==='starter'&&role==='rotation'?.10:expected==='starter'&&role==='prospect'?.20:expected==='rotation'&&role==='prospect'?.05:0;
+ const state=c.players?.[p.id]||{},base=personalWageBase(c,league,p,mode),increase=(mode==='renewal'&&state.happiness<35?.15:.05)+(years>=3?.05:0),expected=role?expectedRole(c,league,p):null,extra=expected==='starter'&&role==='rotation'?.10:expected==='starter'&&role==='prospect'?.20:expected==='rotation'&&role==='prospect'?.05:0;
  return Math.ceil(base*(1+increase+extra)/50)*50;
 }
 export function negotiationStatus(c,id){const n=c.playerNegotiations?.[id],blocked=!!(n?.cooldownUntil&&n.cooldownUntil>c.date),elapsed=n?.lastDate?Math.max(0,days(n.lastDate,c.date)):0,annoyance=blocked?100:n?.cooldownUntil?Math.max(20,40-elapsed):Math.max(0,(n?.annoyance||0)-elapsed*2);return {...n,annoyance,blocked,label:blocked?'Talks suspended':annoyance>=75?'Close to ending talks':annoyance>=45?'Feels undervalued':annoyance>=20?'Patience wearing thin':'Open to discussion'};}

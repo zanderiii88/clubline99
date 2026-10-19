@@ -1,7 +1,7 @@
 import {playerAliases,normaliseName} from './player-aliases.js?v=1.74.0';
-import {contractStatus} from './contracts.js?v=1.74.0';
+import {contractStatus} from './contracts.js?v=1.90.0';
 // League-wide search uses current ownership and saved career availability.
-export const playerValue=p=>Math.round(Math.max(50000,Math.min(15000000,(p.overall-55)**3*320*(p.age>=32?.55:p.age>=29?.78:1)+Math.max(0,p.potential-p.overall)*75000))/10000)*10000;
+export const playerValue=p=>{const ability=Math.max(0,p.overall-55),reference=Math.max(250,ability*ability*12),market=Math.max(p.age<=23?.65:.45,Math.min(1.2,Math.sqrt(Math.max(100,p.wage||100)/reference))),age=p.age>=35?.3:p.age>=32?.5:p.age>=29?.78:1;return Math.round(Math.max(20000,Math.min(15000000,(ability**3*280*age+Math.max(0,p.potential-p.overall)*60000)*market))/10000)*10000;};
 export const transferFee=(p,c)=>{if(p.freeAgent)return 0;const days=c?contractStatus(c,p).days:Infinity;return Math.round(playerValue(p)*1.1*(days<=183?.55:days<=366?.8:1)/10000)*10000;};
 export const blankTransferFilters=()=>({name:'',listed:'all',position:'all',valueMin:'',valueMax:'',ageMin:'',ageMax:'',ratingMin:'',ratingMax:'',hotOnly:false,sort:'rating',feeMax:'',expiry:''});
 export function searchLeaguePlayers(players,career,filters){

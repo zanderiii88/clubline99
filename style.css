@@ -882,3 +882,5 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 .selection-candidate-list{display:flex;flex-direction:column}
 .selection-candidate{flex:0 0 auto;min-height:max-content}
 @media(orientation:landscape) and (max-height:500px){.selection-candidate-list{display:grid;grid-auto-rows:max-content;align-content:start}.selection-candidate{min-height:max-content}}
+
+.country-card img{width:52px;height:34px;object-fit:contain;flex-shrink:0}.country-back img{width:24px;height:16px;vertical-align:middle}.country-card{min-height:110px}
