@@ -824,3 +824,37 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 
 /* v1.86 touch-first stadium planning and explicit construction review */
 .blueprint-scroll{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;touch-action:pan-x pan-y;border:1px solid #81b4d5;scrollbar-gutter:stable}.blueprint-scroll .section-blueprint{grid-template-columns:repeat(10,minmax(44px,1fr));grid-template-rows:repeat(6,44px);gap:4px;padding:6px;min-width:490px;max-width:none;border:0}.blueprint-scroll .section-blueprint button{min-width:44px;min-height:44px;font-weight:800;font-size:.76rem}.blueprint-scroll .section-blueprint button.selected,.section-picker-buttons .selected{background:#866118;border:2px solid #ffdc76;color:white}.section-picker-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.section-picker-buttons .btn{min-height:48px;white-space:normal;line-height:1.3;min-width:0}.designer-section-picker summary,.stadium-assistant summary{padding:12px 0;min-height:44px;cursor:pointer}.designer-preview.interactive .designer-hit.is-selected{stroke:#ffdc76;stroke-width:3.5;stroke-opacity:1;fill:#ffdc76;fill-opacity:.15}.stadium-designer-layout .designer-selection{position:sticky;top:0;z-index:4;padding:10px;background:#17394c;border-bottom:2px solid #ffdc76;margin-top:0}.stadium-designer-layout .designer-selection small{overflow-wrap:anywhere}.stadium-designer-layout .designer-actions{position:sticky;bottom:0;background:#17394c;padding:10px 0 max(10px,env(safe-area-inset-bottom));z-index:4;display:flex;flex-wrap:wrap;gap:8px}.stadium-designer-layout .designer-actions .btn{min-height:44px;white-space:normal;flex:1}.stadium-designer-layout .select{min-height:44px!important}.stadium-designer-layout .designer-preview.interactive{min-height:180px}.construction-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.construction-summary-grid span{min-width:0;font-size:.8rem;line-height:1.4}.construction-summary-grid b{display:block;font-size:1rem;overflow-wrap:anywhere}.construction-notice summary{padding:10px 0;min-height:44px}.stadium-build-review{z-index:240}.stadium-build-review .modal{max-height:calc(100dvh - 20px);overflow:auto}.stadium-build-review .modal-actions{position:sticky;bottom:0;background:#153b68;padding:10px 0 max(5px,env(safe-area-inset-bottom));z-index:5;display:flex;flex-wrap:wrap;gap:8px}.stadium-build-review .modal-actions .btn{min-height:44px;white-space:normal;flex:1}.stadium-assistant{padding:8px;background:#123449;border:1px solid #64849a;margin:10px 0}.stadium-assistant p{line-height:1.4}.stadium-assistant .btn{min-height:44px;white-space:normal}.designer-club-caption{line-height:1.4;overflow-wrap:anywhere}@media(orientation:portrait){.stadium-designer-layout{grid-template-columns:1fr!important}.stadium-designer-layout .facilities-visual,.stadium-designer-layout .facilities-controls{height:auto!important;overflow:visible;max-width:100%}.stadium-designer-layout .designer-fields{grid-template-columns:1fr}}@media(max-width:380px){.section-picker-buttons{grid-template-columns:1fr}.stadium-build-review .modal-actions{flex-direction:column}}
+
+/* v1.87 club stationery, season briefing and formation selection */
+.owner-welcome-overlay .owner-letter{max-width:640px;padding:clamp(20px,5vw,40px);border:1px solid #d4c9aa;color:#292e31;background:repeating-linear-gradient(0deg,#85744f05 0px,#85744f05 1px,transparent 1px,transparent 4px),linear-gradient(110deg,#fffdf3,#f0e9d5);box-shadow:0 20px 70px #000b, inset 0 0 35px #c4b58d30;font-family:Georgia,'Times New Roman',serif}
+.letter-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:5px solid var(--letter-club);border-bottom:1px solid #afa58e;padding:14px 0 16px}
+.letter-heading h2{color:var(--letter-club);font-family:'Clubline Condensed',Arial,sans-serif;font-size:2rem;line-height:1.05;margin:5px 0;overflow-wrap:anywhere}
+.letter-office{font:700 .65rem Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase;color:#5c625e}
+.owner-letter .letter-heading p{margin:5px 0 0;font-size:.76rem}
+.letter-monogram{border:2px solid var(--letter-club);color:var(--letter-club);border-radius:50%;width:58px;height:58px;flex-shrink:0;display:grid;place-items:center;font:bold 1.1rem Georgia,serif}
+.letter-date{font-size:.75rem;text-align:right;margin:16px 0 24px;color:#62645b}
+.owner-letter h3{font-size:1rem;font-weight:normal;margin:0 0 14px}
+.owner-welcome-overlay .owner-letter>p{font-size:.9rem;line-height:1.65;margin:0 0 15px}
+.letter-signoff{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:22px 0 18px}
+.letter-signoff>div{min-width:0;font-size:.87rem}
+.owner-signature{display:block;width:min(195px,100%);height:62px;color:#253d62;margin:4px 0}
+.letter-signoff strong,.letter-signoff small{display:block;overflow-wrap:anywhere}
+.letter-signoff small{font-size:.73rem;color:#62645b;margin-top:4px}
+.letter-shirt{margin:0;text-align:center;flex-shrink:0;width:105px}
+.letter-shirt .period-shirt{display:block;position:relative;width:88px;height:90px;margin:auto;background:none}
+.letter-shirt img{display:block;width:100%;height:100%;object-fit:contain}
+.letter-shirt b{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);font:700 26px Arial,sans-serif;color:white;text-shadow:1px 1px 2px #000,-1px -1px 1px #000}
+.letter-shirt figcaption{font:italic .65rem Georgia,serif;margin-top:7px;color:#62645b}
+.letter-actions{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid #c5bba2;padding-top:18px}
+.owner-letter .letter-actions .btn{font-family:'Clubline Condensed',Arial,sans-serif;min-height:44px}
+.owner-letter .letter-actions .ghost{background:transparent;color:#33424c;border-color:#a49d8e}
+.welcome-season-facts{border:1px solid #526a80;background:#102438;padding:12px;margin:14px 0}
+.welcome-season-facts h3{font-size:1rem;margin:5px 0}
+.welcome-briefing-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}
+.welcome-briefing-actions .btn{min-height:44px}
+.formation-team-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap;padding:8px 0 10px}
+.formation-team-controls label{display:grid;gap:5px;flex:1;min-width:190px;font-size:.8rem}
+.formation-team-controls .select,.formation-team-controls .btn,.stream-team-controls .select,.stream-team-controls .btn{min-height:44px}
+.formation-team-controls .compact-note{flex-basis:100%;margin:0}
+.formation-selection-notes{margin:0 0 10px;padding:9px;border:1px solid #587385;font-size:.8rem;line-height:1.5}
+@media(max-width:400px){.letter-monogram{width:43px;height:43px;font-size:.8rem}.letter-shirt{width:90px}.letter-shirt .period-shirt{width:76px;height:80px}.letter-signoff{gap:10px}.welcome-briefing-actions{grid-template-columns:1fr}}
