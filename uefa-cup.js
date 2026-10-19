@@ -1,8 +1,9 @@
-import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.74.0';
-import {divisionTable,domesticClub} from './divisions.js?v=1.74.0';
-import {clQualified} from './champions-league.js?v=1.74.0';
+import {scottishClub,scottishCareer} from './scottish-world.js?v=1.89.0';
+import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.89.0';
+import {divisionTable,domesticClub} from './divisions.js?v=1.89.0';
+import {clQualified} from './champions-league.js?v=1.89.0';
 export const UC_ID='uefa-cup';
-export const UC_OPENING_ENGLISH=['C02','C03','C09','C11'];
+export const UC_OPENING_ENGLISH=['C02','C03','C09','C11','EU001','SC01','SC05','EU052'];
 export const ucFixtures=c=>c.schedule.flatMap(r=>r.fixtures.filter(f=>f.competition===UC_ID).map(f=>({...f,date:r.date})));
 const yearOf=c=>Number(c.seasonStart.slice(0,4));
 const nation=(league,id)=>league.clubs.find(x=>x.id===id)?.country||'England';
@@ -12,19 +13,19 @@ const shuffle=(a,r)=>[...a].map(x=>({x,key:r()})).sort((a,b)=>a.key-b.key).map(x
 // England's period base allocation: one league place and one place for each domestic cup.
 // A CL-qualified FA winner passes its place to the non-CL finalist; duplicate places go down the league.
 export function ucQualified(c,league,year=yearOf(c)+1,cl=clQualified(c,league,year)){
- const rows=divisionTable(c,league,'premier').map(r=>r.id),selected=[],routes={};
- const add=(id,route)=>{if(!id||!domesticClub(id)||cl.includes(id)||selected.includes(id))return false;selected.push(id);routes[id]=route;return true;};
- const next=route=>{const id=rows.find(id=>!cl.includes(id)&&!selected.includes(id));if(!add(id,route))throw Error('No English UEFA qualification place available');};
- next('League position');
- for(const [cup,route]of [[c.faCup,'FA Cup'],[c.leagueCup,'League Cup']]){
-  if(add(cup?.status==='complete'?cup.winner:null,route+' winner'))continue;
-  if(route==='FA Cup'&&cup?.status==='complete'&&cl.includes(cup.winner)){
-   const final=cup.rounds?.at(-1)?.ties?.[0],runner=final&&[final.home,final.away].find(id=>id!==cup.winner);if(add(runner,'FA Cup runner-up'))continue;
+ const selected=[],routes={},add=(id,route)=>{if(!id||!(domesticClub(id)||scottishClub(id))||cl.includes(id)||selected.includes(id))return false;selected.push(id);routes[id]=route;return true;};
+ for(const [division,slots,nation]of [['premier',3,'England'],['scot-premier',2,'Scotland']]){
+  const rows=divisionTable(c,league,division).map(r=>r.id),same=id=>scottishClub(id)===(nation==='Scotland'),next=route=>{const id=rows.find(id=>!cl.includes(id)&&!selected.includes(id));if(!add(id,route))throw Error('No '+nation+' UEFA place available');};
+  next('League position');
+  const cups=nation==='Scotland'?[[c.faCup,'Scottish Cup']]:[[c.faCup,'FA Cup'],[c.leagueCup,'League Cup']];
+  for(const [cup,title]of cups){
+   const played=cup?.status==='complete'&&(cup.country==='Scotland')===(nation==='Scotland');
+   if(played&&same(cup.winner)&&add(cup.winner,title+' winner'))continue;
+   if(played&&title!=='League Cup'&&cl.includes(cup.winner)){const final=cup.rounds.at(-1).ties[0],runner=[final.home,final.away].find(id=>id!==cup.winner);if(add(runner,title+' runner-up'))continue;}
+   next(title+' place passed to league');
   }
-  next(route+' place passed to league');
  }
- if(c.uefaCup?.status==='complete')add(c.uefaCup.winner,'UEFA Cup title holder');
- return {clubs:selected,routes};
+ if(c.uefaCup?.status==='complete')add(c.uefaCup.winner,'UEFA Cup title holder');return {clubs:selected,routes};
 }
 export function selectUCEntrants(c,league){
  const count=yearOf(c)===1998?64:96,cl=new Set(c.championsLeague?.entrants||[]),english=yearOf(c)===1998?UC_OPENING_ENGLISH:c.ucQualified?.clubs||ucQualified(c,league,yearOf(c),[...cl].filter(domesticClub)).clubs;

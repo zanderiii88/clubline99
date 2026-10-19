@@ -1,5 +1,5 @@
-import {initialiseNationalities} from './nationalities.js?v=1.74.0';
-import {worldRollover,youthReadiness} from './world-development.js?v=1.74.0';
+import {initialiseNationalities} from './nationalities.js?v=1.89.0';
+import {worldRollover,youthReadiness} from './world-development.js?v=1.89.0';
 import {returnLoan} from './loans.js?v=1.74.0';
 import {facilityLevel} from './club-investment.js?v=1.74.0';
 import {trainingDevelopmentFactor} from './training.js?v=1.74.0';

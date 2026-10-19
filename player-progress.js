@@ -1,4 +1,4 @@
-import {youthReadiness} from './world-development.js?v=1.74.0';
+import {youthReadiness} from './world-development.js?v=1.89.0';
 import {suitsRole} from './recruitment.js?v=1.76.0';
 const owner=(c,p)=>c.owners?.[p.id]||p.clubId;
 const owned=(c,p)=>owner(c,p)===c.clubId||c.loans?.[p.id]?.parent===c.clubId;

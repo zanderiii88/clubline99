@@ -1,16 +1,17 @@
-import {divisionOf,divisionInfo,divisionTable} from './divisions.js?v=1.74.0';
-import {clSlots,clQualified,clGroupTable} from './champions-league.js?v=1.74.0';
-import {ucQualified} from './uefa-cup.js?v=1.74.0';
+import {scottishClub} from './scottish-world.js?v=1.89.0';
+import {divisionOf,divisionInfo,divisionTable} from './divisions.js?v=1.89.0';
+import {clSlots,clQualified,clGroupTable} from './champions-league.js?v=1.89.0';
+import {ucQualified} from './uefa-cup.js?v=1.89.0';
 export function leagueSituation(c,league){
  const division=divisionOf(c),info=divisionInfo(division),rows=divisionTable(c,league,division),index=rows.findIndex(r=>r.id===c.clubId),us=rows[index];if(!us||!info)return null;
  const fixtures=c.schedule.flatMap(r=>r.fixtures).filter(f=>f.kind==='league'&&f.competition===division),left=id=>fixtures.filter(f=>f.homeGoals===null&&[f.home,f.away].includes(id)).length,remaining=left(c.clubId),complete=fixtures.length>0&&fixtures.every(f=>f.homeGoals!==null),targets=[];
  const target=(key,label,cut)=>{const inside=index<cut,boundary=rows[inside?cut:cut-1];if(!boundary)return;targets.push({key,label,cut,inside,clubId:boundary.id,position:rows.indexOf(boundary)+1,gap:inside?us.Pts-boundary.Pts:boundary.Pts-us.Pts,gamesDifference:boundary.P-us.P});};
  if(index===0&&rows[1])targets.push({key:'title',label:'Title',inside:true,clubId:rows[1].id,position:2,gap:us.Pts-rows[1].Pts,gamesDifference:rows[1].P-us.P});else if(rows[0])targets.push({key:'title',label:'Title',inside:false,clubId:rows[0].id,position:1,gap:rows[0].Pts-us.Pts,gamesDifference:rows[0].P-us.P});
  const nextYear=Number(c.seasonStart.slice(0,4))+1,cl=clQualified(c,league,nextYear),uc=ucQualified(c,league,nextYear,cl);let qualification=cl.includes(c.clubId)?'Projected Champions League entry':uc.clubs.includes(c.clubId)?'Projected UEFA Cup entry · '+uc.routes[c.clubId]:'No current projected European place';
- if(division==='premier'){const slots=clSlots(nextYear),holder=c.championsLeague?.status==='complete'?c.championsLeague.winner:null,holderRank=rows.findIndex(r=>r.id===holder),cut=holder?.startsWith('C')&&(holderRank<0||holderRank>=slots)?slots-1:slots;target('cl','Champions League league places',cut);const baseUC=rows.findIndex(r=>!cl.includes(r.id));if(baseUC>=0)target('uc','UEFA Cup league cutoff',baseUC+1);}
- else{target('automatic','Automatic promotion',2);target('playoffs','Play-off cutoff',6);}
+ if(division==='premier'||division==='scot-premier'){const slots=division==='scot-premier'?1:clSlots(nextYear),holder=c.championsLeague?.status==='complete'?c.championsLeague.winner:null,holderRank=rows.findIndex(r=>r.id===holder),cut=holder?.startsWith('C')&&(holderRank<0||holderRank>=slots)?slots-1:slots;target('cl','Champions League league places',cut);const baseUC=rows.findIndex(r=>!cl.includes(r.id));if(baseUC>=0)target('uc','UEFA Cup league cutoff',baseUC+1);}
+ else if(division==='scot-first'){target('automatic','Promotion place',1);}else{target('automatic','Automatic promotion',2);target('playoffs','Play-off cutoff',6);}
  if(info.relegation)target('safety','Safety',rows.length-info.relegation);
- const titleSecured=fixtures.length>0&&index===0&&rows.every(r=>r.id===c.clubId||us.Pts>r.Pts+left(r.id)*3),promotionConfirmed=!!c.playoffs?.[division]?.automatic?.includes(c.clubId)||c.playoffs?.[division]?.winner===c.clubId;
+ const titleSecured=fixtures.length>0&&index===0&&rows.every(r=>r.id===c.clubId||us.Pts>r.Pts+left(r.id)*3),promotionConfirmed=division==='scot-first'&&complete&&index===0||!!c.playoffs?.[division]?.automatic?.includes(c.clubId)||c.playoffs?.[division]?.winner===c.clubId;
  return {started:rows.some(r=>r.P>0),division,divisionName:info.name,position:index+1,size:rows.length,points:us.Pts,played:us.P,remaining,complete,titleSecured,promotionConfirmed,qualification,targets,rows};
 }
 export function leagueSnapshot(s){if(!s)return null;const {rows,...snapshot}=s;return snapshot;}

@@ -1,7 +1,8 @@
-import {UC_ID} from './uefa-cup.js?v=1.74.0';
-import {CL_ID} from './champions-league.js?v=1.74.0';
-import {divisionOf} from './divisions.js?v=1.74.0';
-export const cupName=id=>id===UC_ID?'UEFA Cup':id===CL_ID?'Champions League':id==='fa-cup'?'FA Cup':'League Cup';
+import {scottishCareer,domesticCupName} from './scottish-world.js?v=1.89.0';
+import {UC_ID} from './uefa-cup.js?v=1.89.0';
+import {CL_ID} from './champions-league.js?v=1.89.0';
+import {divisionOf} from './divisions.js?v=1.89.0';
+export const cupName=(id,c=null)=>id===UC_ID?'UEFA Cup':id===CL_ID?'Champions League':domesticCupName(c,id);
 export const isCup=id=>['league-cup','fa-cup',CL_ID,UC_ID].includes(id);
 export function relevantFixture(c,f){return f.friendly?[f.home,f.away].includes(c.clubId):f.competition===UC_ID?!!c.uefaCup?.entrants?.includes(c.clubId):f.competition===CL_ID?!!c.championsLeague?.entrants?.includes(c.clubId):isCup(f.competition)?(f.competition==='fa-cup'?c.faCup:c.leagueCup)?.status!=='deferred':f.competition===divisionOf(c);}
 export const dayFixtures=(c,date=c.date)=>c.schedule.filter(r=>r.date===date).flatMap(r=>r.fixtures).filter(f=>relevantFixture(c,f));
@@ -30,6 +31,6 @@ export function announceDraws(c){
  for(const r of c.championsLeague?.stages||[])if(r.drawDate<=c.date&&!r.announced){c.news.push({date:r.drawDate,kind:'cup-draw',important:r.entrants.includes(c.clubId),text:`Champions League ${r.name.toLowerCase()} draw is ready.`,action:CL_ID});r.announced=true;}
 
  for(const [competition,cup]of [['league-cup',c.leagueCup],['fa-cup',c.faCup]])for(const r of cup?.rounds||[])if(r.drawDate<=c.date&&!r.announced){
-  if(!c.news.some(n=>n.kind==='cup-draw'&&n.action===competition&&n.date===r.drawDate&&n.text.toLowerCase().includes(r.name.toLowerCase())))c.news.push({date:r.drawDate,kind:'cup-draw',important:r.entrants.includes(c.clubId),text:`${cupName(competition)} ${r.name.toLowerCase()} draw is ready.`,action:competition});r.announced=true;
+  if(!c.news.some(n=>n.kind==='cup-draw'&&n.action===competition&&n.date===r.drawDate&&n.text.toLowerCase().includes(r.name.toLowerCase())))c.news.push({date:r.drawDate,kind:'cup-draw',important:r.entrants.includes(c.clubId),text:`${cupName(competition,c)} ${r.name.toLowerCase()} draw is ready.`,action:competition});r.announced=true;
  }
 }

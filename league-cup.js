@@ -1,5 +1,7 @@
-import {divisionOf} from './divisions.js?v=1.74.0';
-import {cupAfter as after,insertCupFixture as insert} from './cup-scheduling.js?v=1.74.0';
+import {scottishCareer} from './scottish-world.js?v=1.89.0';
+import {initialiseScottishCup,resolveScottishCup,progressScottishCup,validScottishCup} from './scottish-cups.js?v=1.89.0';
+import {divisionOf} from './divisions.js?v=1.89.0';
+import {cupAfter as after,insertCupFixture as insert} from './cup-scheduling.js?v=1.89.0';
 export const CUP_ID='league-cup';
 export const CUP_ROUNDS=[{name:'First round',month:'08-11',legs:2,prize:10000},{name:'Second round',month:'09-15',legs:2,prize:20000},{name:'Third round',month:'10-27',legs:1,prize:30000},{name:'Fourth round',month:'11-10',legs:1,prize:50000},{name:'Quarter-finals',month:'12-01',legs:1,prize:75000},{name:'Semi-finals',month:'01-26',legs:2,prize:125000},{name:'Final',month:'03-21',legs:1,prize:250000,neutral:true}];
 const rng=seed=>{let v=2166136261;for(const ch of seed)v=Math.imul(v^ch.charCodeAt(0),16777619);return()=>{v^=v<<13;v^=v>>>17;v^=v<<5;return (v>>>0)/4294967296;}};
@@ -16,6 +18,7 @@ function drawRound(c,index,entrants,name){
  const involved=entrants.includes(c.clubId);c.news.push({date:c.date,kind:'cup-draw',important:involved,text:`League Cup ${config.name.toLowerCase()} draw is ready.${involved?' Review your tie in Organiser → League Cup.':''}`,action:'league-cup'});
 }
 export function initialiseCup(c,league,name=id=>id){
+ if(scottishCareer(c))return initialiseScottishCup(c,league,CUP_ID);
  c.cupHistory??=[];if(c.leagueCup){if(!validCup(c,league))throw Error('Invalid League Cup save');return false;}
  c.cupHistory??=[];const first=c.seasonStart.slice(0,4)+'-08-11';
  if(c.date>first){c.leagueCup={edition:1,season:c.season,status:'deferred',rounds:[],current:-1,paid:[]};c.news.push({date:c.date,kind:'cup',text:'League Cup added: this existing season keeps its fixtures. Your club enters the cup from next season.',action:'league-cup'});return false;}
@@ -25,6 +28,7 @@ export function initialiseCup(c,league,name=id=>id){
  drawRound(c,0,league.clubs.filter(x=>divisionOf(c,x.id)==='second').map(x=>x.id),name);return true;
 }
 export function resolveCup(c,f,score,random=Math.random){
+ if(f.competition===CUP_ID&&f.scottishCup)return resolveScottishCup(c,f,score,random);
  if(f.competition!==CUP_ID||f.kind!=='cup'||f.homeGoals===null||f.winner||f.legs===2&&f.leg===1)return;
  let h=f.homeGoals,a=f.awayGoals,awayH=0,awayA=f.awayGoals;
  if(f.legs===2){const first=c.schedule.flatMap(r=>r.fixtures).find(x=>x.tie===f.tie&&x.competition===CUP_ID&&x.leg===1);if(!first||first.homeGoals===null)return;h+=first.awayGoals;a+=first.homeGoals;awayH=first.awayGoals;}
@@ -35,6 +39,7 @@ export function resolveCup(c,f,score,random=Math.random){
  f.decision??=f.extraTime?'extra time':f.legs===2?'aggregate':'full time';
 }
 export function progressCup(c,league,name=id=>id){
+ if(scottishCareer(c))return progressScottishCup(c,league,CUP_ID,name);
  const cup=c.leagueCup;if(!cup||cup.status!=='active')return;
  const round=cup.rounds.at(-1),all=c.schedule.flatMap(r=>r.fixtures);
  for(const tie of round.ties){const f=all.find(f=>f.competition===CUP_ID&&f.tie===tie.id&&f.leg===CUP_ROUNDS[round.index].legs);if(!f?.winner)continue;tie.winner=f.winner;
@@ -45,4 +50,4 @@ export function progressCup(c,league,name=id=>id){
  let entrants=round.ties.map(t=>t.winner);if(round.index===0)entrants.push(...cup.second);if(round.index===1)entrants.push(...cup.late);drawRound(c,round.index+1,entrants,name);
 }
 export function rolloverCup(c,league,name){if(c.leagueCup&&!cupComplete(c))throw Error('Complete the League Cup first');if(c.leagueCup)c.cupHistory.push(structuredClone(c.leagueCup));delete c.leagueCup;initialiseCup(c,league,name);}
-export function validCup(c,league){const p=c.leagueCup;if(!p)return true;const ids=new Set(league.clubs.map(x=>x.id));if(p.edition!==1||p.season!==c.season||!['active','complete','deferred'].includes(p.status)||!Array.isArray(p.rounds)||!Array.isArray(p.paid))return false;if(p.status==='deferred')return p.rounds.length===0;if(!Array.isArray(p.late)||p.late.length!==8||!Array.isArray(p.second)||p.second.length!==36||!p.late.every(x=>ids.has(x))||!p.second.every(x=>ids.has(x))||new Set([...p.late,...p.second]).size!==44||typeof p.seed!=='string')return false;const sizes=[24,48,32,16,8,4,2],fixtures=c.schedule.flatMap(r=>r.fixtures).filter(f=>f.competition===CUP_ID),ties=p.rounds.flatMap(r=>r.ties||[]);if(new Set(ties.map(t=>t.id)).size!==ties.length||new Set(p.paid).size!==p.paid.length||p.paid.some(id=>!ties.some(t=>t.id===id)))return false;if(fixtures.length!==p.rounds.reduce((n,r)=>n+(r.ties?.length||0)*CUP_ROUNDS[r.index]?.legs,0)||fixtures.some(f=>!CUP_ROUNDS[f.cupRound]||f.kind!=='cup'||f.legs!==CUP_ROUNDS[f.cupRound].legs||!Number.isInteger(f.leg)||f.leg<1||f.leg>f.legs||!p.rounds[f.cupRound]?.ties.some(t=>t.id===f.tie&&(f.leg===1?t.home===f.home&&t.away===f.away:t.away===f.home&&t.home===f.away))||(f.winner!==undefined&&![f.home,f.away].includes(f.winner))))return false;return p.rounds.length>=1&&p.rounds.length<=7&&p.current===p.rounds.length-1&&p.rounds.every((r,i)=>r.index===i&&Array.isArray(r.entrants)&&r.entrants.length===sizes[i]&&new Set(r.entrants).size===sizes[i]&&r.entrants.every(x=>ids.has(x))&&Array.isArray(r.ties)&&r.ties.length===sizes[i]/2&&new Set(r.ties.flatMap(t=>[t.home,t.away])).size===sizes[i]&&r.ties.every(t=>r.entrants.includes(t.home)&&r.entrants.includes(t.away)&&(t.winner===null||[t.home,t.away].includes(t.winner)))&&Number.isInteger(r.revealed)&&r.revealed>=0&&r.revealed<=r.ties.length)&&(p.status!=='complete'||p.winner===p.rounds[6]?.ties[0]?.winner);}
+export function validCup(c,league){if(scottishCareer(c))return validScottishCup(c,league,CUP_ID);const p=c.leagueCup;if(!p)return true;const ids=new Set(league.clubs.map(x=>x.id));if(p.edition!==1||p.season!==c.season||!['active','complete','deferred'].includes(p.status)||!Array.isArray(p.rounds)||!Array.isArray(p.paid))return false;if(p.status==='deferred')return p.rounds.length===0;if(!Array.isArray(p.late)||p.late.length!==8||!Array.isArray(p.second)||p.second.length!==36||!p.late.every(x=>ids.has(x))||!p.second.every(x=>ids.has(x))||new Set([...p.late,...p.second]).size!==44||typeof p.seed!=='string')return false;const sizes=[24,48,32,16,8,4,2],fixtures=c.schedule.flatMap(r=>r.fixtures).filter(f=>f.competition===CUP_ID),ties=p.rounds.flatMap(r=>r.ties||[]);if(new Set(ties.map(t=>t.id)).size!==ties.length||new Set(p.paid).size!==p.paid.length||p.paid.some(id=>!ties.some(t=>t.id===id)))return false;if(fixtures.length!==p.rounds.reduce((n,r)=>n+(r.ties?.length||0)*CUP_ROUNDS[r.index]?.legs,0)||fixtures.some(f=>!CUP_ROUNDS[f.cupRound]||f.kind!=='cup'||f.legs!==CUP_ROUNDS[f.cupRound].legs||!Number.isInteger(f.leg)||f.leg<1||f.leg>f.legs||!p.rounds[f.cupRound]?.ties.some(t=>t.id===f.tie&&(f.leg===1?t.home===f.home&&t.away===f.away:t.away===f.home&&t.home===f.away))||(f.winner!==undefined&&![f.home,f.away].includes(f.winner))))return false;return p.rounds.length>=1&&p.rounds.length<=7&&p.current===p.rounds.length-1&&p.rounds.every((r,i)=>r.index===i&&Array.isArray(r.entrants)&&r.entrants.length===sizes[i]&&new Set(r.entrants).size===sizes[i]&&r.entrants.every(x=>ids.has(x))&&Array.isArray(r.ties)&&r.ties.length===sizes[i]/2&&new Set(r.ties.flatMap(t=>[t.home,t.away])).size===sizes[i]&&r.ties.every(t=>r.entrants.includes(t.home)&&r.entrants.includes(t.away)&&(t.winner===null||[t.home,t.away].includes(t.winner)))&&Number.isInteger(r.revealed)&&r.revealed>=0&&r.revealed<=r.ties.length)&&(p.status!=='complete'||p.winner===p.rounds[6]?.ties[0]?.winner);}

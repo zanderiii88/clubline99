@@ -1,6 +1,6 @@
 import {wembleyFrontage} from './wembley-world.js';
 import {eventInstallation} from './stadium-events.js';
-import {fixedSurroundings,fixedSiteError,surroundingsLayer} from './fixed-surroundings.js';
+import {fixedSurroundings,fixedSiteError,surroundingsLayer} from './fixed-surroundings.js?v=1.89.0';
 import {exteriorPeople,pitchPlayers} from './stadium-life.js';
 import {SECTIONS,STANDS,normaliseLayout,defaultLayout} from './stadium-model.js';
 import {groundsStand} from './grounds-geometry.js';

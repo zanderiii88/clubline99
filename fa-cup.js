@@ -1,5 +1,7 @@
-import {divisionOf} from './divisions.js?v=1.74.0';
-import {cupAfter,insertCupFixture} from './cup-scheduling.js?v=1.74.0';
+import {scottishCareer} from './scottish-world.js?v=1.89.0';
+import {initialiseScottishCup,resolveScottishCup,progressScottishCup,validScottishCup} from './scottish-cups.js?v=1.89.0';
+import {divisionOf} from './divisions.js?v=1.89.0';
+import {cupAfter,insertCupFixture} from './cup-scheduling.js?v=1.89.0';
 export const FA_ID='fa-cup';
 export const FA_ROUNDS=[
  {name:'First round',month:'11-14',byes:8,prize:10000},
@@ -26,6 +28,7 @@ function draw(c,index,entrants){
  if(drawDate<=c.date)c.news.push({date:c.date,kind:'cup-draw',important:entrants.includes(c.clubId),text:`FA Cup ${config.name.toLowerCase()} draw is ready.`,action:FA_ID});
 }
 export function initialiseFA(c,league){
+ if(scottishCareer(c))return initialiseScottishCup(c,league,FA_ID);
  c.faHistory??=[];if(c.faCup){if(!validFA(c,league))throw Error('Invalid FA Cup save');return false;}
  if(c.date>c.seasonStart.slice(0,4)+'-11-07'){c.faCup={edition:1,season:c.season,status:'deferred',rounds:[],current:-1,paid:[]};c.news.push({date:c.date,kind:'cup',text:'FA Cup added: your existing season keeps its fixtures. The cup starts next season.',action:FA_ID});return false;}
  c.faCup={edition:1,season:c.season,status:'active',seed:`FA:${c.clubId}:${c.season}:${c.cupSeed??(c.cupSeed=Math.random().toString(36).slice(2))}`,late:league.clubs.filter(x=>['premier','first'].includes(divisionOf(c,x.id))).map(x=>x.id),rounds:[],current:-1,paid:[],winner:null};
@@ -33,6 +36,7 @@ export function initialiseFA(c,league){
 }
 function extra(f,score){const [h,a]=score(f.home,f.away);f.extraTime={home:Math.min(2,Math.floor(h/2)),away:Math.min(2,Math.floor(a/2))};f.homeGoals+=f.extraTime.home;f.awayGoals+=f.extraTime.away;}
 export function resolveFA(c,f,score,random=Math.random){
+ if(f.competition===FA_ID&&f.scottishCup)return resolveScottishCup(c,f,score,random);
  if(f.competition!==FA_ID||f.homeGoals===null||f.winner||f.replayRequired)return;
  const semi=f.cupRound===6,year=Number(c.seasonStart.slice(0,4));
  if(f.homeGoals===f.awayGoals&&(f.replay||semi||f.cupRound===7))extra(f,score);
@@ -44,6 +48,7 @@ export function resolveFA(c,f,score,random=Math.random){
  const win=random()<.5;f.penalties={home:win?5:4,away:win?4:5};f.winner=win?f.home:f.away;f.decision='penalties';
 }
 export function progressFA(c,league,name=id=>id){
+ if(scottishCareer(c))return progressScottishCup(c,league,FA_ID);
  const cup=c.faCup;if(!cup||cup.status!=='active')return;const round=cup.rounds.at(-1),all=c.schedule.flatMap(r=>r.fixtures);
  for(const t of round.ties){const f=all.find(f=>f.competition===FA_ID&&f.tie===t.id&&f.winner);if(!f)continue;t.winner=f.winner;
   if(!cup.paid.includes(t.id)){if(t.winner===c.clubId){const amount=FA_ROUNDS[round.index].prize;c.balance+=amount;c.news.push({date:c.date,kind:'cup-prize',amount,text:`FA Cup ${round.name.toLowerCase()}: ${name(c.clubId)} ${round.index===7?'win the trophy':'progress'}; £${amount.toLocaleString('en-GB')} prize received.`,action:FA_ID});}else if(round.index===7&&[t.home,t.away].includes(c.clubId)){c.balance+=250000;c.news.push({date:c.date,kind:'cup-prize',amount:250000,text:'FA Cup runners-up prize: £250,000.',action:FA_ID});}cup.paid.push(t.id);}
@@ -53,7 +58,7 @@ export function progressFA(c,league,name=id=>id){
  const entrants=[...round.byes,...round.ties.map(t=>t.winner)];if(round.index===1)entrants.push(...cup.late);draw(c,round.index+1,entrants);
 }
 export function rolloverFA(c,league){if(!faComplete(c))throw Error('Complete the FA Cup first');if(c.faCup)(c.faHistory??=[]).push(structuredClone(c.faCup));delete c.faCup;initialiseFA(c,league);}
-export function validFA(c,league){try{
+export function validFA(c,league){if(scottishCareer(c))return validScottishCup(c,league,FA_ID);try{
  const p=c.faCup;if(!p)return !c.schedule.some(r=>r.fixtures.some(f=>f.competition===FA_ID));
  const ids=new Set(league.clubs.map(x=>x.id)),sizes=[24,16,52,32,16,8,4,2],all=c.schedule.flatMap(r=>r.fixtures).filter(f=>f.competition===FA_ID);
  if(p.edition!==1||p.season!==c.season||!['active','complete','deferred'].includes(p.status)||!Array.isArray(p.rounds)||!Array.isArray(p.paid))return false;

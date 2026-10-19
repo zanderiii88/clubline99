@@ -1,9 +1,10 @@
+import {scottishCareer} from './scottish-world.js?v=1.89.0';
 import {stadiumDateConflict} from './club-events.js?v=1.74.0';
 // Invitations are career-owned. Only accepted invitations become fixtures.
 const after=(date,n)=>new Date(Date.parse(date+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
 export function offerFriendlies(career,league){
- const year=career.date.slice(0,4),start=year+'-08-03';
- career.friendlyInvitations=league.clubs.filter(c=>c.id!==career.clubId).sort((a,b)=>Math.abs((a.attack+a.defence)-(league.clubs.find(c=>c.id===career.clubId).attack+league.clubs.find(c=>c.id===career.clubId).defence))-Math.abs((b.attack+b.defence)-(league.clubs.find(c=>c.id===career.clubId).attack+league.clubs.find(c=>c.id===career.clubId).defence))||a.id.localeCompare(b.id)).slice(0,3).map((club,i)=>({id:`F${year}-${career.clubId}-${i}`,opponent:club.id,date:after(start,[2,6,9][i]),home:i!==1,status:'offered'}));
+ const year=career.date.slice(0,4),start=year+(scottishCareer(career)?'-07-27':'-08-03');
+ career.friendlyInvitations=league.clubs.filter(c=>c.id!==career.clubId).sort((a,b)=>Math.abs((a.attack+a.defence)-(league.clubs.find(c=>c.id===career.clubId).attack+league.clubs.find(c=>c.id===career.clubId).defence))-Math.abs((b.attack+b.defence)-(league.clubs.find(c=>c.id===career.clubId).attack+league.clubs.find(c=>c.id===career.clubId).defence))||a.id.localeCompare(b.id)).slice(0,scottishCareer(career)?1:3).map((club,i)=>({id:`F${year}-${career.clubId}-${i}`,opponent:club.id,date:after(start,scottishCareer(career)?1:[2,6,9][i]),home:i!==1,status:'offered'}));
  career.news.push({date:career.date,kind:'friendlies',text:'Pre-season invitations received. Accept or decline them in Home. Friendlies affect condition and form, but not league points or league suspensions.'});
 }
 export function respondToFriendly(career,id,accept){

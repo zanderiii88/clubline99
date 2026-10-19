@@ -1,5 +1,6 @@
-import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.74.0';
-import {divisionTable} from './divisions.js?v=1.74.0';
+import {scottishClub,scottishPlayable} from './scottish-world.js?v=1.89.0';
+import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.89.0';
+import {divisionTable} from './divisions.js?v=1.89.0';
 export const CL_ID='champions-league';
 export const clSlots=year=>year<1999?2:year<2002?3:4;
 export const clFixtures=c=>c.schedule.flatMap(r=>r.fixtures.filter(f=>f.competition===CL_ID).map(f=>({...f,date:r.date})));
@@ -8,7 +9,7 @@ const shuffle=(a,r)=>[...a].map(x=>({x,k:r()})).sort((a,b)=>a.k-b.k).map(o=>o.x)
 const country=(league,id)=>league.clubs.find(c=>c.id===id)?.country||'England';
 const strength=(league,id)=>{const c=league.clubs.find(c=>c.id===id);return c.attack+c.defence;};
 const firstEntrants=['C01','C12','EU004','EU002','EU006','EU010','EU009','EU017','EU013','EU019','EU024','EU027','EU031','EU029','EU033','EU034','EU036','EU038','EU039','EU040','EU043','EU045','EU046','EU050'];
-export function clQualified(c,league,year=Number(c.seasonStart.slice(0,4))+1){const ids=divisionTable(c,league,'premier').slice(0,clSlots(year)).map(r=>r.id),holder=c.championsLeague?.status==='complete'?c.championsLeague.winner:null;if(holder?.startsWith('C')&&!ids.includes(holder))ids[ids.length-1]=holder;return ids;}
+export function clQualified(c,league,year=Number(c.seasonStart.slice(0,4))+1){const english=divisionTable(c,league,'premier').slice(0,clSlots(year)).map(r=>r.id),scottish=divisionTable(c,league,'scot-premier').slice(0,1).map(r=>r.id),ids=[...english,...scottish],holder=c.championsLeague?.status==='complete'?c.championsLeague.winner:null;if(holder&&(/^C\d{2}$/.test(holder)||scottishPlayable(holder))&&!ids.includes(holder)){if(scottishClub(holder))ids[ids.length-1]=holder;else ids[english.length-1]=holder;}return ids;}
 export function selectCLEntrants(c,league){
  const year=Number(c.seasonStart.slice(0,4));if(year===1998)return [...firstEntrants];
  const rng=randomFor(c.clSeed+':entrants:'+c.season),english=c.clQualified||[],selected=[...english],pool=league.clubs.filter(x=>x.foreign&&x.clEligible);const holder=c.clHistory?.at(-1)?.winner;if(holder?.startsWith('EU')&&pool.some(x=>x.id===holder))selected.push(holder);

@@ -1,5 +1,5 @@
 import {bookingWindow} from './club-events.js';
-import {fixedSiteError} from './fixed-surroundings.js';
+import {fixedSiteError} from './fixed-surroundings.js?v=1.89.0';
 import {SECTIONS,STANDS,capacity,changeCost} from './stadium-model.js';
 const daysAfter=(date,n)=>new Date(Date.parse(date+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
 const units=(s,c)=>STANDS[c.stand].tiers.reduce((n,t)=>n+t[0]*s.bays*(s.corner?.55:1),0);

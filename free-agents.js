@@ -1,4 +1,4 @@
-import {initialiseNationalities} from './nationalities.js?v=1.74.0';
+import {initialiseNationalities} from './nationalities.js?v=1.89.0';
 // Supplemental fictional free agents are saved with each career, leaving the base roster unchanged.
 export function initialiseFreeAgents(c,league){
  if(c.freeAgentSeason===c.season)return;c.generatedPlayers??=[];c.owners??={};
