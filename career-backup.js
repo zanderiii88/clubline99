@@ -1,9 +1,10 @@
-import {validPlayerProgress} from './player-progress.js?v=1.79.0';
+import {validClubHistory} from './club-history.js?v=1.80.0';
+import {validPlayerProgress} from './player-progress.js?v=1.80.0';
 import {validNegotiations,SQUAD_ROLES} from './negotiations.js?v=1.76.0';
-import {validLoanReport} from './loans.js?v=1.79.0';
+import {validLoanReport} from './loans.js?v=1.80.0';
 import {validManagerState} from './managers.js?v=1.74.0';
 import {COUNTRIES} from './nationalities.js?v=1.74.0';
-import {validSeasonReviews} from './season-review.js?v=1.74.0';
+import {validSeasonReviews} from './season-review.js?v=1.80.0';
 import {validUC} from './uefa-cup.js?v=1.74.0';
 import {validCL} from './champions-league.js?v=1.74.0';
 import {validVenue} from './venues.js?v=1.74.0';
@@ -35,7 +36,7 @@ export function parseBackup(text,league,formations,styles){
  for(const field of ['youthFunding','trainingFunding'])if(c[field]!==undefined&&(!Number.isInteger(c[field])||c[field]<0||c[field]>8))fail();
  const ids=new Set(league.players.map(p=>p.id));
  if(c.generatedPlayers!==undefined&&!Array.isArray(c.generatedPlayers))fail();for(const p of c.generatedPlayers||[]){if(!object(p)||typeof p.id!=='string'||ids.has(p.id)||typeof p.name!=='string'||!clubs.has(p.clubId)||!Number.isFinite(p.overall)||!Number.isFinite(p.wage)||!object(p.positions))fail();ids.add(p.id)}
- if(!validNegotiations(c,ids)||!validPlayerProgress(c,new Set([...ids,...(c.prospects||[]).map(p=>p.id)]),clubs))fail();
+ if(!validClubHistory(c,ids,clubs)||!validNegotiations(c,ids)||!validPlayerProgress(c,new Set([...ids,...(c.prospects||[]).map(p=>p.id)]),clubs))fail();
  if(c.loans!==undefined){if(!object(c.loans))fail();for(const [id,l]of Object.entries(c.loans))if(!ids.has(id)||!object(l)||!clubs.has(l.parent)||!clubs.has(l.to)||l.parent===l.to||l.contribution!==undefined&&![25,50,75,100].includes(l.contribution)||l.end!==undefined&&!/^\d{4}-\d{2}-\d{2}$/.test(l.end)||l.currentReport!==undefined&&!validLoanReport(l.currentReport)||l.previousReport!==undefined&&l.previousReport!==null&&!validLoanReport(l.previousReport)||l.lastReportDate!==undefined&&(!/^\d{4}-\d{2}-\d{2}$/.test(l.lastReportDate)||!Number.isFinite(Date.parse(l.lastReportDate))))fail();}
  if(c.futureTransfers!==undefined&&(!Array.isArray(c.futureTransfers)||c.futureTransfers.some(t=>!object(t)||!ids.has(t.id)||!clubs.has(t.from)||!clubs.has(t.to)||!Number.isFinite(t.fee)||t.fee<0||!/^\d{4}-07-01$/.test(t.arrival)||!['agreed','completed','cancelled'].includes(t.status)||t.role!==undefined&&!SQUAD_ROLES[t.role]||t.years!==undefined&&(!Number.isInteger(t.years)||t.years<1||t.years>4)||t.wage!==undefined&&(!Number.isFinite(t.wage)||t.wage<0||t.wage>1000000))))fail();
  if(c.clubLife!==undefined&&!validClubLife(c.clubLife,ids))fail();
