@@ -858,3 +858,27 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 .formation-team-controls .compact-note{flex-basis:100%;margin:0}
 .formation-selection-notes{margin:0 0 10px;padding:9px;border:1px solid #587385;font-size:.8rem;line-height:1.5}
 @media(max-width:400px){.letter-monogram{width:43px;height:43px;font-size:.8rem}.letter-shirt{width:90px}.letter-shirt .period-shirt{width:76px;height:80px}.letter-signoff{gap:10px}.welcome-briefing-actions{grid-template-columns:1fr}}
+
+/* v1.88 formation guidance and direct player changes */
+.formation-guide{margin:10px 0;padding:10px;border:1px solid #587385;background:#112a3c;font-size:.8rem;line-height:1.5}
+.formation-guide>summary{cursor:pointer;min-height:30px;font-weight:700}
+.formation-guide-grid{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;margin-top:10px;align-items:start}
+.shape-preview{display:block;width:120px;max-width:100%;height:auto;max-height:none;transform:none}
+.shape-preview text{font:700 6px Arial,sans-serif;fill:#fff}
+.formation-guide p{margin:0 0 10px}.formation-guide .compact-note{font-size:.72rem}
+.selection-choices-overlay{z-index:245}
+.selection-choices-overlay .selection-choices{display:flex;flex-direction:column;width:min(620px,100%);max-height:calc(100dvh - 24px);overflow:hidden;padding:16px}
+.selection-choices>header{display:flex;align-items:start;justify-content:space-between;gap:10px;flex:none}
+.selection-choices header>div{min-width:0}.selection-choices h3{font-size:1.2rem;overflow-wrap:anywhere;margin:5px 0}
+.selection-choices header .btn{min-height:44px;flex-shrink:0}.selection-choices>.compact-note{font-size:.76rem;line-height:1.45;flex:none}
+.selection-candidate-list{overflow:auto;min-height:60px;overscroll-behavior:contain;display:grid;gap:7px;padding:2px}
+.selection-candidate{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:70px;text-align:left;padding:10px;color:#f3f5f3;background:#213e52;border:1px solid #5d7a8b;cursor:pointer;width:100%}
+.selection-candidate>span{min-width:0}.selection-candidate b{font-size:.9rem;overflow-wrap:anywhere}.selection-candidate small{display:block;font-size:.72rem;line-height:1.5;letter-spacing:normal;text-transform:none}.selection-candidate>strong{font-size:.75rem;white-space:nowrap}.selection-candidate:focus-visible{outline:2px solid #f6d76d;outline-offset:0}
+.candidate-suitable{color:#a8e0b5}.candidate-warning{color:#ffd18a}
+.match-personnel-status{padding:9px;background:#142c3b;border:1px solid #79909d;margin:8px 0;font-size:.77rem;line-height:1.45}.match-personnel-status p{margin:5px 0}.match-personnel-status small{font-size:.7rem;letter-spacing:normal;text-transform:none}
+@media(max-width:420px){.formation-guide-grid{grid-template-columns:1fr}.shape-preview{width:116px;margin:auto}.selection-choices-overlay .selection-choices{padding:12px}.selection-candidate{padding:8px}}
+@media(orientation:landscape) and (max-height:500px){.selection-choices-overlay{padding:8px}.selection-choices-overlay .selection-choices{max-height:calc(100dvh - 16px);padding:10px}.selection-choices>.compact-note{margin:5px 0}.selection-candidate-list{grid-template-columns:1fr 1fr}.selection-candidate{min-height:68px}.selection-choices h3{font-size:1rem}}
+.selection-choices-overlay{z-index:320}
+.selection-candidate-list{display:flex;flex-direction:column}
+.selection-candidate{flex:0 0 auto;min-height:max-content}
+@media(orientation:landscape) and (max-height:500px){.selection-candidate-list{display:grid;grid-auto-rows:max-content;align-content:start}.selection-candidate{min-height:max-content}}

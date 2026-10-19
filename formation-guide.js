@@ -1,0 +1,13 @@
+const GUIDES={
+ '4-4-2':{strength:'Two strikers and a clear pair of wide outlets.',tradeoff:'Two central midfielders can be outnumbered by a midfield three.',needs:'Two strikers, wide midfield options and a balanced central pair.'},
+ '4-1-2-1-2':{strength:'A holding midfielder protects the defence while an attacking midfielder supports two strikers.',tradeoff:'The narrow diamond relies on the full-backs for width.',needs:'A defensive midfielder, two central midfielders and a suitable attacking midfielder.'},
+ '4-3-3':{strength:'A midfield three supports a striker and two wide forwards.',tradeoff:'The lone striker can become isolated if the wide players and midfield stay deep.',needs:'Two wide forwards, a striker and midfield cover behind them.'},
+ '4-2-3-1':{strength:'Two holding players provide cover behind a creative attacking midfield line.',tradeoff:'The striker needs support; the central attacking role needs a suitable creator.',needs:'Two defensive midfielders, wide forwards and an attacking midfielder.'},
+ '4-5-1':{strength:'Five midfielders offer width and numbers behind a lone striker.',tradeoff:'Fewer players start close to goal, so the striker needs runners from midfield.',needs:'Wide midfield options, three central players and a striker able to lead the attack.'},
+ '4-1-4-1':{strength:'A dedicated holding midfielder shields the back four.',tradeoff:'The lone striker can be isolated; the central pair must link midfield and attack.',needs:'A defensive midfielder, two central midfielders and two wide outlets.'},
+ '4-3-2-1':{strength:'Two narrow attacking midfielders link a central midfield three to the striker.',tradeoff:'There are no natural wingers; the full-backs supply most of the width.',needs:'Two attacking midfielders, a balanced central trio and suitable full-backs.'},
+ '3-5-2':{strength:'Three centre-backs and a midfield five support two strikers.',tradeoff:'The wide players carry responsibility for both flanks.',needs:'Three centre-backs, two full-back options for the wide roles and two strikers.'},
+ '3-4-3':{strength:'Three forwards stretch the opposition with support from wide midfield roles.',tradeoff:'Only two central midfielders sit ahead of the back three.',needs:'Three centre-backs, two wide full-back options and a complete front three.'},
+ '5-3-2':{strength:'Five defenders provide a broad defensive line behind a central midfield three.',tradeoff:'Without wingers, attacking width depends on the full-backs.',needs:'Three centre-backs, two full-backs and a pair of strikers.'}
+};
+export function formationAdvice(shape){return GUIDES[shape]||null;}
