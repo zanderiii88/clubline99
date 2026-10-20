@@ -1,3 +1,4 @@
+import {validLiveMatch} from './match-control.js?v=1.92.0';
 import {validClubHistory} from './club-history.js?v=1.80.0';
 import {validPlayerProgress} from './player-progress.js?v=1.91.0';
 import {validNegotiations,SQUAD_ROLES} from './negotiations.js?v=1.90.0';
@@ -50,6 +51,6 @@ export function parseBackup(text,league,formations,styles){
  for(const id of ids){if(!c.players[id]&&league.players.find(p=>p.id===id)?.clubId.startsWith('EU')&&(!c.championsLeague||!c.uefaCup&&!league.clubs.find(x=>x.id===league.players.find(p=>p.id===id)?.clubId)?.clEligible))continue;if(!c.divisions&&!c.players[id]&&Number(league.players.find(p=>p.id===id)?.clubId?.slice(1))>20)continue;const p=c.players[id];if(!object(p)||!Number.isFinite(p.fitness)||!Array.isArray(p.form)||p.form.some(n=>!Number.isFinite(n)))fail()}
  for(const r of c.schedule){if(!object(r)||typeof r.date!=='string'||!Array.isArray(r.fixtures)||r.fixtures.some(f=>!object(f)||!clubs.has(f.home)||!clubs.has(f.away)||f.home===f.away||![f.homeGoals,f.awayGoals].every(g=>g===null||Number.isInteger(g)&&g>=0)))fail()}
  for(const team of Object.values(c.owners||{}))if(team!=='FREE'&&!clubs.has(team))fail();for(const o of c.offers||[])if(!object(o)||!ids.has(o.id)||!clubs.has(o.clubId)||!Number.isFinite(o.fee)||o.fee<0)fail();
- if(save.match){const m=save.match;if(!object(m)||!['choice','confirm','live','report'].includes(m.phase)||!clubs.has(m.home)||!clubs.has(m.away)||m.home===m.away)fail();if(m.lineup)selection(m.lineup,11);if(m.bench)selection(m.bench);if(m.oppLineup)selection(m.oppLineup,11);if(m.phase==='live'&&(!Number.isFinite(m.minute)||!Array.isArray(m.events)||!m.lineup||!m.bench))fail()}
+ if(save.match){const m=save.match;if(!validLiveMatch(m,ids))fail();if(!object(m)||!['choice','confirm','live','report'].includes(m.phase)||!clubs.has(m.home)||!clubs.has(m.away)||m.home===m.away)fail();if(m.lineup)selection(m.lineup,11);if(m.bench)selection(m.bench);if(m.oppLineup)selection(m.oppLineup,11);if(m.phase==='live'&&(!Number.isFinite(m.minute)||!Array.isArray(m.events)||!m.lineup||!m.bench))fail()}
  return save;
 }
