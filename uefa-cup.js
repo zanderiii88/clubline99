@@ -1,7 +1,7 @@
 import {scottishClub,scottishCareer} from './scottish-world.js?v=1.89.0';
-import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.89.0';
-import {divisionTable,domesticClub} from './divisions.js?v=1.89.0';
-import {clQualified} from './champions-league.js?v=1.89.0';
+import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.93.0';
+import {divisionTable,domesticClub} from './divisions.js?v=1.93.0';
+import {clQualified} from './champions-league.js?v=1.93.0';
 export const UC_ID='uefa-cup';
 export const UC_OPENING_ENGLISH=['C02','C03','C09','C11','EU001','SC01','SC05','EU052'];
 export const ucFixtures=c=>c.schedule.flatMap(r=>r.fixtures.filter(f=>f.competition===UC_ID).map(f=>({...f,date:r.date})));

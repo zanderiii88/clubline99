@@ -1,3 +1,4 @@
+import {WEMBLEY_CLUB} from './wembley-world.js?v=1.74.0';
 import {HAMPDEN_ID,HAMPDEN_CLUB} from './scottish-world.js?v=1.89.0';
 // Venue identity is independent of the two participating club IDs.
 export const WEMBLEY_ID='wembley-fields';
@@ -12,11 +13,11 @@ export function inferredVenueId(f){
  }
  return WEMBLEY_ID;
 }
-export function assignVenue(f){if(f.neutral){f.venueId=inferredVenueId(f);if(f.venueId===WEMBLEY_ID)f.venue='Wembley Fields';}return f;}
+export function assignVenue(f){if(f.neutral){f.venueId=inferredVenueId(f);if(f.venueId===WEMBLEY_ID)f.venue=WEMBLEY_CLUB.ground;}return f;}
 export function fixtureVenue(f,league,career=null,homeCapacity=null){
  const id=inferredVenueId(f);
  if(id===HAMPDEN_ID)return {id,name:HAMPDEN_CLUB.ground,capacity:52000,neutral:true,national:true,host:HAMPDEN_CLUB};
- if(id===WEMBLEY_ID)return {id,name:'Wembley Fields',capacity:80000,neutral:true,national:true};
+ if(id===WEMBLEY_ID)return {id,name:WEMBLEY_CLUB.ground,capacity:80000,neutral:true,national:true};
  const host=league.clubs.find(c=>c.id===id);if(!host)throw Error('Unknown match venue: '+id);
  return {id,name:host.ground,capacity:id===career?.clubId&&homeCapacity!==null?homeCapacity:host.capacity,neutral:!!f.neutral,national:false,host};
 }

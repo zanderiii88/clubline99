@@ -1,4 +1,4 @@
-import {playerValue,transferFee} from './transfer-search.js?v=1.90.0';
+import {playerValue,transferFee} from './transfer-search.js?v=1.93.0';
 import {scoutEstimate} from './scouting.js?v=1.74.0';
 import {contractStatus,squadCover} from './contracts.js?v=1.90.0';
 export const estimatedBid=transferFee;

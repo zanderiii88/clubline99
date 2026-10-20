@@ -1,4 +1,4 @@
-import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.89.0';
+import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.93.0';
 import {scottishClub,scottishPlayable,HAMPDEN_ID,domesticCupName} from './scottish-world.js?v=1.89.0';
 export const SCOTTISH_LC_ROUNDS=[['First round','08-08',5000],['Second round','08-18',10000],['Third round','09-15',15000],['Quarter-finals','10-14',25000],['Semi-finals','11-10',50000],['Final','11-29',150000]].map(([name,month,prize],i)=>({name,month,prize,legs:1,neutral:i>=4}));
 export const SCOTTISH_FA_ROUNDS=[['First round','11-21',3000],['Second round','12-12',5000],['Third round','01-02',10000],['Fourth round','01-23',20000],['Quarter-finals','03-06',60000],['Semi-finals','04-10',100000],['Final','05-29',300000]].map(([name,month,prize],i)=>({name,month,prize,legs:1,neutral:i>=5}));

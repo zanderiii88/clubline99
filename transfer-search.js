@@ -11,7 +11,7 @@ export function searchLeaguePlayers(players,career,filters){
  const groups={defence:['LB','RB','CB'],midfield:['DM','CM','AM'],attack:['LW','RW','ST']};
  const result=players.filter(p=>{
   if(career.players?.[p.id]?.retired||career.players?.[p.id]?.unregistered)return false;
-  if(text&&!normaliseName(p.name+' '+(playerAliases[p.id]||'')).includes(text))return false;
+  if(text&&!normaliseName(p.name+' '+(p.parodyName||'')+' '+(playerAliases[p.id]||'')).includes(text))return false;
   if(f.listed==='listed'&&!listed.has(p.id)||f.listed==='unlisted'&&listed.has(p.id))return false;
   if(f.listed==='free'&&!p.freeAgent||f.listed==='contracted'&&p.freeAgent)return false;
   if(f.expiry&&(p.freeAgent||contractStatus(career,p).days>Number(f.expiry)))return false;

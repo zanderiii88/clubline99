@@ -1,5 +1,5 @@
 import {youthReadiness} from './world-development.js?v=1.91.0';
-import {suitsRole} from './recruitment.js?v=1.90.0';
+import {suitsRole} from './recruitment.js?v=1.93.0';
 const owner=(c,p)=>c.owners?.[p.id]||p.clubId;
 const owned=(c,p)=>owner(c,p)===c.clubId||c.loans?.[p.id]?.parent===c.clubId;
 const seasonLabel=start=>`${start.slice(0,4)}–${String(Number(start.slice(0,4))+1).slice(-2)}`;

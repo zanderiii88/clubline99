@@ -1,7 +1,7 @@
 import {scottishClub} from './scottish-world.js?v=1.89.0';
-import {divisionOf,divisionInfo,divisionTable} from './divisions.js?v=1.89.0';
-import {clSlots,clQualified,clGroupTable} from './champions-league.js?v=1.89.0';
-import {ucQualified} from './uefa-cup.js?v=1.89.0';
+import {divisionOf,divisionInfo,divisionTable} from './divisions.js?v=1.93.0';
+import {clSlots,clQualified,clGroupTable} from './champions-league.js?v=1.93.0';
+import {ucQualified} from './uefa-cup.js?v=1.93.0';
 export function leagueSituation(c,league){
  const division=divisionOf(c),info=divisionInfo(division),rows=divisionTable(c,league,division),index=rows.findIndex(r=>r.id===c.clubId),us=rows[index];if(!us||!info)return null;
  const fixtures=c.schedule.flatMap(r=>r.fixtures).filter(f=>f.kind==='league'&&f.competition===division),left=id=>fixtures.filter(f=>f.homeGoals===null&&[f.home,f.away].includes(id)).length,remaining=left(c.clubId),complete=fixtures.length>0&&fixtures.every(f=>f.homeGoals!==null),targets=[];

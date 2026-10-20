@@ -1,7 +1,7 @@
 import {scottishCareer} from './scottish-world.js?v=1.89.0';
-import {initialiseScottishCup,resolveScottishCup,progressScottishCup,validScottishCup} from './scottish-cups.js?v=1.89.0';
-import {divisionOf} from './divisions.js?v=1.89.0';
-import {cupAfter,insertCupFixture} from './cup-scheduling.js?v=1.89.0';
+import {initialiseScottishCup,resolveScottishCup,progressScottishCup,validScottishCup} from './scottish-cups.js?v=1.93.0';
+import {divisionOf} from './divisions.js?v=1.93.0';
+import {cupAfter,insertCupFixture} from './cup-scheduling.js?v=1.93.0';
 export const FA_ID='fa-cup';
 export const FA_ROUNDS=[
  {name:'First round',month:'11-14',byes:8,prize:10000},

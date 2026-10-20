@@ -1,5 +1,5 @@
 import {scottishPlayable,scottishClub,scottishSchedule} from './scottish-world.js?v=1.89.0';
-import {insertCupFixture} from './cup-scheduling.js?v=1.89.0';
+import {insertCupFixture} from './cup-scheduling.js?v=1.93.0';
 import {seasonSchedule} from './season-calendar.js?v=1.74.0';
 export const DIVISIONS=[{id:'premier',name:'Premier Division',size:20,relegation:3},{id:'first',name:'First Division',size:24,relegation:3},{id:'second',name:'Second Division',size:24,relegation:0},{id:'scot-premier',name:'Scottish Premier Division',size:10,relegation:1},{id:'scot-first',name:'Scottish First Division',size:10,relegation:0}];
 const after=(s,n)=>new Date(Date.parse(s+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);

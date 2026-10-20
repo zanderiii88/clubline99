@@ -1,7 +1,7 @@
 import {scottishCareer,domesticCupName} from './scottish-world.js?v=1.89.0';
-import {UC_ID} from './uefa-cup.js?v=1.89.0';
-import {CL_ID} from './champions-league.js?v=1.89.0';
-import {divisionOf} from './divisions.js?v=1.89.0';
+import {UC_ID} from './uefa-cup.js?v=1.93.0';
+import {CL_ID} from './champions-league.js?v=1.93.0';
+import {divisionOf} from './divisions.js?v=1.93.0';
 export const cupName=(id,c=null)=>id===UC_ID?'UEFA Cup':id===CL_ID?'Champions League':domesticCupName(c,id);
 export const isCup=id=>['league-cup','fa-cup',CL_ID,UC_ID].includes(id);
 export function relevantFixture(c,f){return f.friendly?[f.home,f.away].includes(c.clubId):f.competition===UC_ID?!!c.uefaCup?.entrants?.includes(c.clubId):f.competition===CL_ID?!!c.championsLeague?.entrants?.includes(c.clubId):isCup(f.competition)?(f.competition==='fa-cup'?c.faCup:c.leagueCup)?.status!=='deferred':f.competition===divisionOf(c);}

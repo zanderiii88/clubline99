@@ -1,18 +1,18 @@
 import {validLiveMatch} from './match-control.js?v=1.92.0';
 import {validClubHistory} from './club-history.js?v=1.80.0';
-import {validPlayerProgress} from './player-progress.js?v=1.91.0';
+import {validPlayerProgress} from './player-progress.js?v=1.93.0';
 import {validNegotiations,SQUAD_ROLES} from './negotiations.js?v=1.90.0';
 import {validLoanReport} from './loans.js?v=1.80.0';
 import {validManagerState} from './managers.js?v=1.89.0';
 import {COUNTRIES} from './nationalities.js?v=1.89.0';
-import {validSeasonReviews} from './season-review.js?v=1.89.0';
-import {validUC} from './uefa-cup.js?v=1.89.0';
-import {validCL} from './champions-league.js?v=1.89.0';
-import {validVenue} from './venues.js?v=1.89.0';
-import {validFA} from './fa-cup.js?v=1.89.0';
-import {validMatchdays} from './matchday.js?v=1.89.0';
-import {validCup} from './league-cup.js?v=1.89.0';
-import {validDivisions,validPlayoffs} from './divisions.js?v=1.89.0';
+import {validSeasonReviews} from './season-review.js?v=1.93.0';
+import {validUC} from './uefa-cup.js?v=1.93.0';
+import {validCL} from './champions-league.js?v=1.93.0';
+import {validVenue} from './venues.js?v=1.93.0';
+import {validFA} from './fa-cup.js?v=1.93.0';
+import {validMatchdays} from './matchday.js?v=1.93.0';
+import {validCup} from './league-cup.js?v=1.93.0';
+import {validDivisions,validPlayoffs} from './divisions.js?v=1.93.0';
 import {validClubLife} from './club-events.js?v=1.74.0';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
