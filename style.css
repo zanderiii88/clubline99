@@ -892,3 +892,8 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 .match-personnel-status>b,.match-personnel-status>small{display:block}.match-personnel-status>small{margin-top:6px}
 /* An absolutely positioned drawer must not inherit a fifth grid row off screen. */
 @media(orientation:landscape) and (max-height:650px){.live-modal .live-decisions{grid-area:auto!important;grid-row:auto!important;grid-column:auto!important;inset:54px 0 0 auto!important;left:auto!important;width:62%!important;height:calc(100% - 54px)!important;max-height:calc(100% - 54px)!important;overflow:auto}}
+
+/* Keep match resume reachable while reviewing a long XI or half-time report. */
+.live-decisions .drawer-header{position:sticky;top:-4px;z-index:8;display:flex;gap:6px;background:#17394c;padding:4px 0}
+.live-decisions .drawer-header>.drawer-handle{position:static;flex:1;width:auto}
+.live-decisions .drawer-header>.match-resume{flex:0 1 45%;min-height:44px;white-space:normal}
