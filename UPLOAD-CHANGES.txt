@@ -1,11 +1,12 @@
-Clubline 99 v1.62.1 — complete release
+CLUBLINE 99 v1.103.0
 
-Extract all three ZIPs into one folder:
-Clubline-1.62.1-Part-1-Game.zip
-Clubline-1.62.1-Part-2-Audio.zip
-Clubline-1.62.1-Part-3-Menu-Assets.zip
+Export a career backup first.
 
-Export a career backup first. Upload the combined contents to your existing GitHub Pages folder, replacing matching files. No earlier release required. Nothing deployed.
+Update ZIP: install over v1.94.0 or any later build through v1.102.0. It includes all changes since v1.94; no intermediate update is needed. Keep existing assets and data.
+Complete ZIP: all files, data and assets; no earlier ZIP is needed.
 
-Crowd boos and cheers removed. Music/advance-time sound retained. Old crowd-cheer.mp3 and crowd-boo.mp3 files can be deleted from assets/audio if desired; this version no longer loads them.
-Read RELEASE-1.62.1.md.
+Extract the chosen ZIP into the existing game repository root, replacing matching files and retaining subfolders. index.html must remain at the repository root. Do not upload the ZIP itself as the game.
+
+After you publish, use Check for Updates / Load update and reopen the game. Confirm v1.103.0 on the main menu. No fresh career required. Nothing has been deployed automatically.
+
+Read RELEASE-1.103.0-NOTES.md and README.md.

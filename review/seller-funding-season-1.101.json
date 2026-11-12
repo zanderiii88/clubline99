@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "scope": "Scottish Streamlined full season, no optional managed transfers; real rollover, funding conservation, unique reports/payrolls and monthly save/backup checks",
+  "summary": {
+    "id": "SC11",
+    "mode": "streamlined",
+    "opening": 1500000,
+    "ended": "1999-06-05",
+    "seasonTwo": "1999-07-27",
+    "balance": 1833898,
+    "weeklyWages": 23250,
+    "steps": 322,
+    "matches": 42,
+    "draws": 8,
+    "firstWeek": 1,
+    "board": 3,
+    "declinedOffers": 5,
+    "declinedBookings": 0,
+    "stories": 0,
+    "decisions": 40,
+    "media": 19,
+    "checkpoints": 14,
+    "payrolls": 44,
+    "prizeMessages": 5
+  },
+  "annualFunding": {
+    "season": 2,
+    "allocated": 147284000
+  },
+  "aiLedgerNet": 147284000,
+  "aiLedgerClubs": 242
+}

@@ -1,0 +1,47 @@
+{
+  "version": "1.99.0",
+  "targetedChecksPassed": true,
+  "managementModes": [
+    "streamlined",
+    "in-depth"
+  ],
+  "dataClubsCovered": 124,
+  "scenarios": [
+    "distinct-player coverage",
+    "joint departures",
+    "rolling contracts",
+    "renewal-risk scenario",
+    "loans and registration",
+    "agreed transfers",
+    "academy readiness privacy",
+    "temporary callups",
+    "fitness separation",
+    "read-only plan and actions",
+    "compressed save reload",
+    "portable backup validation"
+  ],
+  "regressionsPassed": [
+    "v1.95 retirement and rollover",
+    "v1.74 calendar and transfer approval",
+    "pre-match media integration",
+    "board finances",
+    "syntax and source integrity",
+    "cache/import integrity"
+  ],
+  "browser": {
+    "career": "existing Streamlined Arsenal",
+    "date": "1998-08-15",
+    "loadedVersion": "1.99.0",
+    "verified": [
+      "plan",
+      "Bergkamp-Anelka comparison",
+      "ST recruitment filter",
+      "unchanged balance and date"
+    ]
+  },
+  "newFullSeasonRun": false,
+  "untested": [
+    "physical Android",
+    "production offline cache replacement"
+  ]
+}

@@ -1,4 +1,19 @@
-import {termsDemand} from './negotiations.js?v=1.90.0';
+import {commitTerms} from './negotiations.js?v=1.90.0';
+import {buyerAssessment,settleClubFee} from './transfer-interest.js?v=1.100.0';
+import {sellerAssessment} from './seller-assessment.js?v=1.101.0';
 import {hash} from './player-attributes.js?v=1.74.0';
-import {transferFee} from './transfer-search.js?v=1.93.0';
-export function worldTransferDay(c,league){const key=c.date.slice(0,7);if(c.worldTransferMonth===key)return;c.worldTransferMonth=key;c.aiBudgets??={};const owner=p=>c.owners[p.id]||p.clubId,active=p=>!c.players[p.id]?.retired&&!c.players[p.id]?.unregistered,pools=new Map();for(const p of league.players.filter(active)){const id=owner(p);if(!pools.has(id))pools.set(id,[]);pools.get(id).push(p);}const candidates=league.players.filter(p=>active(p)&&owner(p)!==c.clubId&&!p.academy&&!c.loans?.[p.id]&&!c.futureTransfers?.some(t=>t.id===p.id&&t.status==='agreed')&&(p.freeAgent||((pools.get(owner(p))?.length||0)>20&&(p.primary!=='GK'||(pools.get(owner(p))||[]).filter(x=>x.primary==='GK').length>2)))).sort((a,b)=>hash(a.id+key)-hash(b.id+key));for(const p of candidates){const from=owner(p),fee=transferFee(p,c),dest=league.clubs.filter(t=>t.id!==c.clubId&&t.id!==from&&(pools.get(t.id)?.length||0)<26&&(c.aiBudgets[t.id]??t.budget??0)>=fee+4*((pools.get(t.id)||[]).reduce((sum,x)=>sum+x.wage,0)+termsDemand({...c,clubId:t.id},league,p,3,undefined,'signing'))&&p.overall>=Math.max(0,...(pools.get(t.id)||[]).filter(x=>x.primary===p.primary).map(x=>x.overall))+1).sort((a,b)=>hash(a.id+key)-hash(b.id+key))[0];if(!dest)continue;c.aiBudgets[dest.id]=(c.aiBudgets[dest.id]??dest.budget)-fee;if(from!=='FREE'){const seller=league.clubs.find(t=>t.id===from);c.aiBudgets[from]=(c.aiBudgets[from]??seller?.budget??0)+fee;}const wage=termsDemand({...c,clubId:dest.id},league,p,3,undefined,'signing');c.owners[p.id]=dest.id;p.wage=wage;p.freeAgent=false;c.playerChanges[p.id]={...(c.playerChanges[p.id]||{}),freeAgent:false,wage};const generated=c.generatedPlayers.find(x=>x.id===p.id);if(generated){generated.freeAgent=false;generated.wage=wage;}c.contracts[p.id]={end:`${Number(c.date.slice(0,4))+3}-06-30`};c.news.push({date:c.date,kind:'world-transfer',important:p.overall>=78||fee>=5000000,playerId:p.id,clubId:dest.id,text:`World transfer: ${p.name} joins ${dest.name} ${fee?'for £'+fee.toLocaleString('en-GB'):'on a free transfer'}.`});break;}}
+export function worldTransferDay(c,league){
+ const key=c.date.slice(0,7);if(c.worldTransferMonth===key)return;c.worldTransferMonth=key;
+ const owner=p=>c.owners[p.id]||p.clubId,active=p=>!c.players[p.id]?.retired&&!c.players[p.id]?.unregistered&&!c.players[p.id]?.academyOnly&&!c.loans?.[p.id],pools=new Map();
+ for(const p of league.players.filter(active)){const id=owner(p);if(!pools.has(id))pools.set(id,[]);pools.get(id).push(p);}
+ const candidates=league.players.filter(p=>active(p)&&owner(p)!==c.clubId&&!p.academy&&!c.futureTransfers?.some(t=>t.id===p.id&&t.status==='agreed')&&(p.freeAgent||(pools.get(owner(p))?.length||0)>18)).sort((a,b)=>hash(a.id+key)-hash(b.id+key));
+ for(const p of candidates){
+  const from=owner(p);if(sellerAssessment(c,league,p,null).blocked)continue;let dest=null;
+  for(const club of league.clubs.filter(t=>t.id!==c.clubId&&t.id!==from).sort((a,b)=>hash(a.id+key)-hash(b.id+key))){const seller=sellerAssessment(c,league,p,club.id);if(seller.blocked)continue;const a=buyerAssessment(c,league,p,club.id,seller.askingPrice);if(a.acceptable){dest={club,a,fee:seller.askingPrice};break;}}
+  if(!dest)continue;
+  const fee=dest.fee;settleClubFee(c,league,from,dest.club.id,fee);c.owners[p.id]=dest.club.id;
+  p.freeAgent=false;c.playerChanges[p.id]={...(c.playerChanges[p.id]||{}),freeAgent:false};const generated=c.generatedPlayers.find(x=>x.id===p.id);if(generated)generated.freeAgent=false;
+  commitTerms(c,p,{wage:dest.a.wage,years:3});
+  c.news.push({date:c.date,kind:'world-transfer',important:p.overall>=78||fee>=5000000,playerId:p.id,clubId:dest.club.id,text:`World transfer: ${p.name} joins ${dest.club.name} ${fee?'for £'+fee.toLocaleString('en-GB'):'on a free transfer'}. ${dest.a.reason}`});break;
+ }
+}

@@ -1,0 +1,46 @@
+{
+  "version": "1.101.0",
+  "passed": true,
+  "features": [
+    "joint seller formation cover",
+    "permanent squad and keeper safeguards",
+    "confirmed-departure reservations",
+    "cover and rivalry premiums",
+    "stale quotes and fee reconfirmation",
+    "contract-discount opening bids",
+    "bounded once-per-season AI funding"
+  ],
+  "managementModes": [
+    "streamlined",
+    "in-depth"
+  ],
+  "targetedFundingChecks": [
+    "legacy baseline",
+    "multiple annual cycles",
+    "repeat/reload protection",
+    "carryover and cap",
+    "refund debt",
+    "division scaling",
+    "save/backup validation"
+  ],
+  "newFullSeason": {
+    "club": "SC11",
+    "mode": "streamlined",
+    "matches": 42,
+    "checkpoints": 14,
+    "reachedSeason": 2,
+    "fundingLedgerAudit": true
+  },
+  "legacyCareer": "Completed English v1.100 season-two career validated and loaded without cash or AI fund changes",
+  "browser": [
+    "existing Arsenal career",
+    "Peter Schmeichel sale refusal for goalkeeper cover",
+    "disabled signing controls",
+    "opening-price discount"
+  ],
+  "untested": [
+    "physical Android",
+    "production offline cache replacement",
+    "long-term market balance beyond tested rollover"
+  ]
+}

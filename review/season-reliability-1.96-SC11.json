@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "environment": "Node VM with DOM/timer stubs and seeded RNG; real game handlers; routine saves use plain JSON, actual codec at each checkpoint",
+  "policy": "Decline offers/bookings, choose no-spend stories, acknowledge notices; no optional purchases",
+  "summaries": [
+    {
+      "id": "SC11",
+      "mode": "streamlined",
+      "opening": 1500000,
+      "ended": "1999-06-05",
+      "seasonTwo": "1999-07-27",
+      "balance": 1833898,
+      "weeklyWages": 23250,
+      "steps": 292,
+      "matches": 42,
+      "draws": 8,
+      "firstWeek": 1,
+      "board": 3,
+      "declinedOffers": 5,
+      "declinedBookings": 0,
+      "stories": 0,
+      "decisions": 40,
+      "checkpoints": 14,
+      "payrolls": 44,
+      "prizeMessages": 5
+    }
+  ]
+}

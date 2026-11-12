@@ -1,0 +1,75 @@
+{
+  "version": "1.102.0",
+  "passed": true,
+  "pureRecord": "clock boundaries, exact deltas, partial legacy, read-only, invalid data",
+  "watchedModes": [
+    "streamlined",
+    "in-depth"
+  ],
+  "watchedCases": [
+    "half-time",
+    "formation and approach controls",
+    "substitution",
+    "second-yellow dismissal",
+    "exact report shots",
+    "compressed save/reload",
+    "backup and malformed report"
+  ],
+  "quickSimulation": true,
+  "legacyContinuation": true,
+  "seededV1101Comparison": [
+    "score",
+    "every event",
+    "stats",
+    "player state",
+    "balance",
+    "XI",
+    "bench"
+  ],
+  "regressions": [
+    "check-release-173",
+    "check-media-app",
+    "check-seller-app",
+    "check-succession-app"
+  ],
+  "sourceIntegrity": "review/source-integrity-1.102.json",
+  "browser": {
+    "mode": "Streamlined",
+    "fixture": "Arsenal v Wimbledon",
+    "score": "3-0",
+    "spells": [
+      [
+        1,
+        65
+      ],
+      [
+        66,
+        78
+      ],
+      [
+        79,
+        92
+      ]
+    ],
+    "shotsUs": [
+      8,
+      0,
+      1
+    ],
+    "shotsThem": [
+      1,
+      0,
+      0
+    ],
+    "onTargetUs": [
+      6,
+      0,
+      1
+    ],
+    "personnelDisclosure": true,
+    "desktopVisualCheck": true
+  },
+  "newFullSeasonRun": false,
+  "physicalAndroidTested": false,
+  "productionOfflineUpgradeTested": false
+}

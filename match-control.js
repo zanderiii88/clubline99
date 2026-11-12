@@ -1,3 +1,4 @@
+import {validTacticalRecord} from './tactical-review.js?v=1.102.0';
 // Restore a watched match without running the clock before the manager is ready.
 export function restoreMatchControl(match){
  if(match?.phase!=='live')return match;
@@ -8,6 +9,7 @@ export function restoreMatchControl(match){
  return match;
 }
 export function validLiveMatch(match,ids){
+ if(match&&!validTacticalRecord(match.tacticalRecord,ids))return false;
  if(match?.phase!=='live')return true;
  const selection=a=>Array.isArray(a)&&a.every(id=>id===null||ids.has(id));
  if(!selection(match.lineup)||match.lineup.length!==11||!selection(match.bench)||match.bench.length>7||!selection(match.oppLineup)||match.oppLineup.length!==11)return false;

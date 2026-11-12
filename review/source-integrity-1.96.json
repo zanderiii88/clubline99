@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "divisions": [
+    {
+      "id": "premier",
+      "clubs": 20,
+      "rounds": 38,
+      "gamesPerClub": 38
+    },
+    {
+      "id": "first",
+      "clubs": 24,
+      "rounds": 46,
+      "gamesPerClub": 46
+    },
+    {
+      "id": "second",
+      "clubs": 24,
+      "rounds": 46,
+      "gamesPerClub": 46
+    },
+    {
+      "id": "scot-premier",
+      "clubs": 10,
+      "rounds": 36,
+      "gamesPerClub": 36
+    },
+    {
+      "id": "scot-first",
+      "clubs": 10,
+      "rounds": 36,
+      "gamesPerClub": 36
+    }
+  ],
+  "syntaxCheckedModules": 70,
+  "englishStadiumsChecked": 68,
+  "dataHashes": {
+    "league": "03ced9908791096de48739676061367535cf21051fca2850c39b7abc1e3a0243",
+    "scotland": "85af677d34ec70e5f54c2278bb13ac813cd48ee6bc601a363cf73695c166027b",
+    "europe-cl": "6bf880e414f1f14ce06cedaebc63645165b901fc785010a3558e39bd6fd3af07",
+    "europe-uc": "09138a3fbed4ab9d073f23f17013c942715267fa0689788b4f03ae5be8da5fc2"
+  }
+}

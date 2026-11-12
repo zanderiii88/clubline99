@@ -897,3 +897,20 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 .live-decisions .drawer-header{position:sticky;top:-4px;z-index:8;display:flex;gap:6px;background:#17394c;padding:4px 0}
 .live-decisions .drawer-header>.drawer-handle{position:static;flex:1;width:auto}
 .live-decisions .drawer-header>.match-resume{flex:0 1 45%;min-height:44px;white-space:normal}
+
+/* Manager/media responses use the same compact modal as other club decisions. */
+.media-choices{display:grid;gap:.65rem;margin:1rem 0}.media-choice{display:grid;gap:.4rem;text-align:left;padding:.8rem;border:1px solid #7695ae;background:#183c55;color:inherit;font:inherit;cursor:pointer}.media-choice:hover,.media-choice:focus-visible{background:#234f6c;outline:2px solid #edcd63;outline-offset:1px}.media-choice small{line-height:1.45;color:#d4e2eb}.media-event{padding:.5rem 0 1rem}.media-event blockquote{margin:1rem 0;padding:.7rem 1rem;border-left:3px solid #edcd63;background:#ffffff08}.media-outcome,.rivalry-badge{border-left:3px solid #edcd63;padding:.6rem .8rem;background:#ffffff08}.media-overlay .modal{max-width:760px}.media-overlay .media-event+.media-event{border-top:1px solid #ffffff35;padding-top:1rem}
+
+.succession-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.6rem;margin:1rem 0}.succession-summary article{padding:.8rem;border:1px solid #ffffff35;background:#ffffff08}.succession-summary small,.succession-summary b{display:block}.succession-summary b{font-size:1.7rem;margin-top:.3rem}.succession-role{border:1px solid #ffffff35;margin:.7rem 0;padding:.8rem}.succession-role summary{cursor:pointer;line-height:1.5}.succession-option{padding:.6rem .8rem;margin:.5rem 0;border-left:2px solid #93aebd;background:#ffffff08}.succession-option p{margin:.35rem 0}.succession-plan .journey-actions{flex-wrap:wrap}
+
+.tactical-review{margin:14px 0;padding:12px;border:1px solid #ffffff38;background:#0a25354d}
+.tactical-review>summary{font-weight:700;cursor:pointer}
+.tactical-spells{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tactical-spell{padding:12px;border:1px solid #ffffff2b;background:#ffffff08;min-width:0}
+.tactical-spell h4{margin:0 0 8px}
+.tactical-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.tactical-metrics span{padding:6px;background:#0002}
+.tactical-metrics b{display:block}
+.tactical-spell ol{padding-left:22px}
+.tactical-spell li{overflow-wrap:anywhere}
+@media(max-width:650px){.tactical-spells{grid-template-columns:1fr}}

@@ -98,6 +98,9 @@ export function developmentDay(c,league,next){
  }
 }
 export function rolloverDevelopment(c,league,newStart){
+ // A repeated completed transition must not age squads or create another intake.
+ if(newStart===c.seasonStart)return;
+ if(newStart<c.seasonStart)throw new Error('Cannot roll development back to an earlier season.');
  for(const p of c.prospects.filter(p=>p.calledUp))returnProspect(c,league,p.id);
  c.archives.push({season:c.season,reports:structuredClone(c.reports)});
  const previousDate=c.date;c.date=newStart;for(const [id,l]of Object.entries(c.loans))if((l.end||l.season||newStart)<=newStart)returnLoan(c,league,id);c.date=previousDate;c.archives=c.archives.slice(-3);

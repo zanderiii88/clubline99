@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "scope": "Targeted native media tests, actual application match/save handlers in both modes, desktop browser flow",
+  "outcomes": [
+    "win",
+    "draw",
+    "loss",
+    "penalty defeat"
+  ],
+  "checks": [
+    "five response choices",
+    "no duplicate creation or response effects",
+    "no second result penalty",
+    "deadline and opt-out",
+    "rollover expiry",
+    "stable manager identity and four press styles",
+    "queued interview save/reload while match report is open",
+    "answered interview backup/reload",
+    "v1.97 English and Scottish completed-backup validation",
+    "calendar and retirement regressions",
+    "board finance regressions",
+    "source/module/cache integrity"
+  ],
+  "fullSeasonRunThisBuild": false,
+  "physicalAndroidTested": false,
+  "browser": "Existing v1.97 Streamlined Arsenal save; 5-0 win over Wimbledon; report/results/table precede interview; respectful response and tactical manager reply verified"
+}

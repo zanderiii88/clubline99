@@ -1,0 +1,50 @@
+{
+  "version": "1.100.0",
+  "passed": true,
+  "targetedChecks": [
+    "buyer needs and meaningful bid floor",
+    "read-only assessments",
+    "salary reserve and valuation ceilings",
+    "26-player AI recruitment limit",
+    "saved next-day counter decisions",
+    "managed sale buyer debit",
+    "managed purchase seller credit",
+    "no repeat payment",
+    "stale buyer rejection",
+    "new and legacy future-agreement refunds",
+    "ledger validation",
+    "shared formation definitions"
+  ],
+  "managementModes": [
+    "streamlined",
+    "in-depth"
+  ],
+  "regressions": [
+    "squad succession",
+    "calendar and transfer approval",
+    "board finances",
+    "v1.73 manager and match integration",
+    "post-match media",
+    "source syntax and exact cache/import paths"
+  ],
+  "fullSeasonAudit": "transfers-season-audit-1.100.json",
+  "fullSeasonMatches": 96,
+  "fullSeasonCheckpoints": 26,
+  "browser": {
+    "version": "1.100.0",
+    "career": "existing Arsenal",
+    "verified": [
+      "Streamlined match continuation",
+      "switch to In-depth",
+      "sale review explanation",
+      "saved offer re-evaluation",
+      "counter submission",
+      "next-day spending-range rejection"
+    ]
+  },
+  "untested": [
+    "physical Android",
+    "production offline cache replacement",
+    "long-term transfer balance beyond first rollover"
+  ]
+}
