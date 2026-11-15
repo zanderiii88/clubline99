@@ -1,0 +1,24 @@
+{
+  "version": "1.106.0",
+  "passed": true,
+  "branches": [
+    "previous challenge",
+    "previous respect",
+    "win",
+    "loss",
+    "draw",
+    "rivalry fallback",
+    "general fallback"
+  ],
+  "checks": [
+    "pure history/questions",
+    "manager media",
+    "post match",
+    "both-mode rendering, save/reload and backups",
+    "invalid question validation",
+    "source integrity"
+  ],
+  "browserLayoutChecked": false,
+  "freshFullSeason": false,
+  "dataChanged": false
+}

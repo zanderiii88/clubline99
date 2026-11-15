@@ -1,0 +1,147 @@
+{
+  "passed": true,
+  "engineBuild": "1.103.0 (unchanged by 1.104 UI/advice polish)",
+  "policy": "No optional managed transfers, decline offers/bookings, no-spend stories",
+  "results": [
+    {
+      "id": "SC11",
+      "season": 3,
+      "summaries": [
+        {
+          "id": "SC11",
+          "mode": "streamlined",
+          "opening": 1500000,
+          "ended": "1999-06-05",
+          "seasonTwo": "1999-07-27",
+          "balance": 1833898,
+          "weeklyWages": 23250,
+          "steps": 322,
+          "matches": 42,
+          "draws": 8,
+          "firstWeek": 1,
+          "board": 3,
+          "declinedOffers": 5,
+          "declinedBookings": 0,
+          "stories": 0,
+          "decisions": 40,
+          "media": 19,
+          "checkpoints": 14,
+          "payrolls": 44,
+          "prizeMessages": 5
+        },
+        {
+          "id": "SC11",
+          "mode": "streamlined",
+          "opening": 1833898,
+          "ended": "2000-06-10",
+          "seasonTwo": "2000-07-27",
+          "balance": 2744781,
+          "weeklyWages": 21850,
+          "steps": 343,
+          "matches": 42,
+          "draws": 8,
+          "firstWeek": 0,
+          "board": 4,
+          "declinedOffers": 13,
+          "declinedBookings": 0,
+          "stories": 0,
+          "decisions": 45,
+          "media": 19,
+          "checkpoints": 14,
+          "payrolls": 89,
+          "prizeMessages": 10
+        }
+      ],
+      "aiLedgerNet": 290157000,
+      "annualReviews": [
+        "Other clubs' annual transfer budgets reviewed: 241 clubs receive a combined £147,284,000 in new board allocations. Existing transfer balances carry forward.",
+        "Other clubs' annual transfer budgets reviewed: 233 clubs receive a combined £142,873,000 in new board allocations. Existing transfer balances carry forward."
+      ],
+      "cumulativeAllocation": 290157000,
+      "retiredPlayers": 233,
+      "trackedPlayers": 26,
+      "prospects": 5,
+      "archives": [
+        {
+          "season": 1,
+          "reports": 42
+        },
+        {
+          "season": 2,
+          "reports": 42
+        }
+      ],
+      "payrolls": 89
+    },
+    {
+      "id": "C45",
+      "season": 3,
+      "summaries": [
+        {
+          "id": "C45",
+          "mode": "in-depth",
+          "opening": 1800000,
+          "ended": "1999-06-05",
+          "seasonTwo": "1999-08-03",
+          "balance": 2478115,
+          "weeklyWages": 26750,
+          "steps": 517,
+          "matches": 51,
+          "draws": 15,
+          "firstWeek": 1,
+          "board": 3,
+          "declinedOffers": 26,
+          "declinedBookings": 6,
+          "stories": 6,
+          "decisions": 0,
+          "media": 19,
+          "checkpoints": 13,
+          "payrolls": 43,
+          "prizeMessages": 3
+        },
+        {
+          "id": "C45",
+          "mode": "in-depth",
+          "opening": 2478115,
+          "ended": "2000-06-08",
+          "seasonTwo": "2000-08-03",
+          "balance": 3604637,
+          "weeklyWages": 24650,
+          "steps": 554,
+          "matches": 52,
+          "draws": 15,
+          "firstWeek": 0,
+          "board": 4,
+          "declinedOffers": 36,
+          "declinedBookings": 6,
+          "stories": 3,
+          "decisions": 0,
+          "media": 15,
+          "checkpoints": 13,
+          "payrolls": 87,
+          "prizeMessages": 7
+        }
+      ],
+      "aiLedgerNet": 289087000,
+      "annualReviews": [
+        "Other clubs' annual transfer budgets reviewed: 241 clubs receive a combined £146,294,000 in new board allocations. Existing transfer balances carry forward.",
+        "Other clubs' annual transfer budgets reviewed: 234 clubs receive a combined £142,793,000 in new board allocations. Existing transfer balances carry forward."
+      ],
+      "cumulativeAllocation": 289087000,
+      "retiredPlayers": 223,
+      "trackedPlayers": 26,
+      "prospects": 5,
+      "archives": [
+        {
+          "season": 1,
+          "reports": 51
+        },
+        {
+          "season": 2,
+          "reports": 52
+        }
+      ],
+      "payrolls": 87
+    }
+  ]
+}

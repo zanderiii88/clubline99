@@ -1,3 +1,4 @@
+import {rivalryHistory,rivalryQuestion} from './rivalry-history.js?v=1.106.0';
 import {managerFor} from './managers.js?v=1.96.0';
 import {hash} from './player-attributes.js?v=1.74.0';
 
@@ -88,8 +89,9 @@ export function mediaDay(c,league){
  const key=mediaFixtureKey(c.season,next.date,next),derby=clubRivals(c.clubId,opponentId);
  if(s.events.some(e=>e.key===key)||s.lastCreated&&days(s.lastCreated,c.date)<(derby?7:21))return null;
  const relation=s.relationships[manager.id]||0,type=relation<=-4||hash(key)%2===0?'comment':'question';
+ const history=rivalryHistory(c,opponentId,manager.id,next.date);
  const personality=managerPersonality(manager.id),quote=type==='question'?null:relation<=-4?'There has been enough talk from their side. They still have to face us on the pitch.':preQuote(personality,derby,key);
- const e={key,date:c.date,matchDate:next.date,season:c.season,clubId:c.clubId,opponentId,managerId:manager.id,managerName:manager.name,personality,derby,type,quote,status:'pending',deferred:false,choice:null,changes:null,reply:null,responseDate:null,followUp:null,settled:false};
+ const e={key,date:c.date,matchDate:next.date,season:c.season,clubId:c.clubId,opponentId,managerId:manager.id,managerName:manager.name,personality,context:history.text,question:rivalryQuestion(history,derby),derby,type,quote:quote&&history.lastChoice==='provoke'?'I remember the comments at our previous meeting. '+quote:quote,status:'pending',deferred:false,choice:null,changes:null,reply:null,responseDate:null,followUp:null,settled:false};
  s.events.push(e);s.events=s.events.slice(-80);s.lastCreated=c.date;
  c.news.push({date:c.date,kind:'manager-media',mediaKey:key,clubId:c.clubId,text:`${derby?'Rivalry match: ':''}${type==='comment'?manager.name+' has spoken before your meeting. The press want your response.':'The press ask for your view of '+manager.name+' ahead of your next match.'}`});return e;
 }
@@ -125,6 +127,8 @@ export function validMedia(c,league){
  if(!obj(s)||s.version!==1||typeof s.enabled!=='boolean'||!Array.isArray(s.events)||s.events.length>80||!obj(s.relationships)||Object.keys(s.relationships).length>500||!reaction(s.totals)||s.lastCreated!==''&&!date(s.lastCreated)||s.lastPostCreated!==undefined&&s.lastPostCreated!==''&&!date(s.lastPostCreated))return false;
  if(Object.entries(s.relationships).some(([id,n])=>!people[id]||!int(n,-10,10)))return false;
  const keys=new Set();for(const e of s.events){
+  if(obj(e)&&e.question!==undefined&&!str(e.question,500))return false;
+  if(obj(e)&&e.context!==undefined&&!str(e.context,700))return false;
   if(!obj(e)||!str(e.key,300)||keys.has(e.key)||!date(e.date)||!date(e.matchDate)||e.date>e.matchDate||!int(e.season,1,c.season)||e.clubId!==c.clubId||!clubs.has(e.opponentId)||e.opponentId===e.clubId||!people[e.managerId]||!str(e.managerName,100)||typeof e.derby!=='boolean'||!['comment','question'].includes(e.type)||e.quote!==null&&!str(e.quote,500)||!['pending','responded','expired'].includes(e.status)||typeof e.deferred!=='boolean'||typeof e.settled!=='boolean'||e.expiryReason!==undefined&&!str(e.expiryReason,200))return false;
   const parts=e.key.split(':');if(parts[0]!==String(e.season)||parts[1]!==e.matchDate||![parts[2],parts[3]].includes(e.clubId)||![parts[2],parts[3]].includes(e.opponentId))return false;
   if(e.phase!==undefined&&!['pre','post'].includes(e.phase)||e.personality!==undefined&&!PERSONALITIES.includes(e.personality))return false;

@@ -1,0 +1,19 @@
+{
+  "version": "1.110.0",
+  "fixture": "seeded real handlers: quote, completed project, second active project",
+  "renderedViewportWidths": [
+    390,
+    1100
+  ],
+  "observed": [
+    "quote cost and reserve",
+    "single section wording",
+    "active project dates, seats and payment",
+    "remaining fixture disclosure",
+    "completed-project history disclosure",
+    "text wrapping and scrolling"
+  ],
+  "fullBrowserCareerJourney": false,
+  "physicalAndroid": false,
+  "previewFilesIncluded": false
+}

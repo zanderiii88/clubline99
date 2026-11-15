@@ -1,12 +1,12 @@
-CLUBLINE 99 v1.103.0
+CLUBLINE 99 v1.114.0
 
 Export a career backup first.
 
-Update ZIP: install over v1.94.0 or any later build through v1.102.0. It includes all changes since v1.94; no intermediate update is needed. Keep existing assets and data.
+Update ZIP: install over v1.94.0 or any later build through v1.113.0. It includes all changes since v1.94; no intermediate update is needed. Keep existing assets and data.
 Complete ZIP: all files, data and assets; no earlier ZIP is needed.
 
 Extract the chosen ZIP into the existing game repository root, replacing matching files and retaining subfolders. index.html must remain at the repository root. Do not upload the ZIP itself as the game.
 
-After you publish, use Check for Updates / Load update and reopen the game. Confirm v1.103.0 on the main menu. No fresh career required. Nothing has been deployed automatically.
+After you publish, use Check for Updates / Load update and reopen the game. Confirm v1.114.0 on the main menu. No fresh career required. Nothing has been deployed automatically.
 
-Read RELEASE-1.103.0-NOTES.md and README.md.
+Read RELEASE-1.114.0-NOTES.md and README.md.

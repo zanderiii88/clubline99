@@ -914,3 +914,11 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 .tactical-spell ol{padding-left:22px}
 .tactical-spell li{overflow-wrap:anywhere}
 @media(max-width:650px){.tactical-spells{grid-template-columns:1fr}}
+
+.youth-opportunities{margin:16px 0;padding:12px;border:1px solid #ffffff38;background:#0a25354d}.youth-opportunities>summary{font-weight:700;cursor:pointer}.youth-opportunity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.youth-opportunity-grid .youth-card{min-width:0;overflow-wrap:anywhere}@media(max-width:650px){.youth-opportunity-grid{grid-template-columns:1fr}}
+
+.construction-notice{min-width:0;overflow-wrap:anywhere}.construction-notice summary{cursor:pointer;font-weight:700}.construction-notice progress{display:block;width:100%;max-width:32rem;height:14px;margin:8px 0;accent-color:#e4bb63}.stadium-build-review .modal-actions .btn{min-width:0;overflow-wrap:anywhere}
+
+.league-news-items{display:grid;gap:12px}.league-newsroom,.league-news-items>article{min-width:0;overflow-wrap:anywhere}.league-newsroom input{max-width:100%;box-sizing:border-box}
+
+.match-week-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.match-week-plan,.match-week-grid>article{min-width:0;overflow-wrap:anywhere}@media(max-width:650px){.match-week-grid{grid-template-columns:1fr}}

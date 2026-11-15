@@ -1,0 +1,27 @@
+{
+  "batch": "saved blueprint and phased stadium planning",
+  "modes": [
+    "streamlined",
+    "in-depth"
+  ],
+  "workflow": [
+    "save target",
+    "compressed reload and backup",
+    "compare scope without mutation",
+    "review and pay North only",
+    "block overlapping phase",
+    "complete and record",
+    "restore target",
+    "review and pay South remainder",
+    "complete and record",
+    "validate zero remaining differences",
+    "forget without payment"
+  ],
+  "browserRenderedWidths": [
+    390,
+    850
+  ],
+  "physicalAndroid": false,
+  "fullBrowserJourney": false,
+  "freshFullSeason": false
+}

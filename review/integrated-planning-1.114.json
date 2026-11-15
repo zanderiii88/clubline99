@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "environment": "Seeded VM with real handlers, DOM/timer stubs; code-level integration, no browser session",
+  "summaries": [
+    {
+      "mode": "streamlined",
+      "matches": 1,
+      "steps": 33,
+      "checkpoints": 2,
+      "date": "1998-08-20",
+      "projects": 2
+    },
+    {
+      "mode": "in-depth",
+      "matches": 1,
+      "steps": 32,
+      "checkpoints": 2,
+      "date": "1998-08-20",
+      "projects": 2
+    }
+  ]
+}

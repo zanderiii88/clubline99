@@ -1,0 +1,14 @@
+{
+  "version": "1.105.0",
+  "checks": [
+    "pure rivalry history",
+    "manager media",
+    "post-match media",
+    "both-mode context render, save/reload, backup, invalid context",
+    "source integrity"
+  ],
+  "freshFullSeason": false,
+  "browserLayoutChecked": false,
+  "physicalAndroidChecked": false,
+  "dataChanged": false
+}

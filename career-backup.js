@@ -1,5 +1,7 @@
+import {validStadiumBlueprint} from './stadium-blueprint.js?v=1.111.0';
+import {validStadiumHistory} from './stadium-history.js?v=1.109.0';
 import {validTacticalRecord} from './tactical-review.js?v=1.102.0';
-import {validMedia} from './manager-media.js?v=1.98.0';
+import {validMedia} from './manager-media.js?v=1.106.0';
 import {validLiveMatch} from './match-control.js?v=1.102.0';
 import {validClubHistory} from './club-history.js?v=1.80.0';
 import {validPlayerProgress} from './player-progress.js?v=1.93.0';
@@ -25,6 +27,7 @@ export function parseBackup(text,league,formations,styles){
  const walk=(x,depth=0)=>{if(depth>80)fail();if(x&&typeof x==='object')for(const [k,v]of Object.entries(x)){if(['__proto__','prototype','constructor'].includes(k))fail();walk(v,depth+1)}};walk(data);
  if(data?.format!=='clubline-career-backup'||data.formatVersion!==1||!object(data.save)||!object(data.save.career))fail();
  const save=structuredClone(data.save),c=save.career,clubs=new Set(league.clubs.map(c=>c.id));
+ if(!validStadiumHistory(c)||!validStadiumBlueprint(c))fail();
  const calendarTypes=new Set(['loan-report','club-event','board-review','recruitment','investment','stadium-review','youth','sale','draw','club-proposal','draw:league-cup','draw:fa-cup','draw:champions-league','draw:uefa-cup']);
  if(c.ui?.calendarIgnoredPrompts!==undefined&&(!object(c.ui.calendarIgnoredPrompts)||Object.entries(c.ui.calendarIgnoredPrompts).some(([k,v])=>!calendarTypes.has(k)||typeof v!=='boolean')))fail();
  if(c.ui?.calendarSkippedStops!==undefined&&(!Array.isArray(c.ui.calendarSkippedStops)||c.ui.calendarSkippedStops.length>200||c.ui.calendarSkippedStops.some(k=>typeof k!=='string'||k.length>300)))fail();
