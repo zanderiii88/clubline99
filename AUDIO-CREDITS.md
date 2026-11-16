@@ -113,3 +113,7 @@ Licence: Creative Commons 0 - http://creativecommons.org/publicdomain/zero/1.0/
 Derived files: workout.mp3
 
 Source URLs, preview URLs, raw/derived checksums, excerpt offsets and edits are recorded in assets/audio/recorded/sources.json. Raw source previews are not bundled separately.
+
+## Light continuous background (v1.125)
+
+“AMBTraf_Calm City traffic.Clean.Distance 100m.Park.Autumn.Evening_EM” by newlocknew — [source](https://freesound.org/people/newlocknew/sounds/711130/), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Excerpt from the public HQ preview, resampled, level adjusted and crossfaded into a 62-second loop. Quiet background level is controlled independently by Ambience.

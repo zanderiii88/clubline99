@@ -16,9 +16,10 @@ function harness(){
  return {engine,players,starts,pending,advance,now:()=>now};
 }
 const h=harness();h.engine.setContext('quiet');h.advance(120000);assert.equal(h.starts.length,0);h.engine.unlock();h.advance(600000);
+assert(h.engine.state().floorPlaying);assert.equal(h.starts.filter(s=>s.player===3).length,1);
 const ordinary=h.starts.filter(s=>s.player===1);assert(ordinary.length>=7&&ordinary.length<20);assert(ordinary.every(s=>AMBIENCE_CATALOGUE.quiet.includes(s.src)));assert.equal(h.starts.filter(s=>s.player===0).length,0);
 for(let i=1;i<ordinary.length;i++){assert(ordinary[i].at-ordinary[i-1].at>=28000);assert(ordinary[i].at-ordinary[i-1].at<=68000);assert.notEqual(ordinary[i].src,ordinary[i-1].src);}
-const timers=h.pending.size;for(let i=0;i<500;i++){h.engine.setContext('quiet');h.engine.configure({volume:.25,effectsVolume:.65});h.engine.unlock();}assert.equal(h.pending.size,timers);assert.equal(h.players.length,3);
+const timers=h.pending.size;for(let i=0;i<500;i++){h.engine.setContext('quiet');h.engine.configure({volume:.25,effectsVolume:.65});h.engine.unlock();}assert.equal(h.pending.size,timers);assert.equal(h.players.length,4);
 assert(!h.engine.react({type:'goal',key:'outside',gain:.5}));
 const bridge=createMatchSoundBridge(),m={fixtureDate:career.date,home:'home',away:'away',homeGoals:0,awayGoals:0,phase:'confirm',minute:0,events:[]};
 const sync=()=>{const p=bridge.observe({...base,match:m});h.engine.setContext(p.mode);p.cues.forEach(c=>h.engine.react(c));return p;};
@@ -43,5 +44,5 @@ h.engine.setContext('quiet');h.advance(5000);assert(h.players[0].paused&&h.playe
 for(const mode of ['training','gym','changing','office','prematch']){h.engine.setContext(mode);const at=h.now();h.advance(120000);assert(h.starts.filter(s=>s.at>=at&&s.player===1).every(s=>AMBIENCE_CATALOGUE[mode].includes(s.src)));assert(h.players[0].paused);}
 h.engine.setContext('match');h.engine.configure({muted:true,volume:.25,effectsMuted:false,effectsVolume:.65});assert(h.engine.react({type:'goal',key:'fx-only',gain:.5}));assert(h.players[0].paused);h.engine.configure({muted:false,effectsMuted:true,volume:.25,effectsVolume:.65});assert(!h.engine.react({type:'goal',key:'muted-fx',gain:.5}));assert(h.players[2].paused);h.advance(3000);assert(!h.players[0].paused);
 h.engine.configure({hidden:true});assert(h.players.every(p=>p.paused));assert.equal(h.pending.size,0);h.engine.configure({hidden:false,volume:.25});h.advance(3000);assert(!h.players[0].paused);h.engine.setContext('off');h.advance(200);assert(h.players.every(p=>p.paused));assert.equal(h.pending.size,0);
-const report={passed:true,ordinaryVirtualMinutes:10,ordinaryClips:ordinary.length,ambientPlayers:3,checks:['screen contexts','no crowd from fixture date alone','single schedule through 500 renders','kickoff/half/restart/full','home/away goal balance','save vs off-target chance','manual pause silence','skip highlights without queues','instant simulation silence','reload no replay','independent ambience/FX mute','hidden/page exit stop']};
-fs.writeFileSync(new URL('../review/ambience-1.123.json',import.meta.url),JSON.stringify(report,null,2));console.log('PASS contextual recorded ambience',JSON.stringify(report));
+const report={passed:true,ordinaryVirtualMinutes:10,ordinaryClips:ordinary.length,ambientPlayers:4,checks:['screen contexts','no crowd from fixture date alone','single schedule through 500 renders','continuous low-level recorded traffic floor','kickoff/half/restart/full','home/away goal balance','save vs off-target chance','manual pause silence','skip highlights without queues','instant simulation silence','reload no replay','independent ambience/FX mute','hidden/page exit stop']};
+fs.writeFileSync(new URL('../review/ambience-1.125.json',import.meta.url),JSON.stringify(report,null,2));console.log('PASS contextual recorded ambience',JSON.stringify(report));

@@ -1,0 +1,31 @@
+{
+  "version": "1.124.0",
+  "liveBaseline": "1.114",
+  "changedFrom123": [
+    "README.md",
+    "RELEASE-1.124.0-NOTES.md",
+    "ROADMAP.md",
+    "ai-transfer-funding.js",
+    "app.js",
+    "career-backup.js",
+    "finance-model.js",
+    "index.html",
+    "review-tests/check-cash-outlook.mjs",
+    "review-tests/check-divisions.mjs",
+    "review-tests/check-varied-careers.mjs",
+    "review-tests/vm-game-harness.mjs",
+    "review/cash-outlook-1.124.json",
+    "review/five-division-1.124.json",
+    "review/source-integrity-1.124.json",
+    "review/varied-careers-1.124-final.json",
+    "season-board.js",
+    "season-review.js",
+    "sw.js",
+    "version.json"
+  ],
+  "careerMatches": 83,
+  "saveCheckpoints": 27,
+  "controlledDivisionTransitions": 20,
+  "noDataOrAssetChanges": true,
+  "notPublished": true
+}

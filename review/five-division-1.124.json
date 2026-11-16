@@ -1,0 +1,159 @@
+{
+  "passed": true,
+  "seasonsCompleted": 20,
+  "checks": [
+    {
+      "start": "C01",
+      "division": "premier",
+      "fixtures": 380,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C01",
+      "division": "first",
+      "fixtures": 552,
+      "ends": "1999-05-16"
+    },
+    {
+      "start": "C01",
+      "division": "second",
+      "fixtures": 552,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C01",
+      "division": "scot-premier",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    },
+    {
+      "start": "C01",
+      "division": "scot-first",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    },
+    {
+      "start": "C21",
+      "division": "premier",
+      "fixtures": 380,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C21",
+      "division": "first",
+      "fixtures": 552,
+      "ends": "1999-05-16"
+    },
+    {
+      "start": "C21",
+      "division": "second",
+      "fixtures": 552,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C21",
+      "division": "scot-premier",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    },
+    {
+      "start": "C21",
+      "division": "scot-first",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    },
+    {
+      "start": "C45",
+      "division": "premier",
+      "fixtures": 380,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C45",
+      "division": "first",
+      "fixtures": 552,
+      "ends": "1999-05-16"
+    },
+    {
+      "start": "C45",
+      "division": "second",
+      "fixtures": 552,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "C45",
+      "division": "scot-premier",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    },
+    {
+      "start": "C45",
+      "division": "scot-first",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    },
+    {
+      "start": "SC20",
+      "division": "premier",
+      "fixtures": 380,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "SC20",
+      "division": "first",
+      "fixtures": 552,
+      "ends": "1999-05-16"
+    },
+    {
+      "start": "SC20",
+      "division": "second",
+      "fixtures": 552,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "SC20",
+      "division": "scot-premier",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    },
+    {
+      "start": "SC20",
+      "division": "scot-first",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    },
+    {
+      "start": "EU051",
+      "division": "premier",
+      "fixtures": 380,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "EU051",
+      "division": "first",
+      "fixtures": 552,
+      "ends": "1999-05-16"
+    },
+    {
+      "start": "EU051",
+      "division": "second",
+      "fixtures": 552,
+      "ends": "1999-05-15"
+    },
+    {
+      "start": "EU051",
+      "division": "scot-premier",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    },
+    {
+      "start": "EU051",
+      "division": "scot-first",
+      "fixtures": 180,
+      "ends": "1999-04-24"
+    }
+  ],
+  "migration": true,
+  "awayGoals": true,
+  "penalties": true
+}

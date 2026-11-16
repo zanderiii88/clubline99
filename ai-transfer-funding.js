@@ -1,5 +1,5 @@
 import {clubTransferFunds} from './transfer-interest.js?v=1.116.0';
-import {commercialIncome} from './finance-model.js?v=1.91.0';
+import {commercialIncome} from './finance-model.js?v=1.124.0';
 
 // Legacy saves start at their current season: no backdated allocations on load.
 export function initialiseAIFunding(c){c.aiFunding??={season:c.season,allocated:0};return c.aiFunding;}

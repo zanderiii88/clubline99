@@ -1,0 +1,252 @@
+{
+  "passed": true,
+  "environment": "Node VM with DOM/timer stubs and seeded RNG; real game handlers; routine saves use plain JSON, actual codec at each checkpoint",
+  "policy": "Natural starting budgets; development strategy (partial loan with recall, free/cheap recruitment, call-up then promotion, selective renewals); trading strategy (partial season loans, accept up to two suitable offers and make up to two affordable purchases per season, summer agreements, youth and renewals); decline optional bookings, no-spend stories",
+  "summaries": [
+    {
+      "id": "SC20",
+      "mode": "streamlined",
+      "policy": {
+        "style": "trading",
+        "managedFeeNet": -387000,
+        "minCash": 151978,
+        "maxPayroll": 10434,
+        "actions": [
+          {
+            "season": 1,
+            "date": "1998-07-27",
+            "kind": "loan",
+            "id": "SCGEN-SC20-19",
+            "to": "SC31",
+            "share": 75,
+            "end": "1999-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1998-07-27",
+            "kind": "call-up",
+            "id": "YSC20-1-1"
+          },
+          {
+            "season": 1,
+            "date": "1998-07-27",
+            "kind": "purchase",
+            "id": "FREE-SC20-1-0",
+            "fee": 0,
+            "wage": 1050
+          },
+          {
+            "season": 1,
+            "date": "1998-08-01",
+            "kind": "purchase",
+            "id": "FREE-SC20-1-3",
+            "fee": 0,
+            "wage": 1800
+          },
+          {
+            "season": 1,
+            "date": "1998-08-05",
+            "kind": "sale",
+            "id": "SCGEN-SC20-20",
+            "fee": 18000
+          },
+          {
+            "season": 1,
+            "date": "1998-11-15",
+            "kind": "sale",
+            "id": "SCGEN-SC20-06",
+            "fee": 379000
+          },
+          {
+            "season": 1,
+            "date": "1999-01-01",
+            "kind": "promotion",
+            "id": "YSC20-1-1"
+          },
+          {
+            "season": 1,
+            "date": "1999-01-01",
+            "kind": "renewal",
+            "id": "SCGEN-SC20-01",
+            "old": 350,
+            "wage": 400,
+            "end": "2000-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1999-01-01",
+            "kind": "summer-agreement",
+            "id": "P98-E48-06",
+            "fee": 10000
+          },
+          {
+            "season": 1,
+            "date": "1999-02-01",
+            "kind": "renewal",
+            "id": "SCGEN-SC20-18",
+            "old": 250,
+            "wage": 300,
+            "end": "2000-06-30"
+          }
+        ],
+        "seasons": {
+          "1": {
+            "loans": 1,
+            "recalls": 0,
+            "buys": 2,
+            "future": 1,
+            "sales": 2,
+            "renewals": 2,
+            "callups": 1,
+            "promotions": 1
+          }
+        }
+      },
+      "opening": 160000,
+      "ended": "1999-06-05",
+      "seasonTwo": "1999-07-27",
+      "balance": 439908,
+      "weeklyWages": 10434,
+      "steps": 332,
+      "matches": 39,
+      "draws": 5,
+      "firstWeek": 1,
+      "board": 3,
+      "declinedOffers": 5,
+      "declinedBookings": 0,
+      "stories": 0,
+      "decisions": 56,
+      "media": 13,
+      "checkpoints": 14,
+      "payrolls": 44,
+      "prizeMessages": 2
+    },
+    {
+      "id": "EU051",
+      "mode": "in-depth",
+      "policy": {
+        "style": "trading",
+        "managedFeeNet": -1186000,
+        "minCash": 2600000,
+        "maxPayroll": 41770,
+        "actions": [
+          {
+            "season": 1,
+            "date": "1998-07-27",
+            "kind": "loan",
+            "id": "EU98-051-10",
+            "to": "C46",
+            "share": 75,
+            "end": "1999-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1998-07-27",
+            "kind": "call-up",
+            "id": "YEU051-1-2"
+          },
+          {
+            "season": 1,
+            "date": "1998-07-27",
+            "kind": "purchase",
+            "id": "FREE-EU051-1-0",
+            "fee": 0,
+            "wage": 1050
+          },
+          {
+            "season": 1,
+            "date": "1998-07-30",
+            "kind": "sale",
+            "id": "EU98-051-08",
+            "fee": 477000
+          },
+          {
+            "season": 1,
+            "date": "1998-08-01",
+            "kind": "purchase",
+            "id": "FREE-EU051-1-3",
+            "fee": 0,
+            "wage": 1800
+          },
+          {
+            "season": 1,
+            "date": "1998-08-16",
+            "kind": "sale",
+            "id": "EU98-051-02",
+            "fee": 729000
+          },
+          {
+            "season": 1,
+            "date": "1999-01-02",
+            "kind": "promotion",
+            "id": "YEU051-1-2"
+          },
+          {
+            "season": 1,
+            "date": "1999-01-02",
+            "kind": "renewal",
+            "id": "EU98-051-14",
+            "old": 1900,
+            "wage": 2000,
+            "end": "2000-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1999-01-02",
+            "kind": "summer-agreement",
+            "id": "EU98-071-20",
+            "fee": 20000
+          },
+          {
+            "season": 1,
+            "date": "1999-02-04",
+            "kind": "renewal",
+            "id": "EU98-051-19",
+            "old": 4150,
+            "wage": 4400,
+            "end": "2000-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1999-03-01",
+            "kind": "renewal",
+            "id": "EU98-051-21",
+            "old": 400,
+            "wage": 500,
+            "end": "2000-06-30"
+          }
+        ],
+        "seasons": {
+          "1": {
+            "loans": 1,
+            "recalls": 0,
+            "buys": 2,
+            "future": 1,
+            "sales": 2,
+            "renewals": 3,
+            "callups": 1,
+            "promotions": 1
+          }
+        }
+      },
+      "opening": 2600000,
+      "ended": "1999-06-05",
+      "seasonTwo": "1999-07-27",
+      "balance": 4759047,
+      "weeklyWages": 41770,
+      "steps": 401,
+      "matches": 44,
+      "draws": 13,
+      "firstWeek": 1,
+      "board": 3,
+      "declinedOffers": 24,
+      "declinedBookings": 5,
+      "stories": 6,
+      "decisions": 0,
+      "media": 20,
+      "checkpoints": 13,
+      "payrolls": 44,
+      "prizeMessages": 8
+    }
+  ]
+}

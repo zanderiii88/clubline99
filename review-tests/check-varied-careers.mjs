@@ -5,17 +5,17 @@ import {createGame} from './vm-game-harness.mjs';
 import {createPolicy} from './varied-career-policy.mjs';
 
 const buildLabel=JSON.parse(fs.readFileSync(new URL('../version.json',import.meta.url))).version.split('.').slice(0,2).join('.');
-const scenarios=[['C45','in-depth'],['C01','in-depth'],['SC11','streamlined']].filter(([id])=>!process.env.CLUBLINE_TEST_CLUB||id===process.env.CLUBLINE_TEST_CLUB);
+const scenarios=(process.env.CLUBLINE_TEST_CLUBS?process.env.CLUBLINE_TEST_CLUBS.split(',').map(x=>x.split(':')):[['C45','in-depth'],['C01','in-depth'],['SC11','streamlined']]).filter(([id])=>!process.env.CLUBLINE_TEST_CLUB||id===process.env.CLUBLINE_TEST_CLUB);
 const summaries=[];
 for(const [id,mode] of scenarios){
  const {g,mods,dir}=await createGame(196+[...id].reduce((n,ch)=>n+ch.charCodeAt(0),0));
  g.setup(id,mode);g.newCareer();g.click('close-owner-welcome');
  const policy=createPolicy(g,mods,dir,id==='C45'?'development':'trading');
- for(let cycle=0;cycle<2;cycle++){
+ for(let cycle=0;cycle<Number(process.env.CLUBLINE_TEST_SEASONS||2);cycle++){
  const opening=g.get().career.balance;
  const counts={matches:0,draws:0,firstWeek:0,board:0,declinedOffers:0,declinedBookings:0,stories:0,decisions:0,media:0,checkpoints:0};
  let month='',lastDate=g.get().career.date,stuck=0,steps=0;
- const checkpoint=()=>{const b=g.backup();fs.mkdirSync(path.join(dir,'review','checkpoints','varied116'),{recursive:true});fs.writeFileSync(path.join(dir,'review','checkpoints','varied116',id+'.json'),JSON.stringify({backup:b,counts,opening}));g.parse(b);g.checkpointSave();assert(g.load(),'Device save reload');g.parse(g.backup());counts.checkpoints++;console.log('Checkpoint',id,mode,g.get().career.date,'matches',counts.matches);};
+ const checkpoint=()=>{const b=g.backup();fs.mkdirSync(path.join(dir,'review','checkpoints','varied-'+buildLabel),{recursive:true});fs.writeFileSync(path.join(dir,'review','checkpoints','varied-'+buildLabel,id+'.json'),JSON.stringify({backup:b,counts,opening}));g.parse(b);g.checkpointSave();assert(g.load(),'Device save reload');g.parse(g.backup());counts.checkpoints++;console.log('Checkpoint',id,mode,g.get().career.date,'matches',counts.matches);};
  while(!g.seasonReady()||g.get().match||g.get().career.matchday){
   let {career:c,match}=g.get();policy.observe();if(!match)policy.recall();assert(c.date>=lastDate,'Calendar must move forwards');
   stuck=c.date===lastDate?stuck+1:0;lastDate=c.date;

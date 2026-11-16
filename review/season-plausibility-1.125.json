@@ -1,0 +1,583 @@
+{
+  "passedSanityChecks": true,
+  "scope": "200 independently drawn fixture grids per division using the actual background quickScore model; no managed-match, transfers, injuries or career-day simulation. This is diagnostic evidence, not proof of historical realism.",
+  "historicalGoalsPerMatch": {
+    "premier": 2.52,
+    "scottishPremier": 2.62
+  },
+  "divisions": [
+    {
+      "id": "premier",
+      "seasons": 200,
+      "matches": 76000,
+      "goalsPerMatch": 2.7622105263157897,
+      "drawRate": 0.24861842105263157,
+      "clubs": [
+        {
+          "id": "C12",
+          "name": "Manchester United",
+          "titles": 56,
+          "meanPosition": 4.24
+        },
+        {
+          "id": "C01",
+          "name": "Arsenal",
+          "titles": 38,
+          "meanPosition": 5.41
+        },
+        {
+          "id": "C05",
+          "name": "Chelsea",
+          "titles": 37,
+          "meanPosition": 5.745
+        },
+        {
+          "id": "C11",
+          "name": "Liverpool",
+          "titles": 19,
+          "meanPosition": 6.805
+        },
+        {
+          "id": "C09",
+          "name": "Leeds United",
+          "titles": 8,
+          "meanPosition": 8.04
+        },
+        {
+          "id": "C18",
+          "name": "Tottenham Hotspur",
+          "titles": 6,
+          "meanPosition": 9.405
+        },
+        {
+          "id": "C14",
+          "name": "Newcastle United",
+          "titles": 5,
+          "meanPosition": 9.83
+        },
+        {
+          "id": "C02",
+          "name": "Aston Villa",
+          "titles": 1,
+          "meanPosition": 10.495
+        },
+        {
+          "id": "C19",
+          "name": "West Ham United",
+          "titles": 4,
+          "meanPosition": 10.855
+        },
+        {
+          "id": "C17",
+          "name": "Southampton",
+          "titles": 6,
+          "meanPosition": 11.135
+        },
+        {
+          "id": "C03",
+          "name": "Blackburn Rovers",
+          "titles": 3,
+          "meanPosition": 11.185
+        },
+        {
+          "id": "C13",
+          "name": "Middlesbrough",
+          "titles": 4,
+          "meanPosition": 11.51
+        },
+        {
+          "id": "C07",
+          "name": "Derby County",
+          "titles": 2,
+          "meanPosition": 12.395
+        },
+        {
+          "id": "C16",
+          "name": "Sheffield Wednesday",
+          "titles": 0,
+          "meanPosition": 12.52
+        },
+        {
+          "id": "C08",
+          "name": "Everton",
+          "titles": 5,
+          "meanPosition": 12.645
+        },
+        {
+          "id": "C20",
+          "name": "Wimbledon",
+          "titles": 1,
+          "meanPosition": 13.035
+        },
+        {
+          "id": "C15",
+          "name": "Nottingham Forest",
+          "titles": 2,
+          "meanPosition": 13.245
+        },
+        {
+          "id": "C06",
+          "name": "Coventry City",
+          "titles": 1,
+          "meanPosition": 13.505
+        },
+        {
+          "id": "C10",
+          "name": "Leicester City",
+          "titles": 1,
+          "meanPosition": 13.78
+        },
+        {
+          "id": "C04",
+          "name": "Charlton Athletic",
+          "titles": 1,
+          "meanPosition": 14.22
+        }
+      ]
+    },
+    {
+      "id": "first",
+      "seasons": 200,
+      "matches": 110400,
+      "goalsPerMatch": 2.570199275362319,
+      "drawRate": 0.2604710144927536,
+      "clubs": [
+        {
+          "id": "C21",
+          "name": "Sunderland",
+          "titles": 54,
+          "meanPosition": 4.855
+        },
+        {
+          "id": "C27",
+          "name": "Wolverhampton Wanderers",
+          "titles": 23,
+          "meanPosition": 7.355
+        },
+        {
+          "id": "C26",
+          "name": "Bolton Wanderers",
+          "titles": 20,
+          "meanPosition": 7.83
+        },
+        {
+          "id": "C23",
+          "name": "Ipswich Town",
+          "titles": 14,
+          "meanPosition": 8.865
+        },
+        {
+          "id": "C34",
+          "name": "Crystal Palace",
+          "titles": 13,
+          "meanPosition": 9.295
+        },
+        {
+          "id": "C28",
+          "name": "Sheffield United",
+          "titles": 10,
+          "meanPosition": 10.02
+        },
+        {
+          "id": "C29",
+          "name": "Norwich City",
+          "titles": 11,
+          "meanPosition": 10.61
+        },
+        {
+          "id": "C24",
+          "name": "Birmingham City",
+          "titles": 7,
+          "meanPosition": 10.74
+        },
+        {
+          "id": "C22",
+          "name": "Bradford City",
+          "titles": 9,
+          "meanPosition": 10.84
+        },
+        {
+          "id": "C25",
+          "name": "Watford",
+          "titles": 3,
+          "meanPosition": 11.7
+        },
+        {
+          "id": "C33",
+          "name": "Barnsley",
+          "titles": 3,
+          "meanPosition": 11.92
+        },
+        {
+          "id": "C32",
+          "name": "West Bromwich Albion",
+          "titles": 7,
+          "meanPosition": 12.4
+        },
+        {
+          "id": "C35",
+          "name": "Tranmere Rovers",
+          "titles": 3,
+          "meanPosition": 12.915
+        },
+        {
+          "id": "C30",
+          "name": "Huddersfield Town",
+          "titles": 2,
+          "meanPosition": 13.025
+        },
+        {
+          "id": "C36",
+          "name": "Stockport County",
+          "titles": 4,
+          "meanPosition": 13.085
+        },
+        {
+          "id": "C44",
+          "name": "Bristol City",
+          "titles": 4,
+          "meanPosition": 13.355
+        },
+        {
+          "id": "C39",
+          "name": "Portsmouth",
+          "titles": 2,
+          "meanPosition": 13.45
+        },
+        {
+          "id": "C40",
+          "name": "Queens Park Rangers",
+          "titles": 3,
+          "meanPosition": 13.855
+        },
+        {
+          "id": "C38",
+          "name": "Crewe Alexandra",
+          "titles": 3,
+          "meanPosition": 14.885
+        },
+        {
+          "id": "C37",
+          "name": "Swindon Town",
+          "titles": 2,
+          "meanPosition": 16.235
+        },
+        {
+          "id": "C43",
+          "name": "Oxford United",
+          "titles": 2,
+          "meanPosition": 17.21
+        },
+        {
+          "id": "C42",
+          "name": "Bury",
+          "titles": 0,
+          "meanPosition": 18.025
+        },
+        {
+          "id": "C31",
+          "name": "Grimsby Town",
+          "titles": 0,
+          "meanPosition": 18.695
+        },
+        {
+          "id": "C41",
+          "name": "Port Vale",
+          "titles": 1,
+          "meanPosition": 18.835
+        }
+      ]
+    },
+    {
+      "id": "second",
+      "seasons": 200,
+      "matches": 110400,
+      "goalsPerMatch": 2.5437952898550726,
+      "drawRate": 0.26154891304347827,
+      "clubs": [
+        {
+          "id": "C47",
+          "name": "Manchester City",
+          "titles": 47,
+          "meanPosition": 5.19
+        },
+        {
+          "id": "C45",
+          "name": "Fulham",
+          "titles": 29,
+          "meanPosition": 6.24
+        },
+        {
+          "id": "C49",
+          "name": "Preston North End",
+          "titles": 23,
+          "meanPosition": 7.085
+        },
+        {
+          "id": "C50",
+          "name": "Wigan Athletic",
+          "titles": 11,
+          "meanPosition": 9.685
+        },
+        {
+          "id": "C54",
+          "name": "Millwall",
+          "titles": 13,
+          "meanPosition": 10.305
+        },
+        {
+          "id": "C48",
+          "name": "Gillingham",
+          "titles": 10,
+          "meanPosition": 10.455
+        },
+        {
+          "id": "C57",
+          "name": "Bristol Rovers",
+          "titles": 7,
+          "meanPosition": 10.955
+        },
+        {
+          "id": "C56",
+          "name": "Luton Town",
+          "titles": 5,
+          "meanPosition": 11.19
+        },
+        {
+          "id": "C55",
+          "name": "Reading",
+          "titles": 8,
+          "meanPosition": 11.52
+        },
+        {
+          "id": "C51",
+          "name": "AFC Bournemouth",
+          "titles": 5,
+          "meanPosition": 11.64
+        },
+        {
+          "id": "C64",
+          "name": "Oldham Athletic",
+          "titles": 5,
+          "meanPosition": 12.555
+        },
+        {
+          "id": "C60",
+          "name": "Notts County",
+          "titles": 4,
+          "meanPosition": 12.73
+        },
+        {
+          "id": "C46",
+          "name": "Walsall",
+          "titles": 3,
+          "meanPosition": 13.12
+        },
+        {
+          "id": "C52",
+          "name": "Stoke City",
+          "titles": 7,
+          "meanPosition": 13.17
+        },
+        {
+          "id": "C58",
+          "name": "Blackpool",
+          "titles": 6,
+          "meanPosition": 13.555
+        },
+        {
+          "id": "C53",
+          "name": "Chesterfield",
+          "titles": 3,
+          "meanPosition": 13.625
+        },
+        {
+          "id": "C59",
+          "name": "Burnley",
+          "titles": 4,
+          "meanPosition": 14.11
+        },
+        {
+          "id": "C62",
+          "name": "Colchester United",
+          "titles": 3,
+          "meanPosition": 14.345
+        },
+        {
+          "id": "C63",
+          "name": "Wycombe Wanderers",
+          "titles": 3,
+          "meanPosition": 14.78
+        },
+        {
+          "id": "C61",
+          "name": "Wrexham",
+          "titles": 1,
+          "meanPosition": 15.11
+        },
+        {
+          "id": "C68",
+          "name": "Macclesfield Town",
+          "titles": 0,
+          "meanPosition": 15.29
+        },
+        {
+          "id": "C67",
+          "name": "Lincoln City",
+          "titles": 2,
+          "meanPosition": 15.55
+        },
+        {
+          "id": "C65",
+          "name": "York City",
+          "titles": 1,
+          "meanPosition": 18.565
+        },
+        {
+          "id": "C66",
+          "name": "Northampton Town",
+          "titles": 0,
+          "meanPosition": 19.23
+        }
+      ]
+    },
+    {
+      "id": "scot-premier",
+      "seasons": 200,
+      "matches": 36000,
+      "goalsPerMatch": 2.6734444444444443,
+      "drawRate": 0.24716666666666667,
+      "clubs": [
+        {
+          "id": "SC01",
+          "name": "Rangers",
+          "titles": 96,
+          "meanPosition": 2.06
+        },
+        {
+          "id": "EU001",
+          "name": "Celtic",
+          "titles": 62,
+          "meanPosition": 2.525
+        },
+        {
+          "id": "EU051",
+          "name": "Aberdeen",
+          "titles": 19,
+          "meanPosition": 4.455
+        },
+        {
+          "id": "SC05",
+          "name": "Heart of Midlothian",
+          "titles": 8,
+          "meanPosition": 4.93
+        },
+        {
+          "id": "EU052",
+          "name": "Kilmarnock",
+          "titles": 5,
+          "meanPosition": 5.855
+        },
+        {
+          "id": "SC02",
+          "name": "Dundee",
+          "titles": 4,
+          "meanPosition": 6.15
+        },
+        {
+          "id": "EU053",
+          "name": "St Johnstone",
+          "titles": 4,
+          "meanPosition": 6.78
+        },
+        {
+          "id": "SC03",
+          "name": "Dundee United",
+          "titles": 1,
+          "meanPosition": 6.79
+        },
+        {
+          "id": "SC06",
+          "name": "Motherwell",
+          "titles": 1,
+          "meanPosition": 7.045
+        },
+        {
+          "id": "SC04",
+          "name": "Dunfermline Athletic",
+          "titles": 0,
+          "meanPosition": 8.41
+        }
+      ]
+    },
+    {
+      "id": "scot-first",
+      "seasons": 200,
+      "matches": 36000,
+      "goalsPerMatch": 2.6739444444444445,
+      "drawRate": 0.2509722222222222,
+      "clubs": [
+        {
+          "id": "SC11",
+          "name": "Hibernian",
+          "titles": 109,
+          "meanPosition": 2.235
+        },
+        {
+          "id": "SC12",
+          "name": "Falkirk",
+          "titles": 19,
+          "meanPosition": 4.495
+        },
+        {
+          "id": "SC13",
+          "name": "Ayr United",
+          "titles": 14,
+          "meanPosition": 5.025
+        },
+        {
+          "id": "SC14",
+          "name": "Airdrieonians",
+          "titles": 14,
+          "meanPosition": 5.15
+        },
+        {
+          "id": "SC15",
+          "name": "St Mirren",
+          "titles": 12,
+          "meanPosition": 5.38
+        },
+        {
+          "id": "SC16",
+          "name": "Greenock Morton",
+          "titles": 12,
+          "meanPosition": 5.68
+        },
+        {
+          "id": "SC18",
+          "name": "Raith Rovers",
+          "titles": 6,
+          "meanPosition": 6.315
+        },
+        {
+          "id": "SC19",
+          "name": "Hamilton Academical",
+          "titles": 11,
+          "meanPosition": 6.49
+        },
+        {
+          "id": "SC17",
+          "name": "Clydebank",
+          "titles": 2,
+          "meanPosition": 6.685
+        },
+        {
+          "id": "SC20",
+          "name": "Stranraer",
+          "titles": 1,
+          "meanPosition": 7.545
+        }
+      ]
+    }
+  ]
+}

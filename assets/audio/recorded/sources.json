@@ -1,6 +1,6 @@
 {
-  "revision": "1.123.0",
-  "notes": "Derived from the public HQ previews of user-approved recordings; originals require Freesound login. Source licences and credits apply to these excerpts. Rejected procedural audio is excluded.",
+  "revision": "1.125.0",
+  "notes": "Derived from the public HQ previews of user-approved recordings; originals require Freesound login. Source licences and credits apply to these excerpts. Rejected procedural audio is excluded. v1.125 adds a licensed quiet traffic recording in response to the request for continuous light background sound.",
   "sources": [
     {
       "id": 763813,
@@ -287,6 +287,19 @@
       "rawSha256": "ec8e40b2c95a4794d590d7739a8d0b9fc3503ff59b7e7288d5ab9e59b44dccf8",
       "retrieved": "2026-11-16",
       "rawBytes": 1182362
+    },
+    {
+      "id": 711130,
+      "key": "traffic",
+      "title": "AMBTraf_Calm City traffic.Clean.Distance 100m.Park.Autumn.Evening_EM",
+      "author": "newlocknew",
+      "source": "https://freesound.org/people/newlocknew/sounds/711130/",
+      "licence": "Attribution 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "preview": "https://cdn.freesound.org/previews/711/711130_5828667-hq.mp3",
+      "rawSha256": "150b6c4a9775026a1567ca365085c51e15847e930bf2727566bc2413023a499c",
+      "retrieved": "2026-11-16",
+      "rawBytes": 3026352
     }
   ],
   "clips": [
@@ -568,6 +581,15 @@
       "duration": 3.0,
       "modifications": "Excerpt, resampled to 24 kHz stereo, level adjusted, short fades",
       "sha256": "dd440a90e5abfe8b0db98b6eba03d3900b5d2d3813689b9552a34fcc5f0d011f"
+    },
+    {
+      "file": "traffic-bed.mp3",
+      "sourceKey": "traffic",
+      "sourceOffsetSeconds": 10,
+      "excerptSeconds": 64,
+      "duration": 62.0,
+      "modifications": "Resampled 24 kHz stereo, level adjusted, two-second crossfaded loop seam",
+      "sha256": "3f53af1f300fdee6e65214606ef7197ef67dfa80a87dbce133a7b42522b9a07c"
     }
   ]
 }

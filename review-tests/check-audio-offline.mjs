@@ -5,10 +5,10 @@ vm.runInContext(source+'\nglobalThis.testRange=cachedMediaResponse;globalThis.te
 assert(!ctx.testCore.some(url=>url.includes('/assets/audio/ambience/')));
 assert(!fs.existsSync(root+'/assets/audio/ambience'));assert(!fs.existsSync(root+'/tools/build-ambience.py'));
 const catalogue=JSON.parse(fs.readFileSync(root+'/assets/audio/recorded/sources.json'));
-assert.equal(catalogue.clips.length,31);assert.equal(catalogue.sources.length,22);
+assert.equal(catalogue.clips.length,32);assert.equal(catalogue.sources.length,23);
 for(const clip of catalogue.clips){
- const file=root+'/assets/audio/recorded/'+clip.file;assert(ctx.testCore.includes('./assets/audio/recorded/'+clip.file+'?v=1.123.0'));
- const decoded=execFileSync('ffmpeg',['-v','error','-i',file,'-f','f32le','-acodec','pcm_f32le','-'],{maxBuffer:8*1024*1024});let peak=0,sum=0;for(let i=0;i<decoded.length;i+=4){const n=decoded.readFloatLE(i);assert(Number.isFinite(n));peak=Math.max(peak,Math.abs(n));sum+=n*n;}assert(peak<.95&&sum>0,clip.file);
+ const file=root+'/assets/audio/recorded/'+clip.file;assert(ctx.testCore.includes('./assets/audio/recorded/'+clip.file+'?v=1.125.0'));
+ const decoded=execFileSync('ffmpeg',['-v','error','-i',file,'-f','f32le','-acodec','pcm_f32le','-'],{maxBuffer:32*1024*1024});let peak=0,sum=0;for(let i=0;i<decoded.length;i+=4){const n=decoded.readFloatLE(i);assert(Number.isFinite(n));peak=Math.max(peak,Math.abs(n));sum+=n*n;}assert(peak<.95&&sum>0,clip.file);
 }
 for(const source of catalogue.sources)assert(/creativecommons\.org\/(publicdomain\/zero|licenses\/by)\//.test(source.licenceUrl));
 const data=fs.readFileSync(root+'/assets/audio/recorded/stadium-bed.mp3');
@@ -20,5 +20,5 @@ for(const [range,status,start,end] of [['bytes=0-127',206,0,127],['bytes=100-',2
 ctx.fetch=()=>Promise.reject(new Error('offline'));ctx.caches.open=async()=>({match:async()=>new Response(data,{headers:{'Content-Type':'audio/mpeg'}})});
 let response;listeners.fetch({request:new Request('https://example.test/assets/audio/recorded/stadium-bed.mp3',{headers:{Range:'bytes=16-79'}}),respondWith:p=>{response=p;}});assert.equal((await response).status,206);
 for(const file of ['applause.mp3','crowd-bed.wav','birds-1.mp3','whistle.mp3']){listeners.fetch({request:new Request('https://example.test/assets/audio/ambience/'+file),respondWith:p=>{response=p;}});assert.equal((await response).status,410);}
-fs.writeFileSync(root+'/review/audio-offline-1.123.json',JSON.stringify({passed:true,recordedAssets:31,creditedSources:22,rangeCases:9,blockedWithdrawnFiles:4,scope:'31 recorded assets decoded and cached; 22 sources credited; old palette blocked; recorded audio offline byte ranges checked.'},null,2));
-console.log('PASS 31 recorded assets, 22 credit/licence entries, old palette blocked and 9 offline byte-range cases');
+fs.writeFileSync(root+'/review/audio-offline-1.125.json',JSON.stringify({passed:true,recordedAssets:32,creditedSources:23,rangeCases:9,blockedWithdrawnFiles:4,scope:'32 recorded assets decoded and cached; 23 sources credited; old palette blocked; recorded audio offline byte ranges checked.'},null,2));
+console.log('PASS 32 recorded assets, 23 credit/licence entries, old palette blocked and 9 offline byte-range cases');

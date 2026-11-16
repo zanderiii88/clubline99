@@ -1,5 +1,5 @@
 import {clubPayroll} from './wage-planning.js?v=1.116.0';
-import {financeWeek} from './finance-model.js?v=1.91.0';
+import {cashOutlook} from './finance-model.js?v=1.124.0';
 // Club expectations are fixed for a season; assessment is repeatable and contains no random rolls.
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 export function confidenceBand(score){return score>=75?{label:'Delighted',tone:'good',rank:3}:score>=50?{label:'Satisfied',tone:'good',rank:2}:score>=30?{label:'Concerned',tone:'watch',rank:1}:{label:'Under pressure',tone:'poor',rank:0}}
@@ -12,7 +12,7 @@ export function initialiseExpectations(c,league){
 }
 export function assessSeason(c,league,table){
  const plan=initialiseExpectations(c,league),row=table.find(x=>x.id===c.clubId)||{P:0,Pts:0},position=table.findIndex(x=>x.id===c.clubId)+1,played=row.P,complete=(c.schedule||[]).length>0&&c.schedule.every(r=>r.fixtures.filter(f=>!f.friendly&&f.kind!=='playoff'&&f.kind!=='cup'&&(f.home===c.clubId||f.away===c.clubId)).every(f=>f.homeGoals!==null&&f.awayGoals!==null));
- const weekly=clubPayroll(c,league),club=league.clubs.find(x=>x.id===c.clubId),week=financeWeek(c,club||{},weekly),forecast=c.balance+week.net*4;
+ const weekly=clubPayroll(c,league),club=league.clubs.find(x=>x.id===c.clubId),week=cashOutlook(c,club||{},weekly),forecast=week.forecast;
  const results=(c.reports||[]).filter(r=>!r.friendly&&r.kind!=='playoff'&&r.kind!=='cup'),recent=results.slice(-5),recentPoints=recent.reduce((n,r)=>n+(r.us>r.them?3:r.us===r.them?1:0),0),expected=played*plan.expectedPointsPerGame;
  const performance=played?clamp((row.Pts-expected)*2,-28,28):0,positionEffect=played>=4?clamp((plan.targetPosition-position)*2,-12,12)*Math.min(1,played/12):0,financeEffect=c.balance<0?-25:forecast<0?-10:0;
  const board=Math.round(clamp(65+performance+positionEffect+financeEffect,5,95));

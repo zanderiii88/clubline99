@@ -6,3 +6,12 @@ export const runningCosts=(t,c)=>Number(t.runningCostsWeekly||0)+Number(c?.clubI
 export const transferFunds=(balance,payroll)=>Math.max(0,balance-4*payroll);
 export function attendanceShare(t,rng=Math.random){const average=Math.min(.96,Math.max(.20,(t.averageAttendance||t.capacity*.685)/t.capacity));return Math.min(.99,Math.max(.12,average+(rng()-.5)*.18));}
 export function financeWeek(c,t,payroll){const income=commercialIncome(c,t),costs=runningCosts(t,c),net=income-payroll-costs;return {income,costs,payroll,net};}
+
+// A cash forecast is separate from the conservative four-payroll transfer allowance.
+// Match receipts, prizes and discretionary spending are deliberately not promised.
+export function cashOutlook(c,t,payroll,{balance=c.balance,weeks=4}={}){
+ const week=financeWeek(c,t,payroll),forecast=balance+week.net*weeks;
+ return {...week,weeks,balance,forecast,weeklyShortfall:Math.max(0,-week.net),
+  reserve:Math.max(0,-week.net*weeks),
+  weeksCovered:balance<0?0:week.net<0?Math.floor(balance/-week.net):null};
+}

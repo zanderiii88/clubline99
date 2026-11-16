@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "scope": "Actual game handlers in seeded Node VM, two-month calendar runs; no physical-device claim",
+  "results": [
+    {
+      "mode": "streamlined",
+      "matches": 11,
+      "datesReached": true,
+      "keyStopAndDelegate": true,
+      "saveReload": true
+    },
+    {
+      "mode": "in-depth",
+      "matches": 11,
+      "datesReached": true,
+      "keyStopAndDelegate": true,
+      "saveReload": true
+    }
+  ]
+}

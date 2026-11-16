@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "ordinaryVirtualMinutes": 10,
+  "ordinaryClips": 14,
+  "ambientPlayers": 4,
+  "checks": [
+    "screen contexts",
+    "no crowd from fixture date alone",
+    "single schedule through 500 renders",
+    "continuous low-level recorded traffic floor",
+    "kickoff/half/restart/full",
+    "home/away goal balance",
+    "save vs off-target chance",
+    "manual pause silence",
+    "skip highlights without queues",
+    "instant simulation silence",
+    "reload no replay",
+    "independent ambience/FX mute",
+    "hidden/page exit stop"
+  ]
+}

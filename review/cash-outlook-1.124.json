@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "scope": "Shared arithmetic and real financial-screen/transfer rendering in Node VM; no physical device UI",
+  "rows": [
+    {
+      "id": "SC20",
+      "mode": "streamlined",
+      "weekly": 7000,
+      "fourWeek": -401000,
+      "dealFourWeek": -405500,
+      "offseasonLedger": true
+    },
+    {
+      "id": "EU051",
+      "mode": "in-depth",
+      "weekly": 39100,
+      "fourWeek": -401000,
+      "dealFourWeek": -405500,
+      "offseasonLedger": true
+    }
+  ]
+}

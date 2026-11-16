@@ -31,16 +31,20 @@ def crop(key,seconds,start=0,select=None):
 def write(name,key,seconds,start=0,select=None,loop=False,repeats=1):
  x,offset=crop(key,seconds,start,select)
  if loop:
-  n=min(int(.4*SR),len(x)//4);t=np.linspace(0,np.pi/2,n)[:,None]
-  x=np.concatenate([x[n:-n],x[-n:]*np.cos(t)+x[:n]*np.sin(t)])
+  n=min(int((2 if key=='traffic' else .4)*SR),len(x)//4);t=np.linspace(0,np.pi/2,n)[:,None]
+  if key=='traffic':
+   t=np.linspace(0,1,n)[:,None];x=np.concatenate([x[n:-n],x[-n:]*(1-t)+x[:n]*t])
+  else:x=np.concatenate([x[n:-n],x[-n:]*np.cos(t)+x[:n]*np.sin(t)])
  else:
   n=min(int(.035*SR),len(x)//4);r=np.linspace(0,1,n)[:,None];x[:n]*=r;x[-n:]*=r[::-1]
  if repeats>1:x=np.concatenate([part for i in range(repeats) for part in ([x] if i==repeats-1 else [x,np.zeros((int(.18*SR),2))])])
- rms=float(np.sqrt(np.mean(x*x)));peak=float(np.max(np.abs(x)));x*=min((.10 if loop else .12)/max(rms,1e-8),(.50 if loop else .72)/max(peak,1e-8))
+ rms=float(np.sqrt(np.mean(x*x)));peak=float(np.max(np.abs(x)));x*=min((.085 if key=='traffic' else .10 if loop else .12)/max(rms,1e-8),(.45 if key=='traffic' else .50 if loop else .72)/max(peak,1e-8))
  with tempfile.TemporaryDirectory() as tmp:
   wav=Path(tmp)/'clip.wav';wavfile.write(wav,SR,(x*32767).astype(np.int16));target=OUT/(name+'.mp3')
   subprocess.run(['ffmpeg','-v','error','-y','-i',str(wav),'-c:a','libmp3lame','-b:a','112k',str(target)],check=True)
  clips.append({'file':name+'.mp3','sourceKey':key,'sourceOffsetSeconds':offset,'excerptSeconds':seconds,'duration':round(len(x)/SR,3),'modifications':'Excerpt, resampled to 24 kHz stereo, level adjusted, short fades'+('; crossfaded loop seam' if loop else '')+(f'; whistle repeated {repeats} times with gaps' if repeats>1 else ''),'sha256':hashlib.sha256(target.read_bytes()).hexdigest()})
+if 'traffic' not in SOURCES or not (RAW/'traffic.mp3').is_file():raise SystemExit('Include the credited traffic preview and metadata from assets/audio/recorded/sources.json to rebuild the current palette.')
+write('traffic-bed','traffic',64,start=10,loop=True)
 write('stadium-bed','stadium',16,select='stable',loop=True)
 write('goal-home-1','cheer-big',5)
 write('goal-home-2','cheer',5)
@@ -73,11 +77,11 @@ write('phone','phone',2.5,select='loud')
 write('paper-1','paper',3,select='loud')
 write('paper-2','paper',3,start=5)
 used={c['sourceKey'] for c in clips};sources=[SOURCES[k] for k in sorted(used)]
-manifest={'revision':'1.123.0','notes':'Derived from the public HQ previews of user-approved recordings; originals require Freesound login. Source licences and credits apply to these excerpts. Rejected procedural audio is excluded.','sources':sources,'clips':clips}
+manifest={'revision':'1.125.0','notes':'Derived from the public HQ previews of user-approved recordings; originals require Freesound login. Source licences and credits apply to these excerpts. Rejected procedural audio is excluded.','sources':sources,'clips':clips}
 (OUT/'sources.json').write_text(json.dumps(manifest,indent=2)+'\n')
-catalogue={'bed':'stadium-bed','quiet':['birds-1','birds-2','wind','steps'],'training':['training-1','training-2','practice-1','touches','kick','whistle-single'],'gym':['workout','weights','gym'],'changing':['shower-1','shower-2'],'office':['office-1','office-2','paper-1','paper-2','phone'],'prematch':['turnstile-1','turnstile-2'],'match':['chant-1','chant-2'],'interval':[],'cues':{'kickoff':['whistle-single'],'restart':['whistle-single'],'half':['whistle-half'],'full':['whistle-full'],'goal':['goal-home-1','goal-home-2'],'save':['applause-1','applause-2']}}
+catalogue={'floor':'traffic-bed','bed':'stadium-bed','quiet':['birds-1','birds-2','wind','steps'],'training':['training-1','training-2','practice-1','touches','kick','whistle-single'],'gym':['workout','weights','gym'],'changing':['shower-1','shower-2'],'office':['office-1','office-2','paper-1','paper-2','phone'],'prematch':['turnstile-1','turnstile-2'],'match':['chant-1','chant-2'],'interval':[],'cues':{'kickoff':['whistle-single'],'restart':['whistle-single'],'half':['whistle-half'],'full':['whistle-full'],'goal':['goal-home-1','goal-home-2'],'save':['applause-1','applause-2']}}
 (ROOT/'audio-catalogue.js').write_text('// Reviewed recorded sources; see AUDIO-CREDITS.md for attribution and edits.\nexport const AMBIENCE_CATALOGUE='+json.dumps(catalogue,separators=(',',':'))+';\nexport const SOUND_CREDITS='+json.dumps(sources,separators=(',',':'))+';\n')
-credits=['# Recorded sound credits - CLUBLINE 99 v1.123.0','','These excerpts use public Freesound HQ MP3 previews of recordings approved for integration in the conversation. Credits below identify original creators, source pages and licences. Excerpts were trimmed, resampled, level adjusted and faded. The crowd bed has a crossfaded seam; half/full-time whistles repeat the recorded whistle with gaps. No FIFA audio or rejected synthesized sounds are included.','']
+credits=['# Recorded sound credits - CLUBLINE 99 v1.125.0','','These excerpts use public Freesound HQ MP3 previews of recordings approved for integration in the conversation. Credits below identify original creators, source pages and licences. Excerpts were trimmed, resampled, level adjusted and faded. The traffic and crowd beds have crossfaded seams; half/full-time whistles repeat the recorded whistle with gaps. No FIFA audio or rejected synthesized sounds are included.','']
 for s in sources:credits.extend([f"## {s['title']} - {s['author']}",f"Source: {s['source']}",f"Licence: {s['licence']} - {s['licenceUrl']}",'Derived files: '+', '.join(c['file'] for c in clips if c['sourceKey']==s['key']),''])
 credits.extend(['Source URLs, preview URLs, raw/derived checksums, excerpt offsets and edits are recorded in assets/audio/recorded/sources.json. Raw source previews are not bundled separately.'])
 (ROOT/'AUDIO-CREDITS.md').write_text('\n'.join(credits)+'\n')

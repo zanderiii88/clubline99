@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "recordedAssets": 32,
+  "creditedSources": 23,
+  "rangeCases": 9,
+  "blockedWithdrawnFiles": 4,
+  "scope": "32 recorded assets decoded and cached; 23 sources credited; old palette blocked; recorded audio offline byte ranges checked."
+}

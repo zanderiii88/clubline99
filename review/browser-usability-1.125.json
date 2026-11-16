@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "scope": "Desktop cloud browser with actual saved Aberdeen career; no physical Android, narrow viewport or listening claim",
+  "checks": [
+    "v1.125 menu and existing career load",
+    "compact builder shows section plan, stand/roof, quote and duration together",
+    "N4 overhang double preview: 133000 pounds, 150 added seats, six weeks; balance unchanged; separate review visible; no payment made",
+    "Club menu shortcut reaches facilities from saved club overview",
+    "Simulate All Events advances through two matchdays and shows each managed result",
+    "recap filters unrelated world injuries and records declined proposals",
+    "Bert Paton shown by name in the post-match news"
+  ],
+  "limits": [
+    "cloud interaction timed out during one completed simulation; state was inspected before any retry",
+    "final playback mix requires user listening",
+    "phone layout and real offline version upgrade still need validation"
+  ]
+}
