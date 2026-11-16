@@ -2,7 +2,7 @@ import {scottishClub,scottishCareer,domesticCupName} from './scottish-world.js?v
 import {scottishCupRounds} from './scottish-cups.js?v=1.93.0';
 import {seasonHighlights} from './club-history.js?v=1.80.0';
 import {DIVISIONS,divisionOf,divisionLeague,divisionTable,seasonReady,seasonPrize} from './divisions.js?v=1.93.0';
-import {assessSeason} from './season-board.js?v=1.96.0';
+import {assessSeason} from './season-board.js?v=1.116.0';
 import {CUP_ID,CUP_ROUNDS} from './league-cup.js?v=1.93.0';
 import {FA_ID,FA_ROUNDS} from './fa-cup.js?v=1.93.0';
 import {CL_ID,clSlots,clQualified,clFixtures,clGroupTable} from './champions-league.js?v=1.93.0';

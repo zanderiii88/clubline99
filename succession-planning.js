@@ -1,7 +1,7 @@
 import {assignSquad} from './squad-selection.js?v=1.87.0';
 import {contractStatus} from './contracts.js?v=1.90.0';
 import {suitsRole} from './recruitment.js?v=1.93.0';
-import {youthReadiness} from './world-development.js?v=1.91.0';
+import {youthReadiness} from './world-development.js?v=1.116.0';
 
 const owner=(c,p)=>c.owners?.[p.id]||p.clubId;
 const alive=(c,p)=>!c.players?.[p.id]?.retired;

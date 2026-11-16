@@ -1,3 +1,4 @@
+import {clubPayroll as payroll} from './wage-planning.js?v=1.116.0';
 import {formationSlots} from './formations.js?v=1.100.0';
 import {assignSquad} from './squad-selection.js?v=1.87.0';
 import {suitsRole} from './recruitment.js?v=1.93.0';
@@ -17,7 +18,7 @@ export function settleClubFee(c,league,from,to,fee){
  if(from!==c.clubId&&league.clubs.some(x=>x.id===from))c.aiBudgets[from]=clubTransferFunds(c,league,from)+fee;
  if(to!==c.clubId&&league.clubs.some(x=>x.id===to))c.aiBudgets[to]=clubTransferFunds(c,league,to)-fee;
 }
-function payroll(c,league,id){return league.players.reduce((n,p)=>{if(!active(c,p))return n;const loan=c.loans?.[p.id];if(loan)return n+(loan.parent===id?p.wage*(1-(loan.contribution??100)/100):0)+(loan.to===id?p.wage*(loan.contribution??100)/100:0);return n+(owner(c,p)===id&&!c.players?.[p.id]?.unregistered?p.wage:0);},0);}
+
 function lineup(pool,slots){const picks=assignSquad([...pool].sort((a,b)=>a.id.localeCompare(b.id)),slots,(p,pos)=>suitsRole(p,pos)?10000+effective(p,pos):-1e6),byId=new Map(pool.map(p=>[p.id,p]));return {filled:picks.filter(Boolean).length,quality:picks.reduce((n,id,i)=>n+(id?effective(byId.get(id),slots[i]):0),0)};}
 export function buyerAssessment(c,league,p,buyerId,fee=0){
  const buyer=league.clubs.find(x=>x.id===buyerId),no=reason=>({interested:false,acceptable:false,reason,maxFee:0,openingFee:0});

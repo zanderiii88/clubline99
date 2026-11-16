@@ -1,5 +1,5 @@
-import {successionPlan} from './succession-planning.js?v=1.99.0';
-import {youthAdvice,progressSummary} from './player-progress.js?v=1.93.0';
+import {successionPlan} from './succession-planning.js?v=1.116.0';
+import {youthAdvice,progressSummary} from './player-progress.js?v=1.116.0';
 // Read-only current-season evidence. Academy estimates never expose exact ability.
 export function youthOpportunities(c,league,slots){
  const plan=successionPlan(c,league,slots),pool=new Map();

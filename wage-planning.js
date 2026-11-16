@@ -1,5 +1,16 @@
 // Advisory season allowance. Payroll processing remains owned by the career engine.
 export const weeklyPayroll=pool=>pool.reduce((sum,p)=>sum+(Number(p.wage)||0),0);
+// Registration affects eligibility, not a senior player's wage obligation.
+// Loan ownership sits with the borrower; each club pays its agreed share.
+export function clubPayroll(c,league,clubId=c.clubId){
+ return Math.round(league.players.reduce((sum,p)=>{
+  if(c.players?.[p.id]?.retired||c.players?.[p.id]?.academyOnly)return sum;
+  const wage=Number(p.wage)||0,loan=c.loans?.[p.id];
+  if(loan){const share=(loan.contribution??100)/100;return sum+(loan.parent===clubId?wage*(1-share):0)+(loan.to===clubId?wage*share:0);}
+  return sum+((c.owners?.[p.id]||p.clubId)===clubId?wage:0);
+ },0));
+}
+export function clubWageOutlook(c,league,adjustment=0){return wageOutlook(c,[{wage:clubPayroll(c,league)}],adjustment);}
 export function payrollsAfter(date,end){
  const start=Date.parse(date+'T12:00:00Z'),finish=Date.parse(end+'T12:00:00Z');
  if(!Number.isFinite(start)||!Number.isFinite(finish)||finish<=start)return 0;

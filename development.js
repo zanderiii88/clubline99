@@ -1,6 +1,7 @@
+import {repairGeneratedIdentities} from './generated-identities.js?v=1.116.0';
 import {developmentAssessment} from './development-context.js?v=1.91.0';
 import {initialiseNationalities} from './nationalities.js?v=1.89.0';
-import {worldRollover,youthReadiness} from './world-development.js?v=1.91.0';
+import {worldRollover,youthReadiness} from './world-development.js?v=1.116.0';
 import {returnLoan} from './loans.js?v=1.74.0';
 // Career-owned youth and development data; saved with the existing career.
 const POS=['GK','LB','CB','RB','DM','CM','AM','LW','RW','ST'];
@@ -19,6 +20,7 @@ export function squadSpace(c,league){const active=league.players.filter(p=>(c.ow
 export function canRegister(c,league,p){const s=squadSpace(c,league);return s.total<30}
 export function initialiseDevelopment(c,league){
  c.season??=1;c.seasonStart??=c.date||'1998-08-03';c.youthFunding??=0;c.trainingFunding??=0;c.generatedPlayers??=[];c.playerChanges??={};c.developmentIds??=[];c.prospects??=[];c.developmentReports??=[];c.conversations??=[];c.archives??=[];
+ repairGeneratedIdentities(c,league);
  for(const p of c.generatedPlayers)if(!league.players.some(x=>x.id===p.id))league.players.push(structuredClone(p));
  for(const [id,changes]of Object.entries(c.playerChanges)){const p=league.players.find(x=>x.id===id);if(p)Object.assign(p,structuredClone(changes))}
  for(const p of league.players)c.players[p.id]??={fitness:p.fitness,form:[],happiness:70,instruction:'Standard',reason:'Content with their squad role.'};

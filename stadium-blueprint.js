@@ -1,6 +1,6 @@
 import {SECTIONS,STANDS,ROOFS,REARS,FINISHES,changeCost,capacity} from './stadium-model.js';
-import {constructionQuote} from './construction.js?v=1.109.0';
-import {fixedSiteError} from './fixed-surroundings.js?v=1.89.0';
+import {constructionQuote} from './construction.js?v=1.120.0';
+import {fixedSiteError} from './fixed-surroundings.js?v=1.120.0';
 export function validStadiumBlueprint(c){
  const p=c.stadiumBlueprint;if(p===undefined||p===null)return true;
  const obj=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);

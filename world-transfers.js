@@ -1,5 +1,5 @@
 import {commitTerms} from './negotiations.js?v=1.90.0';
-import {buyerAssessment,settleClubFee} from './transfer-interest.js?v=1.100.0';
+import {buyerAssessment,settleClubFee} from './transfer-interest.js?v=1.116.0';
 import {sellerAssessment} from './seller-assessment.js?v=1.101.0';
 import {hash} from './player-attributes.js?v=1.74.0';
 export function worldTransferDay(c,league){

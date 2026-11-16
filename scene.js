@@ -1,11 +1,12 @@
 import {wembleyFrontage} from './wembley-world.js';
 import {eventInstallation} from './stadium-events.js';
-import {fixedSurroundings,fixedSiteError,surroundingsLayer} from './fixed-surroundings.js?v=1.89.0';
+import {fixedSurroundings,fixedSiteError,surroundingsLayer} from './fixed-surroundings.js?v=1.120.0';
 import {exteriorPeople,pitchPlayers} from './stadium-life.js';
 import {SECTIONS,STANDS,normaliseLayout,defaultLayout} from './stadium-model.js';
 import {groundsStand} from './grounds-geometry.js';
 // Fixed site plots share the stadium grid. No stadium translation or rotation is exposed.
 import {siteById} from './sites.js';
+import {stadiumAccess} from './stadium-access.js?v=1.120.0';
 const SCENE_WIDTH=1100;
 const at=(x,y,z=0)=>({x,y,z});
 const safe=s=>String(s??'').replace(/[&<>"']/g,'');
@@ -55,10 +56,22 @@ export function sceneSvg(club,site='aberdeen',crowd=false,evening=false,close=fa
   const work=works.find(job=>job.sections[s.id]);
   if(work){
    const future=groundsStand(work.sections[s.id].stand),D=Math.max(spec?.depth||2,future?.depth||2),H=Math.max(spec?.wallH||2,future?.wallH||2),L=s.bays,parts=[];
-   parts.push(face(s,[[0,0,.8],[L,0,.8],[L,D,H],[0,D,H]],'#bcc7c6','opacity=".92"'));
-   parts.push(face(s,[[0,D,0],[L,D,0],[L,D,H],[0,D,H]],'#819a9f','opacity=".95"'));
-   for(let u=0;u<=L;u+=.7)parts.push(edge(s,[[u,0,.5],[u,D,H+.6]],'#50636b',.65));
-   for(let z=2;z<H;z+=3){parts.push(edge(s,[[0,D,z],[L,D,z]],'#d5d5c0',.7));for(let u=0;u+.7<L;u+=.7)parts.push(edge(s,[[u,D,z],[u+.7,D,Math.min(H,z+3)]],'#465963',.5));}
+   const segments=s.corner?12:1;
+   for(let i=0;i<segments;i++){
+    const a=L*i/segments,b=L*(i+1)/segments;
+    // Scaffolding has vertical front/rear faces, not a pitch-to-roof ramp.
+    parts.push(face(s,[[a,D,0],[b,D,0],[b,D,H],[a,D,H]],'#819a9f','opacity=".42" data-construction-panel="rear"'));
+    parts.push(face(s,[[a,0,0],[b,0,0],[b,0,H],[a,0,H]],'#bcc7c6','opacity=".16" data-construction-panel="front"'));
+    for(let z=2;z<H;z+=3)for(const v of [0,D])parts.push(edge(s,[[a,v,z],[b,v,z]],'#d5d5c0',.7));
+   }
+   for(const u of [0,L]){
+    parts.push(face(s,[[u,0,0],[u,D,0],[u,D,H],[u,0,H]],'#a3b3b2','opacity=".25" data-construction-panel="end"'));
+    parts.push(edge(s,[[u,0,H],[u,D,H]],'#50636b',.7));
+    for(let z=2;z<H;z+=3)parts.push(edge(s,[[u,0,z],[u,D,z]],'#bfc9bd',.65));
+   }
+   const bays=Math.ceil(L/.7);
+   for(let i=0;i<=bays;i++)for(const v of [0,D])parts.push(edge(s,[[L*i/bays,v,0],[L*i/bays,v,H+.6]],'#50636b',.65));
+   for(let z=2;z<H;z+=3)for(let i=0;i<bays;i++)parts.push(edge(s,[[L*i/bays,D,z],[L*(i+1)/bays,D,Math.min(H,z+3)]],'#465963',.5));
    parts.push(edge(s,[[0,0,.9],[L,0,.9]],'#e6ba5e',1.4));
    return `<g class="construction-section" data-section="${s.id}" aria-label="${s.id}: closed for construction until ${work.opens}">${parts.join('')}</g>`;
   }
@@ -392,10 +405,13 @@ export function sceneSvg(club,site='aberdeen',crowd=false,evening=false,close=fa
  const layer=near=>{const list=ordered.filter(x=>(['S','E'].includes(x.s.side)||x.s.id==='SE')===near);const result=[...list.filter(x=>!closed(x.s.id)),...list.filter(x=>closed(x.s.id))].map(x=>sectionSvg(x.s)).join('');return near?Object.values(nearLayers).flat().join('')+result:result};
  const far=layer(false),near=layer(true);
  const venueFront=club?.venueStyle==='old-wembley'?wembleyFrontage(project):'';
- const stadiumFrame={...frame};
- const lights=[[16,15],[56,15],[56,45],[16,45]].map(([x,y],i)=>{const p=project(at(x,y,15)),q=project(at(x,y));return `<path d="M${q.x},${q.y}L${p.x},${p.y}" stroke="#77878b" stroke-width="1.1"/><rect x="${p.x-3.2}" y="${p.y-1.5}" width="6.4" height="2.8" fill="${evening?'#fff3ad':'#aab7b5'}"/>`}).join('');
+ const standFrame={...frame};
+ const lights=[[16,15],[56,15],[56,45],[16,45]].map(([x,y],i)=>{const p=project(at(x,y,15)),q=project(at(x,y));return `<g data-stadium-light="${i+1}"><path d="M${q.x},${q.y}L${p.x},${p.y}" stroke="#77878b" stroke-width="1.1"/><rect x="${p.x-3.2}" y="${p.y-1.5}" width="6.4" height="2.8" fill="${evening?'#fff3ad':'#aab7b5'}"/></g>`}).join('');
+ // Low stands must not cause the camera to crop the taller floodlight masts.
+ // Bowl-only previews hide those fixtures and retain their tighter framing.
+ const stadiumFrame=preview?standFrame:{...frame};
  const hull=points=>{const sorted=points.sort((a,b)=>a.x-b.x||a.y-b.y),cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x),lo=[],hi=[];for(const p of sorted){while(lo.length>1&&cross(lo.at(-2),lo.at(-1),p)<=0)lo.pop();lo.push(p)}for(const p of [...sorted].reverse()){while(hi.length>1&&cross(hi.at(-2),hi.at(-1),p)<=0)hi.pop();hi.push(p)}return lo.slice(0,-1).concat(hi.slice(0,-1))};
- const targets=selection===null?'':SECTIONS.map(s=>{const cfg=model.sections[s.id],spec=groundsStand(cfg.stand),d=spec?.depth||2.3,h=spec?.wallH||1.8,points=[];for(const u of [0,s.bays])for(const v of [0,d])for(const z of [0,h])points.push(project(world(s,u,v,z)));const outline=hull(points).map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');return `<polygon class="designer-hit ${selection.has(s.id)?'is-selected':''}" data-action="toggle-stand" data-id="${s.id}" role="button" tabindex="0" aria-label="${s.id}: ${safe(STANDS[cfg.stand].label)}" aria-pressed="${selection.has(s.id)}" points="${outline}"/>`}).join('');
+ const targets=selection===null?'':SECTIONS.map(s=>{const cfg=model.sections[s.id],spec=groundsStand(cfg.stand),d=spec?.depth||2.3,h=spec?.wallH||1.8,points=[];for(const u of [0,s.bays])for(const v of [0,d])for(const z of [0,h])points.push(project(world(s,u,v,z)));const outline=hull(points).map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');return `<polygon class="designer-hit ${selection.has(s.id)?'is-selected':''} ${motion?.designClosed?.includes(s.id)?'is-closed':motion?.designChanges?.includes(s.id)?'has-preview-change':motion?.designTargets?.includes(s.id)?'has-target-change':''}" data-action="toggle-stand" data-id="${s.id}" role="button" tabindex="0" aria-label="${s.id}: ${safe(STANDS[cfg.stand].label)}${motion?.designClosed?.includes(s.id)?' · Closed for works':''}${motion?.designChanges?.includes(s.id)?' · Preview change':''}${motion?.designTargets?.includes(s.id)?' · Saved target pending':''}" aria-pressed="${selection.has(s.id)}" points="${outline}"/>`}).join('');
  const eventArt=motion?.event?eventInstallation(project,motion.event.type,Number(motion.event.id.split('-')[1])||1,figureScale):'';
  const athletes=['prematch','live'].includes(motion?.phase)?pitchPlayers(project,motion.homeColour||colour,motion.awayColour,motion,figureScale):'';
  const specs=SECTIONS.filter(s=>!s.corner).map(s=>({s,cfg:model.sections[s.id],sp:groundsStand(model.sections[s.id].stand)}));
@@ -434,7 +450,9 @@ export function sceneSvg(club,site='aberdeen',crowd=false,evening=false,close=fa
    ground.push(face(section,[[a,0,0],[b,0,0],[b,d,0],[a,d,0]],groundColour,`data-ground-section="${section.id}"`));
   }
  }
- const stadiumGround=`<g data-stadium-ground="current-layout">${ground.join('')}</g>`;
+ const access=pilot?.assetStem?.startsWith('scotland-')?stadiumAccess(model,works,pilot.reserve):[];
+ const accessArt=access.map(p=>rect(p.x,p.y,p.x+p.w,p.y+p.d,0,evening?'#777c72':'#b5b5a6',`data-stadium-access="${p.id}"`)).join('');
+ const stadiumGround=`<g data-stadium-ground="current-layout">${accessArt}${ground.join('')}</g>`;
  const careerFrame=close==='career'?`data-career-frame="${cx} ${fy} ${fw} ${fh} ${backgroundTop} ${backgroundBottom}"`:'';
 
  let clockBadge='';

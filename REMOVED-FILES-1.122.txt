@@ -1,0 +1,18 @@
+Remove these withdrawn v1.121 files from an existing game folder before uploading. New ZIPs omit them; extraction alone cannot delete old files.
+
+assets/audio/ambience/applause.mp3
+assets/audio/ambience/birds-1.mp3
+assets/audio/ambience/birds-2.mp3
+assets/audio/ambience/birds-3.mp3
+assets/audio/ambience/crowd-bed.wav
+assets/audio/ambience/crowd-swell-1.mp3
+assets/audio/ambience/crowd-swell-2.mp3
+assets/audio/ambience/distant-calls-1.mp3
+assets/audio/ambience/distant-calls-2.mp3
+assets/audio/ambience/distant-calls-3.mp3
+assets/audio/ambience/kicks-1.mp3
+assets/audio/ambience/kicks-2.mp3
+assets/audio/ambience/kicks-3.mp3
+assets/audio/ambience/sources.json
+assets/audio/ambience/whistle.mp3
+tools/build-ambience.py

@@ -1,4 +1,4 @@
-import {clubTransferFunds} from './transfer-interest.js?v=1.100.0';
+import {clubTransferFunds} from './transfer-interest.js?v=1.116.0';
 import {commercialIncome} from './finance-model.js?v=1.91.0';
 
 // Legacy saves start at their current season: no backdated allocations on load.
