@@ -1,0 +1,29 @@
+{
+  "version": "1.115.0",
+  "date": "2026-11-15",
+  "environment": "Desktop Chrome at local Sites preview; actual app UI, Streamlined Arsenal test career",
+  "passed": true,
+  "checks": [
+    "Created and reloaded test career",
+    "Opened squad cover, training and player conversations from Team reports & advice",
+    "Opened planner and newsroom through Season picker",
+    "Followed season-expectations news action into club planning",
+    "Opened club planning from club-screen shortcut and viewed objective panels and finances",
+    "Saved blueprint for N4 exterior Red brick to Grey metal",
+    "Reviewed itemised construction and confirmed payment of 16000",
+    "Handled loan enquiry, scouting recommendations and club story during calendar advancement",
+    "Observed reopening on 1998-08-10 and completed project count of one",
+    "Answered pre-match press question with No comment",
+    "Simulated Arsenal v Wimbledon on 1998-08-15; result 3-0",
+    "Completed match report, other results and matchday table screens",
+    "Opened weekly training report dated 1998-08-10 after the fixture",
+    "Inspected desktop report layout and left match-week planner open"
+  ],
+  "not_covered": [
+    "Full In-depth browser journey",
+    "Second paid stadium phase in browser",
+    "Physical Android",
+    "Production offline upgrade",
+    "Full multi-season rerun"
+  ]
+}

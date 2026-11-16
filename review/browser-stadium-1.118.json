@@ -1,0 +1,8 @@
+{
+  "version": "1.118.0",
+  "date": "2026-11-16",
+  "environment": "Desktop Chrome actual application controls; fresh Streamlined Arsenal career",
+  "passed": true,
+  "checks": ["Saved two-section finish target without spending", "Compared built/preview/target", "Paid 16000 for North phase only", "Observed active closure and pending target labels", "Reloaded saved project", "Handled intervening decisions", "Observed North completed and South remaining", "Restored and paid 16000 for South phase only", "Played home fixture during reduced capacity", "Completed match report/results/table", "Advanced to next fixture stop on 22 August", "Both target sections marked built with zero remaining differences and two project records", "Desktop status/register layout inspected and colour conflict corrected"],
+  "notCovered": ["Physical Android", "Production offline upgrade", "Full In-depth browser journey"]
+}

@@ -1,0 +1,9 @@
+{
+  "version": "1.117.0",
+  "reviewDate": "2026-11-15",
+  "environment": "Desktop Chrome, actual local app, existing Streamlined Arsenal career on 15 August 1998 after one managed match",
+  "checks": ["Season picker opened story view", "Next competitive opponent and recorded milestone cards displayed", "Behind this story revealed current opposing manager context", "Club/division scopes switched without calendar or cash changes", "Player-details link showed the recorded competitive appearance", "Newsroom link returned to Season stories", "Desktop card layout inspected"],
+  "sourceRevalidationDate": "2026-11-16",
+  "sourceRevalidation": "Restored source rechecked with both-mode story, newsroom, compressed save/backup and calendar integration tests",
+  "notCovered": ["Physical Android", "Production offline update", "Multi-season browser playthrough"]
+}

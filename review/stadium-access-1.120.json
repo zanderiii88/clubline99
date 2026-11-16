@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "clubs": 56,
+  "layouts": 134,
+  "scenes": 670,
+  "activeWorksLayouts": 58,
+  "checks": [
+    "paths inside site",
+    "built and future section clearances",
+    "connected approaches reach site edges",
+    "finite camera frames",
+    "floodlight mast framing",
+    "vertical scaffold faces including corners",
+    "input immutability",
+    "Scottish-only access art"
+  ]
+}

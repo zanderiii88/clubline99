@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "watchedMatches": 2,
+  "goalCues": 5,
+  "saveCues": 12,
+  "instantSimulations": 2,
+  "scope": "Actual match engine events fed to the sound bridge; no browser listening claim."
+}

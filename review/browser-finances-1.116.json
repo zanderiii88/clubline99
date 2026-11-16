@@ -1,0 +1,13 @@
+{
+  "version": "1.116.0",
+  "environment": "Desktop Chrome; actual controls at local Sites preview; existing Streamlined Arsenal test save upgraded from 1.115",
+  "passed": true,
+  "checks": [
+    "Existing career loaded successfully",
+    "Arranged a three-month outgoing loan for Luis Boa Morte with borrower paying 75 percent and a recall clause",
+    "Contracts wage planning displayed 274613 pounds per week, including Arsenal's remaining loan share",
+    "Finances displayed the same weekly payroll and next Monday payment of 274613 pounds",
+    "Free-agent search displayed 12 fictional identities such as Jamie Lennox, Iwan Harcourt and Owen Radford after loading the old save"
+  ],
+  "not_covered": ["Physical Android", "Production offline update", "Full multi-season browser playthrough"]
+}

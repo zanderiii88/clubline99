@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "shippedAmbienceAssets": 0,
+  "rangeCases": 9,
+  "blockedWithdrawnFiles": 4,
+  "scope": "No withdrawn assets in source/cache; stale palette requests blocked; offline ranges retained for existing audio."
+}

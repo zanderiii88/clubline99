@@ -1,0 +1,356 @@
+{
+  "passed": true,
+  "environment": "Node VM with DOM/timer stubs and seeded RNG; real game handlers; routine saves use plain JSON, actual codec at each checkpoint",
+  "policy": "Natural starting budgets; development strategy (partial loan with recall, free/cheap recruitment, call-up then promotion, selective renewals); trading strategy (partial season loans, accept up to two suitable offers and make up to two affordable purchases per season, summer agreements, youth and renewals); decline optional bookings, no-spend stories",
+  "summaries": [
+    {
+      "id": "C01",
+      "mode": "in-depth",
+      "policy": {
+        "style": "trading",
+        "managedFeeNet": -18160000,
+        "minCash": 12866029,
+        "maxPayroll": 278850,
+        "actions": [
+          {
+            "season": 1,
+            "date": "1998-08-03",
+            "kind": "loan",
+            "id": "P98-0478",
+            "to": "C04",
+            "share": 75,
+            "end": "1999-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1998-08-03",
+            "kind": "call-up",
+            "id": "YC01-1-0"
+          },
+          {
+            "season": 1,
+            "date": "1998-08-03",
+            "kind": "purchase",
+            "id": "FREE-C01-1-0",
+            "fee": 0,
+            "wage": 1050
+          },
+          {
+            "season": 1,
+            "date": "1998-08-14",
+            "kind": "sale",
+            "id": "P98-0243",
+            "fee": 10035000
+          },
+          {
+            "season": 1,
+            "date": "1998-08-20",
+            "kind": "sale",
+            "id": "P98-0594",
+            "fee": 8145000
+          },
+          {
+            "season": 1,
+            "date": "1998-09-02",
+            "kind": "purchase",
+            "id": "FREE-C01-1-3",
+            "fee": 0,
+            "wage": 3950
+          },
+          {
+            "season": 1,
+            "date": "1999-01-02",
+            "kind": "promotion",
+            "id": "YC01-1-0"
+          },
+          {
+            "season": 1,
+            "date": "1999-01-02",
+            "kind": "renewal",
+            "id": "P98-0586",
+            "old": 7950,
+            "wage": 8350,
+            "end": "2000-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1999-01-02",
+            "kind": "summer-agreement",
+            "id": "EU98-071-20",
+            "fee": 20000
+          },
+          {
+            "season": 1,
+            "date": "1999-02-02",
+            "kind": "renewal",
+            "id": "P98-0778",
+            "old": 5000,
+            "wage": 5250,
+            "end": "2000-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1999-03-02",
+            "kind": "renewal",
+            "id": "P98-0127",
+            "old": 5650,
+            "wage": 5950,
+            "end": "2000-06-30"
+          }
+        ],
+        "seasons": {
+          "1": {
+            "loans": 1,
+            "recalls": 0,
+            "buys": 2,
+            "future": 1,
+            "sales": 2,
+            "renewals": 3,
+            "callups": 1,
+            "promotions": 1
+          }
+        }
+      },
+      "opening": 13000000,
+      "ended": "1999-06-05",
+      "seasonTwo": "1999-08-03",
+      "balance": 45907373,
+      "weeklyWages": 251758,
+      "steps": 542,
+      "matches": 61,
+      "draws": 19,
+      "firstWeek": 1,
+      "board": 3,
+      "declinedOffers": 24,
+      "declinedBookings": 6,
+      "stories": 5,
+      "decisions": 0,
+      "media": 27,
+      "checkpoints": 12,
+      "payrolls": 43,
+      "prizeMessages": 19
+    },
+    {
+      "id": "C01",
+      "mode": "in-depth",
+      "policy": {
+        "style": "trading",
+        "managedFeeNet": -25606000,
+        "minCash": 12866029,
+        "maxPayroll": 278850,
+        "actions": [
+          {
+            "season": 1,
+            "date": "1998-08-03",
+            "kind": "loan",
+            "id": "P98-0478",
+            "to": "C04",
+            "share": 75,
+            "end": "1999-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1998-08-03",
+            "kind": "call-up",
+            "id": "YC01-1-0"
+          },
+          {
+            "season": 1,
+            "date": "1998-08-03",
+            "kind": "purchase",
+            "id": "FREE-C01-1-0",
+            "fee": 0,
+            "wage": 1050
+          },
+          {
+            "season": 1,
+            "date": "1998-08-14",
+            "kind": "sale",
+            "id": "P98-0243",
+            "fee": 10035000
+          },
+          {
+            "season": 1,
+            "date": "1998-08-20",
+            "kind": "sale",
+            "id": "P98-0594",
+            "fee": 8145000
+          },
+          {
+            "season": 1,
+            "date": "1998-09-02",
+            "kind": "purchase",
+            "id": "FREE-C01-1-3",
+            "fee": 0,
+            "wage": 3950
+          },
+          {
+            "season": 1,
+            "date": "1999-01-02",
+            "kind": "promotion",
+            "id": "YC01-1-0"
+          },
+          {
+            "season": 1,
+            "date": "1999-01-02",
+            "kind": "renewal",
+            "id": "P98-0586",
+            "old": 7950,
+            "wage": 8350,
+            "end": "2000-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1999-01-02",
+            "kind": "summer-agreement",
+            "id": "EU98-071-20",
+            "fee": 20000
+          },
+          {
+            "season": 1,
+            "date": "1999-02-02",
+            "kind": "renewal",
+            "id": "P98-0778",
+            "old": 5000,
+            "wage": 5250,
+            "end": "2000-06-30"
+          },
+          {
+            "season": 1,
+            "date": "1999-03-02",
+            "kind": "renewal",
+            "id": "P98-0127",
+            "old": 5650,
+            "wage": 5950,
+            "end": "2000-06-30"
+          },
+          {
+            "season": 2,
+            "date": "1999-08-03",
+            "kind": "loan",
+            "id": "YC01-1-0",
+            "to": "C22",
+            "share": 75,
+            "end": "2000-06-30"
+          },
+          {
+            "season": 2,
+            "date": "1999-08-03",
+            "kind": "call-up",
+            "id": "YC01-1-6"
+          },
+          {
+            "season": 2,
+            "date": "1999-08-03",
+            "kind": "renewal",
+            "id": "P98-0478",
+            "old": 5650,
+            "wage": 5950,
+            "end": "2001-06-30"
+          },
+          {
+            "season": 2,
+            "date": "1999-08-03",
+            "kind": "purchase",
+            "id": "P98-E57-15",
+            "fee": 20000,
+            "wage": 950
+          },
+          {
+            "season": 2,
+            "date": "1999-08-06",
+            "kind": "sale",
+            "id": "P98-0839",
+            "fee": 4959000
+          },
+          {
+            "season": 2,
+            "date": "1999-08-20",
+            "kind": "sale",
+            "id": "P98-0778",
+            "fee": 2547000
+          },
+          {
+            "season": 2,
+            "date": "1999-09-04",
+            "kind": "purchase",
+            "id": "EU98-091-17",
+            "fee": 20000,
+            "wage": 850
+          },
+          {
+            "season": 2,
+            "date": "2000-01-01",
+            "kind": "promotion",
+            "id": "YC01-1-6"
+          },
+          {
+            "season": 2,
+            "date": "2000-01-01",
+            "kind": "renewal",
+            "id": "P98-0025",
+            "old": 8850,
+            "wage": 9300,
+            "end": "2001-06-30"
+          },
+          {
+            "season": 2,
+            "date": "2000-01-01",
+            "kind": "summer-agreement",
+            "id": "P98-E41-06",
+            "fee": 20000
+          },
+          {
+            "season": 2,
+            "date": "2000-02-01",
+            "kind": "renewal",
+            "id": "P98-0303",
+            "old": 7100,
+            "wage": 7500,
+            "end": "2001-06-30"
+          }
+        ],
+        "seasons": {
+          "1": {
+            "loans": 1,
+            "recalls": 0,
+            "buys": 2,
+            "future": 1,
+            "sales": 2,
+            "renewals": 3,
+            "callups": 1,
+            "promotions": 1
+          },
+          "2": {
+            "loans": 1,
+            "recalls": 0,
+            "buys": 2,
+            "future": 1,
+            "sales": 2,
+            "renewals": 3,
+            "callups": 1,
+            "promotions": 1
+          }
+        }
+      },
+      "opening": 45907373,
+      "ended": "2000-06-10",
+      "seasonTwo": "2000-08-03",
+      "balance": 69822843,
+      "weeklyWages": 178710,
+      "steps": 585,
+      "matches": 67,
+      "draws": 20,
+      "firstWeek": 0,
+      "board": 4,
+      "declinedOffers": 31,
+      "declinedBookings": 7,
+      "stories": 5,
+      "decisions": 0,
+      "media": 25,
+      "checkpoints": 12,
+      "payrolls": 87,
+      "prizeMessages": 44
+    }
+  ]
+}

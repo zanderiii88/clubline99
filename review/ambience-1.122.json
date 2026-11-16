@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "ordinaryVirtualMinutes": 10,
+  "matchdayVirtualMinutes": 10,
+  "ordinaryClips": 14,
+  "matchdayClips": 19,
+  "players": 4,
+  "shippedAmbienceAssets": 0,
+  "schedulerUsesMockCatalogue": true,
+  "checks": [
+    "no autoplay",
+    "sparse randomized clips",
+    "no immediate repeat",
+    "one event at a time",
+    "no duplicated players/timers on navigation",
+    "matchday bed and fade",
+    "quiet Sunday birds only",
+    "mute/zero volume/hidden stop",
+    "visibility resume",
+    "missing clip recovery",
+    "old preference migration",
+    "independent controls",
+    "menu/game music switch",
+    "cross-tab settings"
+  ]
+}
