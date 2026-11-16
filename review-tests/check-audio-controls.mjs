@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
+const root=new URL('../',import.meta.url),listeners={},media=[];let stored=JSON.stringify({musicCatalogue:'pixabay-1',musicMuted:false,effectsMuted:false,ambienceMuted:false,ambienceVolume:.4,track:2,playlist:[2],mode:'repeat'});
+class Player{constructor(){this.paused=true;this.volume=0;this.src='';this.events={};media.push(this);}pause(){this.paused=true;}play(){this.paused=false;return Promise.resolve();}addEventListener(t,f){this.events[t]=f;}}
+const context=vm.createContext({console,Audio:Player,URL,Date,Math,JSON,Number,Set,Promise,CustomEvent:class{},localStorage:{getItem:()=>stored,setItem:(k,v)=>stored=v},window:{addEventListener:(t,f)=>listeners[t]=f,dispatchEvent(){}},document:{hidden:false,querySelectorAll:()=>[],addEventListener:(t,f)=>listeners[t]=f},setTimeout:()=>1,clearTimeout(){}});
+const modules=new Map();for(const file of ['audio.js','ambience.js','audio-catalogue.js','match-audio.js'])modules.set(file,new vm.SourceTextModule(fs.readFileSync(new URL(file,root),'utf8'),{context,identifier:file,initializeImportMeta:m=>{m.url=new URL(file,root).href;}}));
+const mod=modules.get('audio.js');await mod.link(s=>modules.get(s.split('/').at(-1).split('?')[0]));await mod.evaluate();const a=mod.namespace;
+assert.equal(a.audioState().ambienceVolume,.4);assert(a.audioState().ambience.available);assert.equal(media.length,5);a.unlockAudio();assert(!media[0].paused);
+const state={view:'career',career:{date:'1998-08-01',season:1},match:{home:'H',away:'A',fixtureDate:'1998-08-01',phase:'confirm',minute:0,events:[],homeGoals:0,awayGoals:0}};a.setAudioContext(state);assert(media[0].paused);state.match.phase='live';a.setAudioContext(state);assert(media[4].src.includes('whistle-single'));
+state.match.minute=10;state.match.homeGoals=1;state.match.events.push({type:'goal',minute:10,team:'H',playerId:'h'});a.setAudioContext(state);assert(media[4].src.includes('goal-'));
+a.setAudioSetting('effectsMuted',true);assert(media[4].paused);a.setAudioSetting('ambienceMuted',true);assert(a.audioState().ambience.muted);a.setAudioSetting('effectsMuted',false);assert(a.audioState().ambience.muted);
+state.match.minute=20;state.match.awayGoals=1;state.match.events.push({type:'goal',minute:20,team:'A',playerId:'a'});a.setAudioContext(state);assert(!media[4].paused,'FX reactions remain available with ambience muted');assert(media[2].paused);
+context.document.hidden=true;listeners.visibilitychange();assert(media.every(p=>p.paused));context.document.hidden=false;listeners.visibilitychange();a.setAudioContext(state);assert(media[4].paused,'No old reaction on visibility return');
+a.handleAudioChange({hasAttribute:k=>k==='data-audio-volume',dataset:{audioVolume:'effectsVolume'},value:'30'});assert.equal(JSON.parse(stored).effectsVolume,.3);
+a.handleAudioAction({dataset:{action:'audio-play'}});assert(a.audioState().musicInGame);assert(!media[0].paused);
+assert(a.audioControls().includes('Recorded sound credits'));assert(a.audioControls().includes('Freesound'));assert(!a.audioControls().includes('temporarily unavailable'));assert(!a.audioControls().includes('data-audio-volume="ambienceVolume" disabled'));
+console.log('PASS real catalogue/preferences/control integration, independent FX, visibility no-replay and credits');

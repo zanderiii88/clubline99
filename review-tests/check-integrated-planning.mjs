@@ -3,7 +3,7 @@ const summaries=[];
 for(const mode of ['streamlined','in-depth']){
  const {g,mods,dir}=await createGame(1114);g.setup('C01',mode);g.newCareer();g.click('close-owner-welcome');let c=g.get().career;const target=structuredClone(c.stadium);for(const id of ['N1','S1'])target.sections[id].finish=target.sections[id].finish==='brick'?'metal':'brick';g.stadiumDraft(target);g.click('save-stadium-blueprint');g.click('choose-stadium-phase',{phase:'N'});g.click('confirm-stadium-build');let second=false,matches=0,checkpoints=0,steps=0;
  while(g.get().career.date<'1998-08-20'||g.get().match||g.get().career.matchday){assert(++steps<500);c=g.get().career;const m=g.get().match;
-  const before=JSON.stringify(c);assert(g.matchWeekPanel().includes('Match-week planner'));assert(g.leagueNewsPanel().includes('League newsroom'));g.constructionStatus();assert.equal(JSON.stringify(c),before);
+  const before=JSON.stringify(c);assert(g.matchWeekPanel().includes('Match-week planner'));assert(g.leagueNewsPanel().includes('League newsroom'));g.constructionStatus();assert(g.seasonStoriesPanel().includes('Season stories'));g.stadiumBlueprint();g.stadiumVisualControls();g.stadiumComparisonScene(g.get().source.clubs.find(t=>t.id===c.clubId),g.stadiumPreview()||c.stadium);assert.equal(JSON.stringify(c),before);
   if(m){assert.equal(m.fixtureDate,c.date);if(m.phase==='choice'){g.auto();g.beginMatch('simulate');matches++;}else if(m.phase==='report')g.closeMatchReport();continue;}
   if(c.matchday){g.click('matchday-continue');continue;}
   if(!c.construction.length&&!second){g.stadiumDraft(c.stadium);g.click('restore-stadium-blueprint');g.click('commit-stadium');g.click('confirm-stadium-build');assert.equal(Object.keys(c.construction[0].sections).join(),'S1');second=true;g.checkpointSave();assert(g.load());g.parse(g.backup());checkpoints++;continue;}
@@ -18,6 +18,6 @@ for(const mode of ['streamlined','in-depth']){
   if(g.get().outcomeCard){g.click('outcome-close');continue;}
   if(c.date===g.nextFixture()?.date)g.advance();else await g.advanceToDate(new Date(Date.parse(c.date+'T12:00:00Z')+86400000).toISOString().slice(0,10));
  }
- c=g.get().career;assert(second);assert.equal(c.stadiumProjects.length,2);assert.equal(c.construction.length,0);assert(matches>=1);g.checkpointSave();assert(g.load());g.parse(g.backup());checkpoints++;assert(g.get().career.stadiumBlueprint);summaries.push({mode,matches,steps,checkpoints,date:c.date,projects:c.stadiumProjects.length});console.log('PASS integrated:',JSON.stringify(summaries.at(-1)));
+ c=g.get().career;assert(second);assert.equal(c.stadiumProjects.length,2);assert.equal(c.construction.length,0);assert(matches>=1);g.checkpointSave();assert(g.load());g.parse(g.backup());checkpoints++;assert(g.get().career.stadiumBlueprint);assert(/first recorded competitive (appearance|goal)/.test(g.seasonStoriesPanel()));summaries.push({mode,matches,steps,checkpoints,date:c.date,projects:c.stadiumProjects.length});console.log('PASS integrated:',JSON.stringify(summaries.at(-1)));
 }
-fs.writeFileSync(new URL('../review/integrated-planning-1.114.json',import.meta.url),JSON.stringify({passed:true,environment:'Seeded VM with real handlers, DOM/timer stubs; code-level integration, no browser session',summaries},null,2));
+fs.writeFileSync(new URL('../review/integrated-stadium-1.118.json',import.meta.url),JSON.stringify({passed:true,environment:'Seeded VM with real handlers, DOM/timer stubs; code-level integration, no browser session',summaries},null,2));
