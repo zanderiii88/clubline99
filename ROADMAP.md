@@ -1,8 +1,10 @@
 # Clubline 99 development priorities
 
-Updated 17 November 2026, after v1.128.0.
+Updated 17 November 2026, after v1.129.0.
 
 ## Current state
+v1.129 extends the isolated match lab with four editable plans, attribute-based suitability, fictional squad profiles, individual movement instructions and more flexible support/transition movement. Review these on a phone before further rule/season integration. Upload archives omit historic notes/tests/tools; a separate Development archive retains them. This is still experimental work, not public-release preparation.
+
 v1.128 adds the isolated Developer · Match test shortcut and a deterministic three-minute possession/spatial prototype. The next match-work priority is user feedback on movement, ball readability and mobile performance, followed by possession/pass/shot tuning and missing rules. The normal career engine is unchanged. This is an experimental prepared build, not public-release preparation.
 
 v1.127 brings the stadium arrows into the preview frame following the supplied mobile sketch: roof above, stand left/right and material below. The larger preview and folded section map fit at 320px and 390px browser viewport widths. Physical phone/PWA interaction remains to be confirmed. This is a prepared build; publication is not automatic.

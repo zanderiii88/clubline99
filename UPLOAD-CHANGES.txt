@@ -1,12 +1,9 @@
-CLUBLINE 99 v1.114.0
+CLUBLINE 99 v1.129.0
 
-Export a career backup first.
+Use the Complete ZIP for the whole game, or the cumulative Update ZIP over v1.94-v1.128. Extract into the game root, replacing matching files and retaining subfolders. Keep assets and data when using the Update ZIP. Do not upload the ZIP itself as the game.
 
-Update ZIP: install over v1.94.0 or any later build through v1.113.0. It includes all changes since v1.94; no intermediate update is needed. Keep existing assets and data.
-Complete ZIP: all files, data and assets; no earlier ZIP is needed.
+These two upload packages now exclude old release notes, tools, tests and review files. They retain current instructions, credits/source material and every runtime dependency. The separate Development ZIP is not for website upload.
 
-Extract the chosen ZIP into the existing game repository root, replacing matching files and retaining subfolders. index.html must remain at the repository root. Do not upload the ZIP itself as the game.
+Extracting a ZIP cannot delete old files already present. UPLOAD-CLEANUP.txt lists obsolete paths that may be removed from an existing copy. Keep a backup first and remove only listed paths, not the whole game folder.
 
-After you publish, use Check for Updates / Load update and reopen the game. Confirm v1.114.0 on the main menu. No fresh career required. Nothing has been deployed automatically.
-
-Read RELEASE-1.114.0-NOTES.md and README.md.
+After you choose to upload/publish, use Check for Updates and Load update, then reopen. Main menu: v1.129.0. Choose Developer · Match test to try tactics. Existing careers need no restart. No live publication or cleanup has been performed automatically.
