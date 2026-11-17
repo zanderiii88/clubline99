@@ -1,5 +1,5 @@
-import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan} from './lab-tactics.js?v=1.131.0';
-import {createSimulation,stepSimulation,simulationSnapshot,setTactic,adjustPlan,instructPlayer,STEP} from './possession-sim.js?v=1.131.0';
+import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan} from './lab-tactics.js?v=1.132.0';
+import {createSimulation,stepSimulation,simulationSnapshot,setTactic,adjustPlan,instructPlayer,STEP} from './possession-sim.js?v=1.132.0';
 const root=document.querySelector('#match-lab'),query=selector=>root.querySelector(selector),svgNS='http://www.w3.org/2000/svg';
 let sim=createSimulation(),previous=simulationSnapshot(sim),running=false,speed=4,lastFrame=null,accumulator=0,eventCursor=0,sound=false,inspected=null,disposed=false,runGeneration=0;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let ambience=null,audioLoading=false;
@@ -41,14 +41,15 @@ function consumeEvents(){
 function paint(alpha=1){
  const now=simulationSnapshot(sim),old=new Map(previous.players.map(p=>[p.id,p])),blend=reduced?1:alpha;
  for(const p of now.players){const before=old.get(p.id)||p,x=before.x+(p.x-before.x)*blend,y=before.y+(p.y-before.y)*blend;nodes.get(p.id).setAttribute('transform',`translate(${y*10} ${(105-x)*10})`);}
+ const height=now.ball.z||0;query('[data-ball]').setAttribute('r',String(9+Math.min(height,16)*.45));
  const x=previous.ball.x+(now.ball.x-previous.ball.x)*blend,y=previous.ball.y+(now.ball.y-previous.ball.y)*blend;
  for(const sel of ['[data-ball]','[data-ball-halo]']){query(sel).setAttribute('cx',y*10);query(sel).setAttribute('cy',(105-x)*10);}
  query('[data-score]').textContent=`${sim.score[0]} – ${sim.score[1]}`;query('[data-clock]').textContent=`${format(sim.time)} / ${format(sim.duration)}`;
- query('[data-play-state]').textContent=sim.phase==='ended'?'Test complete':!running?(sim.time===0?'Pre-match setup':'Paused'):sim.phase==='restart'?(sim.restartKind==='kickoff'?'Kick-off':'Goal kick'):sim.flight?.kind==='shot'?'Shot':`${sim.teams[sim.possession].name} possession`;
+ query('[data-play-state]').textContent=sim.phase==='ended'?'Test complete':!running?(sim.time===0?'Pre-match setup':'Paused'):sim.phase==='restart'?(({'kickoff':'Kick-off','goal-kick':'Goal kick','throw-in':'Throw-in','corner':'Corner','indirect':'Indirect free kick'}[sim.restartKind]||'Restart')):sim.flight?.kind==='shot'?'Shot':sim.flight?.kind==='kick'?'Long keeper kick':`${sim.teams[sim.possession].name} possession`;
  query('[data-lab="pause"]').textContent=sim.phase==='ended'?'Replay':running?'Pause':'Play';query('[data-lab="pause"]').setAttribute('aria-label',sim.phase==='ended'?'Replay test':running?'Pause simulation':'Play simulation');
  const owner=sim.players.find(p=>p.id===(inspected||sim.ball.owner));query('[data-ball-owner]').textContent=owner?`${inspected?'Player':'Ball'}: #${owner.number} ${owner.name}`:sim.flight?'Ball in flight':'Loose ball';
- const recentGoal=sim.events.findLast(e=>e.type==='goal'&&sim.time-e.second<2),latest=recentGoal||sim.events.at(-1);query('[data-current]').textContent=latest?.text||'Ready to play.';if(recentGoal&&sim.phase!=='ended')query('[data-play-state]').textContent='GOAL!';
- query('[data-shots]').textContent=sim.stats.map(s=>s.shots).join(' – ');query('[data-passes]').textContent=sim.stats.map(s=>s.completed).join(' – ');query('[data-carries]').textContent=sim.stats.map(s=>s.carries).join(' – ');
+ const recentGoal=sim.events.findLast(e=>e.type==='goal'&&sim.time-e.second<2),recentFlag=sim.events.findLast(e=>e.type==='offside'&&sim.time-e.second<3),latest=recentGoal||recentFlag||sim.events.at(-1);query('[data-current]').textContent=latest?.text||'Ready to play.';if(recentGoal&&sim.phase!=='ended')query('[data-play-state]').textContent='GOAL!';else if(recentFlag&&sim.phase!=='ended')query('[data-play-state]').textContent='Offside · Indirect free kick';
+ query('[data-shots]').textContent=sim.stats.map(s=>s.shots).join(' – ');query('[data-passes]').textContent=sim.stats.map(s=>s.completed).join(' – ');query('[data-offsides]').textContent=sim.stats.map(s=>s.offsides||0).join(' – ');query('[data-corners]').textContent=sim.stats.map(s=>s.corners||0).join(' – ');query('[data-miscontrols]').textContent=sim.stats.map(s=>s.miscontrols||0).join(' – ');query('[data-long-kicks]').textContent=sim.stats.map(s=>s.longKicks||0).join(' – ');query('[data-carries]').textContent=sim.stats.map(s=>s.carries).join(' – ');
  const total=sim.stats.reduce((n,s)=>n+s.possession,0),home=total?Math.round(sim.stats[0].possession/total*100):50;query('[data-possession]').textContent=`${home}% – ${100-home}%`;
  const log=query('[data-log]');if(Number(log.dataset.last)!==sim.serial){log.dataset.last=sim.serial;log.replaceChildren(...sim.events.slice(-12).reverse().map(e=>{const li=document.createElement('li');li.textContent=`${format(e.second)} · ${e.text}`;return li;}));}
  query('[data-seed]').textContent=`Seed ${sim.seed}`;if(sim.time===0||Math.floor(sim.time)!==lastAdviceSecond){lastAdviceSecond=Math.floor(sim.time);updateAdvice();}if(inspected){const p=sim.players.find(p=>p.id===inspected);query('[data-player-intent]').textContent=`Now: ${p.intent}. Energy ${Math.round(p.energy)}%.`;}
@@ -79,7 +80,7 @@ root.addEventListener('click',event=>{
  if(action==='step'){running=false;const serial=sim.serial;for(let i=0;i<200&&sim.serial===serial&&sim.phase!=='ended';i++)advance();previous=simulationSnapshot(sim);accumulator=0;}
  if(action==='sound'){sound=!sound;query('[data-lab="sound"]').textContent=sound?'Sound on':'Sound off';query('[data-lab="sound"]').setAttribute('aria-pressed',String(sound));if(sound)enableAudio();}
  if(action==='export'){
-  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.131.0',seed:sim.seed,scenario:sim.scenario,setup:{profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental ground-ball passage, not a calibrated full match.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.132.0',seed:sim.seed,scenario:sim.scenario,setup:{profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. No calibrated full match, fouls, penalties, cards, injuries or aerial duels. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  syncAudio();paint(1);
 });

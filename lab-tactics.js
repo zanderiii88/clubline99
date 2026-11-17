@@ -1,11 +1,11 @@
 // Experimental match-lab plans and fictional squad profiles; independent of careers.
 export const PRESETS={
- balanced:{label:'Balanced',passing:'mixed',tempo:'normal',width:'normal',press:'normal',freedom:'balanced',win:'hold',loss:'regroup'},
- possession:{label:'Possession',passing:'short',tempo:'patient',width:'wide',press:'normal',freedom:'balanced',win:'hold',loss:'counterpress'},
- counter:{label:'Counterattack',passing:'direct',tempo:'quick',width:'normal',press:'deep',freedom:'balanced',win:'counter',loss:'regroup'},
- press:{label:'High Press',passing:'mixed',tempo:'quick',width:'normal',press:'high',freedom:'balanced',win:'counter',loss:'counterpress'}
+ balanced:{label:'Balanced',keeper:'mixed',passing:'mixed',tempo:'normal',width:'normal',press:'normal',freedom:'balanced',win:'hold',loss:'regroup'},
+ possession:{label:'Possession',keeper:'short',passing:'short',tempo:'patient',width:'wide',press:'normal',freedom:'balanced',win:'hold',loss:'counterpress'},
+ counter:{label:'Counterattack',keeper:'long',passing:'direct',tempo:'quick',width:'normal',press:'deep',freedom:'balanced',win:'counter',loss:'regroup'},
+ press:{label:'High Press',keeper:'mixed',passing:'mixed',tempo:'quick',width:'normal',press:'high',freedom:'balanced',win:'counter',loss:'counterpress'}
 };
-export const PLAN_OPTIONS={passing:{label:'Passing',values:{short:'Short',mixed:'Mixed',direct:'Direct'}},tempo:{label:'Tempo',values:{patient:'Patient',normal:'Normal',quick:'Quick'}},width:{label:'Width',values:{narrow:'Narrow',normal:'Normal',wide:'Wide'}},press:{label:'Pressing',values:{deep:'Drop deeper',normal:'Normal',high:'Press high'}},freedom:{label:'Freedom',values:{disciplined:'Hold shape',balanced:'Balanced',free:'More freedom'}},win:{label:'After winning it',values:{hold:'Keep possession',counter:'Counter quickly'}},loss:{label:'After losing it',values:{regroup:'Regroup',counterpress:'Counterpress'}}};
+export const PLAN_OPTIONS={keeper:{label:'Goalkeeper distribution',values:{mixed:'Vary · favour long',short:'Play short',long:'Kick long'}},passing:{label:'Passing',values:{short:'Short',mixed:'Mixed',direct:'Direct'}},tempo:{label:'Tempo',values:{patient:'Patient',normal:'Normal',quick:'Quick'}},width:{label:'Width',values:{narrow:'Narrow',normal:'Normal',wide:'Wide'}},press:{label:'Pressing',values:{deep:'Drop deeper',normal:'Normal',high:'Press high'}},freedom:{label:'Freedom',values:{disciplined:'Hold shape',balanced:'Balanced',free:'More freedom'}},win:{label:'After winning it',values:{hold:'Keep possession',counter:'Counter quickly'}},loss:{label:'After losing it',values:{regroup:'Regroup',counterpress:'Counterpress'}}};
 export const INSTRUCTIONS={auto:'Follow team plan',hold:'Hold position',support:'Offer support',roam:'Roam into space',forward:'Run beyond',overlap:'Overlap'};
 export const STRENGTHS={elite:'Top-flight contender',standard:'Mid-level side',lower:'Lower-division side'};
 const QUALITY={elite:10,standard:0,lower:-10};

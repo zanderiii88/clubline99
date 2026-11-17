@@ -1,8 +1,22 @@
 # Clubline 99 development priorities
 
-Updated 17 November 2026, after v1.131.0.
+Updated 17 November 2026, after v1.132.0.
 
 ## Current state
+v1.132 adds the match foundations pass: long keeper distribution, distinct support angles, teammate target separation, ability-driven first touches, release-time offside on received balls, indirect free kicks after flags, throw-ins, corners and goal kicks with the 1998 penalty-area exit restriction. Five direct starting tests are available in the lab. This is prepared experimental work, not public-release preparation. Normal career simulation is unchanged.
+
+## Agreed match-engine sequence
+1. Test v1.132 on phones: support angles, reduced bunching, first touch, readable long kicks, offside flags, restarts and continued play. Continue chance, pass reception and score-rate calibration. A 30-passage equal-tier sample is 8 Blue wins, 7 Red wins, 15 draws; this does not establish side symmetry or full-match realism. Dedicated identical-squad mirror testing remains outstanding.
+2. Match rules and player consequences: fouls and advantage; direct free kicks, penalty-area appeals, awarded/rejected penalties and resulting kicks; bookings, dismissals, substitutions, knocks and forced-off injuries. Injury risk follows the challenge/contact and player condition, not the colour of the card; non-contact injuries also possible. Important injuries to the managed side must allow an intervention. Research 1998–99 competition details before integrating these.
+3. Match presentation and time: one incremental underlying simulation/event ledger; Key Highlights (mobile default), Extended Highlights and Full Match. Readable action with modest playback speed; fewer passages for quicker completion. Between passages, advance the clock and update compact stats, text incidents and evidence-based tactical observations. Pause for tactics and important decisions; changes affect only future simulation. Do not precompute an unchangeable final result or invent stats to hit targets. Validate viewing-mode/seed equivalence and intervention behaviour.
+4. Better defensive organisation, shot selection by angle/pressure/keeper position, passes/first touches, transition roles, tiredness and aerial duels. Validate scoring/chance frequencies and strength gaps across longer sessions; three-minute results cannot be extrapolated into 90-minute or season realism.
+5. Referee judgement and media: occasional genuinely marginal offside decisions, with possible errors and no reversal. Build interviews from actual consequential match incidents: disagree, agree, did not see, move on. Responses can affect squad/supporter sentiment, disciplinary attention and manager rivalries. Do not invent controversies or imply the manager has perfect knowledge. Existing career media tools are separate from this future spatial-match link.
+
+## Permanent historical constraint
+No VAR in CLUBLINE 99, in any season or mode: no review flow, video-check event, VAR text, replay adjudication or later overturning of decisions. The referee and assistants make the on-field decisions. Visual highlights can show play; they never become an officiating review.
+
+## Earlier prepared builds
+
 v1.131 adds separate fictional strength tiers for both lab XIs and handling/reflex-based goalkeeping. Across 120 ten-minute mismatch passages: stronger side 112 wins, 6 draws, 2 losses; shots 1725–382, goals 391–45. Equal-tier controls showed Blue 29 wins, Red 12, 19 draws over 60 passages. Prioritise equal-side symmetry, realistic chance/scoring rates and pass reception before historical squad mapping or career integration. These are prototype passages, not full-match or season calibration. Prepared for testing only, not public-release preparation.
 
 v1.130 fixes a reproduced loose-ball stall at 2:30, moves optional audio out of startup and adds dribbling decisions based on attributes and space. Confirm the user-reported frozen position against the pending screenshot and assess phone opening/performance. This remains experimental lab work, not public-release preparation.

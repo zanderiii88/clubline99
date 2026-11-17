@@ -1,4 +1,4 @@
-CLUBLINE 99 v1.131.0 - optional cleanup of an existing upload
+CLUBLINE 99 v1.132.0 - optional cleanup of an existing upload
 
 ZIP extraction does not remove old files. The exact relative paths below are obsolete development/docs or the previously withdrawn synthetic audio. Remove only these paths if present. Current game code, data, recorded audio, credits and source/licence material are not on this list. Nothing has been deleted from your live site.
 
@@ -6,6 +6,7 @@ AUDIO-REVIEW.md
 CLUBS-1.91-NOTES.md
 Clubline-99-Match-Simulation-Research-2026-11-17.md
 MATCH-1.94-NOTES.md
+MATCH-LAB-DESIGN.md
 MATCH-VIEW-PLAN.md
 MUSIC-UPDATE-INSTRUCTIONS.md
 RELEASE-1.100.0-NOTES.md
@@ -39,6 +40,7 @@ RELEASE-1.127.0-NOTES.md
 RELEASE-1.128.0-NOTES.md
 RELEASE-1.129.0-NOTES.md
 RELEASE-1.130.0-NOTES.md
+RELEASE-1.131.0-NOTES.md
 RELEASE-1.49-NOTES.md
 RELEASE-1.50-NOTES.md
 RELEASE-1.51-NOTES.md
@@ -107,6 +109,7 @@ review-tests/check-fa-cup.mjs
 review-tests/check-firstweek-patch.mjs
 review-tests/check-generated-identities.mjs
 review-tests/check-integrated-planning.mjs
+review-tests/check-keeper-distribution.mjs
 review-tests/check-lab-tactics.mjs
 review-tests/check-league-news-app.mjs
 review-tests/check-league-news.mjs
@@ -128,6 +131,7 @@ review-tests/check-release-173.mjs
 review-tests/check-release-174.mjs
 review-tests/check-release-195.mjs
 review-tests/check-rivalry-history.mjs
+review-tests/check-rules-support.mjs
 review-tests/check-scottish-surroundings.mjs
 review-tests/check-season-evidence.mjs
 review-tests/check-season-plausibility.mjs
@@ -223,8 +227,10 @@ review/integrated-planning-1.114.json
 review/integrated-planning-1.115.json
 review/integrated-stadium-1.118.json
 review/integrated-stories-1.117.json
+review/keeper-distribution-1.132.json
 review/lab-tactics-1.129.json
 review/lab-tactics-1.130.json
+review/lab-tactics-1.132.json
 review/league-cup-app.json
 review/league-cup-assets.json
 review/league-cup-logic.json
@@ -248,13 +254,16 @@ review/navigation-checks.json
 review/possession-sim-1.128.json
 review/possession-sim-1.129.json
 review/possession-sim-1.130.json
+review/possession-sim-1.132.json
 review/post-media-validation-1.98.json
 review/rebrand-browser-checks.json
 review/rebrand-source-checks.json
 review/recovery-dribbling-1.130.json
+review/recovery-dribbling-1.132.json
 review/release-1.58-summary.json
 review/release-172.json
 review/rivalry-history-1.105.json
+review/rules-support-1.132.json
 review/scene-mapping.json
 review/scottish-surroundings-1.119-layouts.json
 review/scottish-surroundings-1.120-layouts.json
@@ -314,6 +323,7 @@ review/source-integrity-1.128.json
 review/source-integrity-1.129.json
 review/source-integrity-1.130.json
 review/source-integrity-1.131.json
+review/source-integrity-1.132.json
 review/source-integrity-1.96.json
 review/source-integrity-1.97.json
 review/source-integrity-1.98.json
@@ -333,6 +343,7 @@ review/tactical-review-1.102.json
 review/tactics-browser-1.129.json
 review/tactics-export-1.129.json
 review/team-strength-1.131.json
+review/team-strength-1.132.json
 review/three-division-app.json
 review/three-division-assets.json
 review/three-division-logic.json
@@ -344,6 +355,7 @@ review/uefa-cup-engine.json
 review/uefa-roster-validation.json
 review/upload-packaging-1.129.json
 review/upload-packaging-1.130.json
+review/upload-packaging-1.131.json
 review/usability-1.126.json
 review/varied-careers-1.116-final-C01.json
 review/varied-careers-1.116-final-C45.json
@@ -360,7 +372,9 @@ tools/build-wembley.mjs
 tools/curate-upload-129.py
 tools/curate-upload-130.py
 tools/curate-upload-131.py
+tools/curate-upload-132.py
 tools/package-129.py
 tools/package-130.py
 tools/package-131.py
+tools/package-132.py
 tools/source-checks.mjs

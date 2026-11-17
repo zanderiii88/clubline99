@@ -1,7 +1,7 @@
-CLUBLINE 99 v1.131.0
+CLUBLINE 99 v1.132.0
 
-Use the cumulative Update over v1.94–v1.130, or Complete for all runtime files. Extract into the game root and replace matching files. Back up your career first. No fresh career required. Main menu should show v1.131.0.
+Use Update over v1.94–v1.131 or Complete for all runtime files. Back up your career, extract into the game root and replace matching files. No fresh career required. Main menu should show v1.132.0.
 
-Try Developer · Match test → Team strength. Strong v lower division selects contrasting fictional sides; selectors allow either colour to be stronger. Still experimental: scoring and side balance need calibration.
+Developer · Match test now includes long keeper kicks, support spacing, first touches, offside and basic restarts. Test controls offers direct examples. Normal career matches are unchanged.
 
-Historic notes/tests/tools are excluded from upload ZIPs. Development ZIP is for future development, not website upload. ZIP extraction does not delete old files: see UPLOAD-CLEANUP.txt. Nothing has been published automatically.
+Historic notes/tests/tools stay out of the upload. Keep Development ZIP off the website. Extraction does not delete old files; see UPLOAD-CLEANUP.txt. No automatic publication.
