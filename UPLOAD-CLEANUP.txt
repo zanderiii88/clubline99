@@ -1,4 +1,4 @@
-CLUBLINE 99 v1.129.0 - optional cleanup of an existing upload
+CLUBLINE 99 v1.131.0 - optional cleanup of an existing upload
 
 ZIP extraction does not remove old files. The exact relative paths below are obsolete development/docs or the previously withdrawn synthetic audio. Remove only these paths if present. Current game code, data, recorded audio, credits and source/licence material are not on this list. Nothing has been deleted from your live site.
 
@@ -37,6 +37,8 @@ RELEASE-1.125.0-NOTES.md
 RELEASE-1.126.0-NOTES.md
 RELEASE-1.127.0-NOTES.md
 RELEASE-1.128.0-NOTES.md
+RELEASE-1.129.0-NOTES.md
+RELEASE-1.130.0-NOTES.md
 RELEASE-1.49-NOTES.md
 RELEASE-1.50-NOTES.md
 RELEASE-1.51-NOTES.md
@@ -119,6 +121,7 @@ review-tests/check-media-evidence.mjs
 review-tests/check-payroll-consistency.mjs
 review-tests/check-possession-sim.mjs
 review-tests/check-post-media.mjs
+review-tests/check-recovery-dribbling.mjs
 review-tests/check-release-170.mjs
 review-tests/check-release-172.mjs
 review-tests/check-release-173.mjs
@@ -155,6 +158,7 @@ review-tests/check-succession.mjs
 review-tests/check-tactical-app.mjs
 review-tests/check-tactical-review.mjs
 review-tests/check-tactical-seed.mjs
+review-tests/check-team-strength.mjs
 review-tests/check-transfer-interest-app.mjs
 review-tests/check-transfer-interest.mjs
 review-tests/check-transfer-season-evidence.mjs
@@ -220,12 +224,14 @@ review/integrated-planning-1.115.json
 review/integrated-stadium-1.118.json
 review/integrated-stories-1.117.json
 review/lab-tactics-1.129.json
+review/lab-tactics-1.130.json
 review/league-cup-app.json
 review/league-cup-assets.json
 review/league-cup-logic.json
 review/league-cup-summary.json
 review/league-data-baseline.json
 review/long-career-1.104.json
+review/loose-ball-129-repro.json
 review/match-audio-app-1.123.json
 review/match-audio-app-1.125.json
 review/match-audio-app-1.126.json
@@ -241,9 +247,11 @@ review/mobile-usability.json
 review/navigation-checks.json
 review/possession-sim-1.128.json
 review/possession-sim-1.129.json
+review/possession-sim-1.130.json
 review/post-media-validation-1.98.json
 review/rebrand-browser-checks.json
 review/rebrand-source-checks.json
+review/recovery-dribbling-1.130.json
 review/release-1.58-summary.json
 review/release-172.json
 review/rivalry-history-1.105.json
@@ -304,6 +312,8 @@ review/source-integrity-1.126.json
 review/source-integrity-1.127.json
 review/source-integrity-1.128.json
 review/source-integrity-1.129.json
+review/source-integrity-1.130.json
+review/source-integrity-1.131.json
 review/source-integrity-1.96.json
 review/source-integrity-1.97.json
 review/source-integrity-1.98.json
@@ -313,6 +323,7 @@ review/stadium-access-1.120.json
 review/stadium-blueprint-1.111.json
 review/stadium-browser-1.110.json
 review/starting-managers-1.125.json
+review/startup-browser-1.130.json
 review/streamlined-season-166.json
 review/streamlined-season-167.json
 review/streamlined-season-171.json
@@ -321,6 +332,7 @@ review/syntax-checks.json
 review/tactical-review-1.102.json
 review/tactics-browser-1.129.json
 review/tactics-export-1.129.json
+review/team-strength-1.131.json
 review/three-division-app.json
 review/three-division-assets.json
 review/three-division-logic.json
@@ -331,6 +343,7 @@ review/uefa-cup-app.json
 review/uefa-cup-engine.json
 review/uefa-roster-validation.json
 review/upload-packaging-1.129.json
+review/upload-packaging-1.130.json
 review/usability-1.126.json
 review/varied-careers-1.116-final-C01.json
 review/varied-careers-1.116-final-C45.json
@@ -345,5 +358,9 @@ tools/build-recorded-audio.py
 tools/build-scottish-surroundings.mjs
 tools/build-wembley.mjs
 tools/curate-upload-129.py
+tools/curate-upload-130.py
+tools/curate-upload-131.py
 tools/package-129.py
+tools/package-130.py
+tools/package-131.py
 tools/source-checks.mjs

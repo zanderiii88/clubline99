@@ -1,9 +1,7 @@
-CLUBLINE 99 v1.129.0
+CLUBLINE 99 v1.131.0
 
-Use the Complete ZIP for the whole game, or the cumulative Update ZIP over v1.94-v1.128. Extract into the game root, replacing matching files and retaining subfolders. Keep assets and data when using the Update ZIP. Do not upload the ZIP itself as the game.
+Use the cumulative Update over v1.94–v1.130, or Complete for all runtime files. Extract into the game root and replace matching files. Back up your career first. No fresh career required. Main menu should show v1.131.0.
 
-These two upload packages now exclude old release notes, tools, tests and review files. They retain current instructions, credits/source material and every runtime dependency. The separate Development ZIP is not for website upload.
+Try Developer · Match test → Team strength. Strong v lower division selects contrasting fictional sides; selectors allow either colour to be stronger. Still experimental: scoring and side balance need calibration.
 
-Extracting a ZIP cannot delete old files already present. UPLOAD-CLEANUP.txt lists obsolete paths that may be removed from an existing copy. Keep a backup first and remove only listed paths, not the whole game folder.
-
-After you choose to upload/publish, use Check for Updates and Load update, then reopen. Main menu: v1.129.0. Choose Developer · Match test to try tactics. Existing careers need no restart. No live publication or cleanup has been performed automatically.
+Historic notes/tests/tools are excluded from upload ZIPs. Development ZIP is for future development, not website upload. ZIP extraction does not delete old files: see UPLOAD-CLEANUP.txt. Nothing has been published automatically.

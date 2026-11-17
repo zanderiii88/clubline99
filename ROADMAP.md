@@ -1,8 +1,12 @@
 # Clubline 99 development priorities
 
-Updated 17 November 2026, after v1.129.0.
+Updated 17 November 2026, after v1.131.0.
 
 ## Current state
+v1.131 adds separate fictional strength tiers for both lab XIs and handling/reflex-based goalkeeping. Across 120 ten-minute mismatch passages: stronger side 112 wins, 6 draws, 2 losses; shots 1725–382, goals 391–45. Equal-tier controls showed Blue 29 wins, Red 12, 19 draws over 60 passages. Prioritise equal-side symmetry, realistic chance/scoring rates and pass reception before historical squad mapping or career integration. These are prototype passages, not full-match or season calibration. Prepared for testing only, not public-release preparation.
+
+v1.130 fixes a reproduced loose-ball stall at 2:30, moves optional audio out of startup and adds dribbling decisions based on attributes and space. Confirm the user-reported frozen position against the pending screenshot and assess phone opening/performance. This remains experimental lab work, not public-release preparation.
+
 v1.129 extends the isolated match lab with four editable plans, attribute-based suitability, fictional squad profiles, individual movement instructions and more flexible support/transition movement. Review these on a phone before further rule/season integration. Upload archives omit historic notes/tests/tools; a separate Development archive retains them. This is still experimental work, not public-release preparation.
 
 v1.128 adds the isolated Developer · Match test shortcut and a deterministic three-minute possession/spatial prototype. The next match-work priority is user feedback on movement, ball readability and mobile performance, followed by possession/pass/shot tuning and missing rules. The normal career engine is unchanged. This is an experimental prepared build, not public-release preparation.
