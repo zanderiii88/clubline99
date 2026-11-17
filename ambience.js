@@ -17,10 +17,15 @@ export function ambienceForGame({view,career,match,panelOpen=false,section,sub,t
  if(['finances','inbox','club','organiser'].includes(section))return 'office';
  return 'quiet';
 }
+// Ambient details sit underneath the continuous floor; match reactions retain their FX control.
+export function textureMix(name){
+ const gain=name.startsWith('birds-')?.055:name==='phone'?.045:name.startsWith('whistle')?.06:name==='kick'||name==='weights'?.08:.12;
+ return {gain,attack:.9,release:1.1};
+}
 export function createAmbience({catalogue=AMBIENCE_CATALOGUE,makeAudio=()=>new Audio(),random=Math.random,later=setTimeout,cancel=clearTimeout,asset=name=>`assets/audio/recorded/${name}.mp3?v=1.125.0`}={}){
  const bed=makeAudio(),texture=makeAudio(),cue=makeAudio(),floor=makeAudio();bed.loop=true;floor.loop=true;
  for(const player of [bed,texture,cue,floor]){player.preload='none';player.volume=0;}
- let floorTimer=null,floorWanted=false;
+ let floorTimer=null,floorWanted=false,textureTimer=null,textureEpoch=0,textureEnvelope=0;
  let mode='off',unlocked=false,hidden=false,muted=false,volume=.25,effectsMuted=false,effectsVolume=.65,timer=null,fadeTimer=null,cueTimer=null,last='',playing=false,bedWanted=false,epoch=0,bedFailed=false,lastCue=null,cuePlaying=false,cueEpoch=0;
  const seen=new Set();
  const available=!!catalogue.floor||!!catalogue.bed||Object.values(catalogue).some(v=>Array.isArray(v)&&v.length);
@@ -28,7 +33,17 @@ export function createAmbience({catalogue=AMBIENCE_CATALOGUE,makeAudio=()=>new A
  const cueAllowed=()=>available&&unlocked&&!hidden&&!effectsMuted&&effectsVolume>0;
  const events=()=>Array.isArray(catalogue[mode])?catalogue[mode]:[];
  const clear=()=>{if(timer!==null)cancel(timer);timer=null;};
- function stopTexture(){clear();playing=false;texture.pause();}
+ function stopTexture(soft=false){
+  clear();const token=++textureEpoch;if(textureTimer!==null)cancel(textureTimer);textureTimer=null;playing=false;
+  if(!soft||texture.paused){texture.pause();texture.volume=0;return;}
+  const start=texture.volume;let step=0;const tick=()=>{if(token!==textureEpoch)return;texture.volume=start*(1-++step/5);if(step<5)textureTimer=later(tick,100);else{textureTimer=null;texture.pause();texture.volume=0;}};textureTimer=later(tick,100);
+ }
+ function applyTextureVolume(){if(playing)texture.volume=Math.max(0,Math.min(1,volume*textureMix(last).gain*textureEnvelope));}
+ function envelopeTexture(token){
+  let elapsed=0;const tick=()=>{if(token!==textureEpoch||!playing)return;const mix=textureMix(last),time=Number.isFinite(texture.currentTime)?texture.currentTime:elapsed,duration=Number.isFinite(texture.duration)&&texture.duration>0?texture.duration:14;
+   textureEnvelope=Math.min(1,Math.max(0,time/mix.attack),Math.max(0,(duration-time)/mix.release));applyTextureVolume();elapsed+=.1;textureTimer=later(tick,100);
+  };tick();
+ }
  function stopCue(){++cueEpoch;if(cueTimer!==null)cancel(cueTimer);cueTimer=null;cuePlaying=false;cue.pause();if(bedWanted&&ambientAllowed()&&mode==='match')fadeBed(volume*.32,1);}
  function fadeBed(target,seconds){
   if(fadeTimer!==null)cancel(fadeTimer);fadeTimer=null;
@@ -40,12 +55,12 @@ export function createAmbience({catalogue=AMBIENCE_CATALOGUE,makeAudio=()=>new A
   const min=first?12:mode==='office'?35:25,max=first?28:mode==='office'?90:65;
   timer=later(playTexture,Math.round((min+random()*(max-min))*1000));
  }
- function finished(){if(!playing)return;playing=false;texture.pause();schedule();}
+ function finished(){if(!playing)return;stopTexture();schedule();}
  function playTexture(){
   timer=null;if(!ambientAllowed()||!events().length)return;
   const choices=events().filter(n=>n!==last),pool=choices.length?choices:events();last=pool[Math.min(pool.length-1,Math.floor(random()*pool.length))];
-  const token=epoch;texture.pause();texture.src=asset(last);texture.volume=volume*.20;playing=true;timer=later(finished,14000);
-  try{Promise.resolve(texture.play()).then(()=>{if(!playing||!ambientAllowed())texture.pause();},()=>{if(token===epoch)finished();});}catch{finished();}
+  const token=++textureEpoch;texture.pause();texture.src=asset(last);texture.volume=0;textureEnvelope=0;playing=true;envelopeTexture(token);timer=later(finished,14000);
+  try{Promise.resolve(texture.play()).then(()=>{if(token===textureEpoch&&(!playing||!ambientAllowed()))texture.pause();},()=>{if(token===textureEpoch)finished();});}catch{finished();}
  }
  function syncFloor(){
   const wanted=ambientAllowed()&&!['off','match','paused'].includes(mode)&&!!catalogue.floor;
@@ -70,12 +85,12 @@ export function createAmbience({catalogue=AMBIENCE_CATALOGUE,makeAudio=()=>new A
  const cueEnded=()=>{stopCue();schedule();};cue.addEventListener('ended',cueEnded);cue.addEventListener('error',cueEnded);
  bed.addEventListener('error',()=>{bedFailed=true;bedWanted=false;bed.pause();});
  return {
-  setContext(next){if(!['off','quiet','training','gym','changing','office','prematch','match','interval','paused'].includes(next))next='off';if(next===mode)return;mode=next;++epoch;stopTexture();stopCue();syncBed();schedule(true);},
+  setContext(next){if(!['off','quiet','training','gym','changing','office','prematch','match','interval','paused'].includes(next))next='off';if(next===mode)return;mode=next;++epoch;stopTexture(!['off','paused'].includes(next));stopCue();syncBed();schedule(true);},
   configure(settings={}){
    const previous=ambientAllowed(),oldVolume=volume,oldHidden=hidden;muted=settings.muted===true;volume=Number.isFinite(settings.volume)?Math.max(0,Math.min(1,settings.volume)):.25;hidden=settings.hidden===true;
    effectsMuted=settings.effectsMuted===true;effectsVolume=Number.isFinite(settings.effectsVolume)?Math.max(0,Math.min(1,settings.effectsVolume)):.65;
    if(hidden){stop();return;}
-   if(!ambientAllowed()){syncFloor();stopTexture();if(bedWanted){bedWanted=false;fadeBed(0,.1);}}else{texture.volume=volume*.20;if(!previous||oldVolume!==volume||oldHidden)syncBed();if(!previous)schedule(true);}
+   if(!ambientAllowed()){syncFloor();stopTexture();if(bedWanted){bedWanted=false;fadeBed(0,.1);}}else{applyTextureVolume();if(!previous||oldVolume!==volume||oldHidden)syncBed();if(!previous)schedule(true);}
    if(!cueAllowed()&&cuePlaying)stopCue();else if(cuePlaying)cue.volume=Math.max(0,Math.min(1,effectsVolume*(lastCue?.gain||0)));
   },
   unlock(){const was=unlocked;unlocked=true;bedFailed=false;if(!was){syncBed();schedule(true);}else if(ambientAllowed()&&(mode==='match'&&!bedWanted||mode!=='off'&&mode!=='match'&&!floorWanted))syncBed();},

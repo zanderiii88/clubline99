@@ -1,11 +1,17 @@
 # Clubline 99 development priorities
 
-Updated 16 November 2026, after v1.125.0.
+Updated 17 November 2026, after v1.128.0.
 
 ## Current state
+v1.128 adds the isolated Developer · Match test shortcut and a deterministic three-minute possession/spatial prototype. The next match-work priority is user feedback on movement, ball readability and mobile performance, followed by possession/pass/shot tuning and missing rules. The normal career engine is unchanged. This is an experimental prepared build, not public-release preparation.
+
+v1.127 brings the stadium arrows into the preview frame following the supplied mobile sketch: roof above, stand left/right and material below. The larger preview and folded section map fit at 320px and 390px browser viewport widths. Physical phone/PWA interaction remains to be confirmed. This is a prepared build; publication is not automatic.
+
+v1.126 refines the uploaded v1.125 checkpoint: multi-section stadium arrows, longer new structural quotes, gentler ambient details, requested-only calendar policies, quiet advancement and a true Stop action that clears the target. Existing paid projects retain their opening dates. Physical-device listening and narrow-screen checks remain outstanding. The build is prepared for review, not published.
+
 v1.125 adds a continuous light recorded traffic floor, UI clicks, three date-simulation policies with recaps, the compact section-first stadium builder, 40 historical starting managers under the existing names toggle, and named passages during matches. Bounded actual-handler journeys and a desktop browser run cover the new flows. Physical-phone listening and narrow-screen interaction still need feedback. Starting-manager research remains to be extended to lower English and European clubs.
 
-v1.124 unifies four-week cash forecasts across the full finance screen, Streamlined budget and transfer previews. It distinguishes the four-payroll allowance from the full operating forecast and shows weeks of regular bills covered. Two additional Scottish careers (83 managed matches, 27 save/backup checkpoints) and 20 controlled five-division transitions extend the reliability evidence; rates remain unchanged. Prepared builds are ahead of the user-confirmed v1.114 live deployment.
+v1.124 unifies four-week cash forecasts across the full finance screen, Streamlined budget and transfer previews. It distinguishes the four-payroll allowance from the full operating forecast and shows weeks of regular bills covered. Two additional Scottish careers (83 managed matches, 27 save/backup checkpoints) and 20 controlled five-division transitions extend the reliability evidence; rates remain unchanged. The user subsequently confirmed uploading v1.125 as the checkpoint.
 
 v1.123 integrates 31 edited clips from 22 approved recorded sources. Background sounds follow the current screen; goals, saves and match whistles follow newly displayed events. Both-mode real-engine event tests and desktop controls/training navigation are covered. Next audio work is in-game listening on phones and mix refinement, not a return to the rejected synthesized palette.
 
@@ -22,12 +28,12 @@ Implemented: manager/media responses and follow-ups, personal rivalry context, h
 v1.116 exercises three careers over two seasons each with optional transfers, loans, renewals and youth decisions, alongside fee-ledger and save checks. This is bounded interaction/accounting evidence; extreme spending, all clubs and all promotion/relegation paths remain outside the tested scope. Desktop browser checks confirm loan payroll consistency and repaired fictional identities. v1.115 retains the construction-to-match browser journey; two separately paid stadium phases remain verified in both modes at code level.
 
 ## Next larger batches
-1. Match presentation and balance: prototype an event-linked top-down shirt-and-ball view; first retain the new named passages. Calibrate managed and background scores across many seeds. The v1.125 background-score diagnostic finds Premier scoring somewhat high; it does not establish full historical realism. See MATCH-VIEW-PLAN.md.
+1. Match presentation and balance: review and improve the v1.128 isolated spatial prototype before integration; retain the existing career engine and its named passages until the new model is ready. Calibrate managed and background scores across many seeds. The v1.125 background-score diagnostic finds Premier scoring somewhat high; it does not establish full historical realism. See MATCH-VIEW-PLAN.md.
 2. Extend browser coverage to the full In-depth journey and more club/site layouts. Two separately paid phases are now covered in the Streamlined browser journey; physical Android and real offline upgrades remain outstanding.
 3. Extend career balance coverage to more divisions, aggressive spending and promotion/relegation paths. Preserve the new mixed-choice career checks and avoid changing rates solely to fit one strategy.
 4. Expand the new recorded Season stories with further distinct achievements and longer-running manager narratives, retaining explicit source context and optional/no-comment press choices.
 5. Further stadium-detail polish and broader visual coverage, retaining site/capacity/booking safeguards and separate confirmation of each paid phase.
-6. Audio listening pass: assess the v1.123 recorded excerpts and mix on real phones and through full matches. Tune levels, loop seam, intervals and screen transitions from feedback. Preserve source credits, event-triggered reactions, no replay on reload, no reaction queues in fast simulation, and the withdrawn synthesized-palette block.
+6. Audio listening pass: assess the v1.123 recorded excerpts and mix on real phones and through full matches. Tune levels, loop seam, intervals and screen transitions from feedback. Retain a default intro theme, followed by quieter ambient, atmospheric main-game music/sound because prominent tracks distract. Preserve source credits, event-triggered reactions, no replay on reload, no reaction queues in fast simulation, and the withdrawn synthesized-palette block.
 7. Pending public-release checkpoint: review names, branding, databases, artwork/music and other asset/code licences using current guidance. See RELEASE-PLANNING.md. This is not yet a release candidate or public-release preparation milestone.
 
 ## Release cadence

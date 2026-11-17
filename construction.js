@@ -11,7 +11,11 @@ export function constructionQuote(career,club,draft){
  const cost=changed.reduce((n,s)=>n+changeCost(career.stadium.sections[s.id],draft.sections[s.id]),0);
  const structural=changed.some(s=>career.stadium.sections[s.id].stand!==draft.sections[s.id].stand),roof=changed.some(s=>career.stadium.sections[s.id].roof!==draft.sections[s.id].roof),rear=changed.some(s=>career.stadium.sections[s.id].rear!==draft.sections[s.id].rear);
  const tiers=Math.max(0,...changed.map(s=>STANDS[draft.sections[s.id].stand].tiers.length));
- const days=changed.length?Math.min(120,(structural?28+tiers*7:roof?21:rear?18:7)+Math.floor((changed.length-1)/4)*3):0;
+ // Game estimates: structural rebuilding spans months; smaller alterations are shorter.
+ const standingOnly=changed.every(s=>['empty','grass','terrace3','terrace5','bleacher3','bleacher5'].includes(draft.sections[s.id].stand)&&STANDS[career.stadium.sections[s.id].stand].tiers.length<=1);
+ const base=structural?(standingOnly?42:tiers>=3?240:tiers>=2?180:98):rear?70:roof?42:14;
+ const scope=structural?Math.ceil(Math.max(0,changed.length-1)*3.5):Math.floor(Math.max(0,changed.length-1)/4)*7;
+ const days=changed.length?base+scope:0;
  const opens=daysAfter(career.date,days),affected=(career.schedule||[]).flatMap(r=>r.fixtures.map(f=>({...f,date:r.date}))).filter(f=>f.home===career.clubId&&!f.neutral&&f.homeGoals==null&&f.date>=career.date&&f.date<opens);
  const during=usableCapacity(career,club,changed.map(s=>s.id));
  const affectedBookings=(career.clubLife?.bookings||[]).filter(b=>['accepted','completed'].includes(b.status)&&bookingWindow(b).start<opens&&bookingWindow(b).end>=career.date);

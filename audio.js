@@ -1,5 +1,5 @@
-import {createAmbience} from './ambience.js?v=1.125.0';
-import {createMatchSoundBridge} from './match-audio.js?v=1.125.0';
+import {createAmbience} from './ambience.js?v=1.126.0';
+import {createMatchSoundBridge} from './match-audio.js?v=1.126.0';
 import {SOUND_CREDITS} from './audio-catalogue.js?v=1.125.0';
 // Audio preferences belong to this installation, independently of careers or releases.
 const KEY='clubline-audio-settings';

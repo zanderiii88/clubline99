@@ -1,4 +1,4 @@
-import {validStadiumBlueprint} from './stadium-blueprint.js?v=1.120.0';
+import {validStadiumBlueprint} from './stadium-blueprint.js?v=1.126.0';
 import {validStadiumHistory} from './stadium-history.js?v=1.109.0';
 import {validTacticalRecord} from './tactical-review.js?v=1.102.0';
 import {validMedia} from './manager-media.js?v=1.106.0';

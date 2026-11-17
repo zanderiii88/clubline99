@@ -944,3 +944,31 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 /* Override legacy full-height designer framing inside the compact builder. */
 .simple-stadium .designer-preview.interactive{height:240px!important;max-height:240px!important;aspect-ratio:auto!important;overflow:hidden}.simple-stadium .designer-preview.interactive svg{height:100%!important;max-height:100%;width:100%}
 @media(max-width:650px){.simple-stadium .designer-preview.interactive{height:150px!important;max-height:150px!important}.quick-stadium-plan{grid-template-rows:repeat(6,25px)}}
+
+.stadium-cycle-controls{display:grid;gap:10px;margin:12px 0}.stadium-cycle{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;gap:8px;align-items:stretch}.stadium-cycle>div{text-align:center;display:flex;flex-direction:column;justify-content:center;gap:2px}.stadium-cycle span{font-size:13px}.stadium-cycle small{opacity:.7;font-size:11px}.stadium-cycle .cycle-arrow{font-size:30px;line-height:1;padding:8px;min-height:58px}.quick-clear-selection{display:block;margin:6px auto}.simple-stadium-options .stadium-cycle-controls{max-width:100%}@media(max-width:650px){.stadium-cycle-controls{gap:6px}.stadium-cycle{grid-template-columns:44px minmax(0,1fr) 44px}.stadium-cycle .cycle-arrow{min-height:48px}.simple-stadium .designer-preview.interactive{height:130px!important;max-height:130px!important}}
+
+.calendar-run-screen{min-height:100dvh;display:grid;place-items:center;padding:24px;background:#101e2b;color:#ecf1f4}.calendar-run-screen article{max-width:520px;width:100%;padding:32px;text-align:center}.calendar-run-screen progress{width:100%;height:12px;margin:18px 0}.calendar-run-screen .btn{min-width:140px;margin-top:12px}.calendar-advance-overlay .modal{max-width:560px;max-height:85dvh;overflow:auto}.simulation-league-place{padding:10px;background:#263e4b;border-radius:6px}
+
+/* Keep the compact builder controls with the preview at every viewport size. */
+.stadium-preview-controls{gap:0;margin:0;border:1px solid #536977;border-radius:5px;overflow:hidden;background:#102c4d}
+.stadium-preview-controls .stadium-cycle{gap:4px;grid-template-columns:48px minmax(0,1fr) 48px;min-height:48px;padding:3px}
+.stadium-preview-controls .stadium-choice{display:flex;flex-direction:row;align-items:center;justify-content:center;flex-wrap:wrap;gap:3px 7px;text-align:center;line-height:1.2;min-width:0}
+.stadium-preview-controls .stadium-choice b{font-size:14px}.stadium-preview-controls .stadium-choice span{font-size:13px}.stadium-preview-controls .stadium-choice small{font-size:11px;opacity:.7}
+.stadium-preview-controls .cycle-arrow{min-height:44px;min-width:44px;padding:0;font-size:30px;line-height:1;touch-action:manipulation}
+.stadium-cycle-stage{position:relative;min-width:0}
+.stadium-cycle-stage>.cycle-arrow{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:56px;z-index:2;background:rgba(9,35,62,.88);border-color:#a5bdce}
+.stadium-cycle-stage>.cycle-arrow[data-direction="-1"]{left:4px}.stadium-cycle-stage>.cycle-arrow[data-direction="1"]{right:4px}
+.simple-stadium .stadium-cycle-stage .designer-preview.interactive{height:280px!important;max-height:280px!important;margin:0;border:0}
+.stadium-stand-caption{min-height:32px;display:grid;place-items:center;border-bottom:1px solid #536977;padding:4px 8px}
+.stadium-cycle-roof{border-bottom:1px solid #536977}
+.simple-section-picker{margin-top:8px;border:1px solid #536977;border-radius:4px;padding:0 8px}.simple-section-picker>summary{cursor:pointer;min-height:44px;padding:8px 0;line-height:1.3}.simple-section-picker>summary span{display:block;font-size:12px;opacity:.8;margin-left:15px}.simple-section-picker .quick-stand-sides{margin-bottom:8px}.simple-stadium-options{min-width:0}
+@media(max-width:650px){
+ .simple-stadium{gap:4px}.simple-stadium .stadium-cycle-stage .designer-preview.interactive{height:190px!important;max-height:190px!important}
+ .stadium-preview-controls .stadium-cycle{grid-template-columns:44px minmax(0,1fr) 44px;padding:2px;min-height:48px}
+ .stadium-preview-controls .stadium-choice{gap:2px 5px}.stadium-preview-controls .stadium-choice b{font-size:13px}.stadium-preview-controls .stadium-choice span{font-size:12px}
+ .stadium-preview-controls .stadium-choice small{font-size:10px}.stadium-stand-caption{min-height:30px;padding:3px 4px}
+ .simple-section-picker{margin-top:6px}.simple-build-totals{gap:4px;margin:8px 0}.simple-stadium-more{margin-top:10px}
+}
+
+.cover-menu .lab-shortcut{border-color:#b5b56a;text-decoration:none;text-align:center;font-size:.83rem;min-height:44px;}
+.cover-menu .lab-shortcut{white-space:normal;line-height:1.15;display:flex;align-items:center;justify-content:center;padding:6px 8px;min-width:0;}
