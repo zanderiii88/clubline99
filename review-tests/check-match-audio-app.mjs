@@ -14,4 +14,4 @@ for(const [mode,seed] of [['streamlined',1231],['in-depth',1232]]){
  g.newCareer();g.click('close-owner-welcome');const next=g.nextFixture();g.get().career.date=next.date;g.startScheduledMatch(next);g.auto();const quick=createMatchSoundBridge();quick.observe({view:'career',...g.get()});g.beginMatch('simulate');assert.equal(quick.observe({view:'career',...g.get()}).cues.length,0);
  console.log('PASS real match sound events',mode);
 }
-assert(goals>0&&saves>0);const report={passed:true,watchedMatches:matches,goalCues:goals,saveCues:saves,instantSimulations:2,scope:'Actual match engine events fed to the sound bridge; no browser listening claim.'};fs.writeFileSync(new URL('../review/match-audio-app-1.125.json',import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report));
+assert(goals>0&&saves>0);const report={passed:true,watchedMatches:matches,goalCues:goals,saveCues:saves,instantSimulations:2,scope:'Actual match engine events fed to the sound bridge; no browser listening claim.'};fs.writeFileSync(new URL('../review/match-audio-app-1.126.json',import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report));

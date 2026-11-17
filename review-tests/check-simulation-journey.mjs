@@ -16,4 +16,4 @@ for(const mode of ['streamlined','in-depth']){
  g.checkpointSave();assert(g.load());g.parse(g.backup());results.push({mode,matches:g.get().career.reports.length,datesReached:true,keyStopAndDelegate:true,saveReload:true});
  console.log('PASS journey',JSON.stringify(results.at(-1)));
 }
-fs.writeFileSync(new URL('../review/simulation-journey-1.125.json',import.meta.url),JSON.stringify({passed:true,scope:'Actual game handlers in seeded Node VM, two-month calendar runs; no physical-device claim',results},null,2));
+fs.writeFileSync(new URL('../review/simulation-journey-1.126.json',import.meta.url),JSON.stringify({passed:true,scope:'Actual game handlers in seeded Node VM, two-month calendar runs; no physical-device claim',results},null,2));
