@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "date": "2026-11-17",
+  "environment": "Managed desktop browser preview; fresh Streamlined Middlesbrough career",
+  "checks": [
+    "Main menu displays v1.126.0",
+    "Two section selections retained while material/colour cycles and quote updates; balance unchanged",
+    "Double-tier preview quotes six months and retains fixed-site rejection",
+    "Calendar settings absent until Advance to this date",
+    "Delegated August run shows results and current league position with key events collapsed",
+    "Longer delegated run shows dedicated progress display without live match screens",
+    "Stop ends run before December destination and recap retains twelve completed results",
+    "Ordinary Continue after Stop opens a squad-availability decision at the stopped date, without resuming destination"
+  ],
+  "limits": [
+    "Physical-device listening and narrow-screen checks outstanding",
+    "In-depth browser journey not repeated; both-mode handlers tested separately",
+    "A locator click during the active run timed out; native Stop click succeeded at next observed progress state"
+  ]
+}

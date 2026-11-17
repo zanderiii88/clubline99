@@ -1,0 +1,498 @@
+{
+  "passed": true,
+  "passages": 30,
+  "checks": [
+    "deterministic replay",
+    "JSON state restoration",
+    "speed-independent batching",
+    "bounded player motion",
+    "one goal per score update",
+    "active actors and receivers",
+    "contact-driven interception",
+    "tactical input changes actions",
+    "no events after end"
+  ],
+  "scope": "Short experimental passages, not season calibration or real-device performance",
+  "records": [
+    {
+      "seed": 99,
+      "scenario": "open",
+      "score": [
+        0,
+        1
+      ],
+      "shots": [
+        3,
+        1
+      ],
+      "passes": [
+        10,
+        12
+      ]
+    },
+    {
+      "seed": 100,
+      "scenario": "open",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        3
+      ],
+      "passes": [
+        5,
+        2
+      ]
+    },
+    {
+      "seed": 101,
+      "scenario": "open",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        1,
+        1
+      ],
+      "passes": [
+        5,
+        8
+      ]
+    },
+    {
+      "seed": 102,
+      "scenario": "open",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        2,
+        1
+      ],
+      "passes": [
+        9,
+        6
+      ]
+    },
+    {
+      "seed": 103,
+      "scenario": "open",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        1,
+        3
+      ],
+      "passes": [
+        9,
+        11
+      ]
+    },
+    {
+      "seed": 104,
+      "scenario": "open",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        2,
+        1
+      ],
+      "passes": [
+        8,
+        8
+      ]
+    },
+    {
+      "seed": 105,
+      "scenario": "open",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        0
+      ],
+      "passes": [
+        6,
+        9
+      ]
+    },
+    {
+      "seed": 106,
+      "scenario": "open",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        0
+      ],
+      "passes": [
+        0,
+        2
+      ]
+    },
+    {
+      "seed": 107,
+      "scenario": "open",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        1,
+        2
+      ],
+      "passes": [
+        9,
+        8
+      ]
+    },
+    {
+      "seed": 108,
+      "scenario": "open",
+      "score": [
+        1,
+        1
+      ],
+      "shots": [
+        1,
+        5
+      ],
+      "passes": [
+        10,
+        2
+      ]
+    },
+    {
+      "seed": 99,
+      "scenario": "counter",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        1,
+        0
+      ],
+      "passes": [
+        5,
+        0
+      ]
+    },
+    {
+      "seed": 100,
+      "scenario": "counter",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        1,
+        0
+      ],
+      "passes": [
+        8,
+        7
+      ]
+    },
+    {
+      "seed": 101,
+      "scenario": "counter",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        1
+      ],
+      "passes": [
+        1,
+        3
+      ]
+    },
+    {
+      "seed": 102,
+      "scenario": "counter",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        3,
+        3
+      ],
+      "passes": [
+        9,
+        9
+      ]
+    },
+    {
+      "seed": 103,
+      "scenario": "counter",
+      "score": [
+        1,
+        0
+      ],
+      "shots": [
+        4,
+        2
+      ],
+      "passes": [
+        11,
+        6
+      ]
+    },
+    {
+      "seed": 104,
+      "scenario": "counter",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        1,
+        2
+      ],
+      "passes": [
+        8,
+        8
+      ]
+    },
+    {
+      "seed": 105,
+      "scenario": "counter",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        1,
+        1
+      ],
+      "passes": [
+        9,
+        4
+      ]
+    },
+    {
+      "seed": 106,
+      "scenario": "counter",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        1,
+        2
+      ],
+      "passes": [
+        7,
+        13
+      ]
+    },
+    {
+      "seed": 107,
+      "scenario": "counter",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        1,
+        3
+      ],
+      "passes": [
+        6,
+        6
+      ]
+    },
+    {
+      "seed": 108,
+      "scenario": "counter",
+      "score": [
+        0,
+        1
+      ],
+      "shots": [
+        1,
+        3
+      ],
+      "passes": [
+        6,
+        6
+      ]
+    },
+    {
+      "seed": 99,
+      "scenario": "wide",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        0
+      ],
+      "passes": [
+        1,
+        0
+      ]
+    },
+    {
+      "seed": 100,
+      "scenario": "wide",
+      "score": [
+        0,
+        1
+      ],
+      "shots": [
+        2,
+        1
+      ],
+      "passes": [
+        4,
+        3
+      ]
+    },
+    {
+      "seed": 101,
+      "scenario": "wide",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        3
+      ],
+      "passes": [
+        10,
+        3
+      ]
+    },
+    {
+      "seed": 102,
+      "scenario": "wide",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        0
+      ],
+      "passes": [
+        0,
+        0
+      ]
+    },
+    {
+      "seed": 103,
+      "scenario": "wide",
+      "score": [
+        1,
+        0
+      ],
+      "shots": [
+        3,
+        2
+      ],
+      "passes": [
+        9,
+        9
+      ]
+    },
+    {
+      "seed": 104,
+      "scenario": "wide",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        0
+      ],
+      "passes": [
+        5,
+        11
+      ]
+    },
+    {
+      "seed": 105,
+      "scenario": "wide",
+      "score": [
+        1,
+        0
+      ],
+      "shots": [
+        1,
+        0
+      ],
+      "passes": [
+        7,
+        5
+      ]
+    },
+    {
+      "seed": 106,
+      "scenario": "wide",
+      "score": [
+        0,
+        1
+      ],
+      "shots": [
+        0,
+        2
+      ],
+      "passes": [
+        6,
+        7
+      ]
+    },
+    {
+      "seed": 107,
+      "scenario": "wide",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        0
+      ],
+      "passes": [
+        0,
+        1
+      ]
+    },
+    {
+      "seed": 108,
+      "scenario": "wide",
+      "score": [
+        0,
+        0
+      ],
+      "shots": [
+        0,
+        1
+      ],
+      "passes": [
+        2,
+        6
+      ]
+    }
+  ]
+}

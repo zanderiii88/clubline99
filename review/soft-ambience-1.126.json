@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "birdGain": 0.055,
+  "defaultDetailGain": 0.12,
+  "attackSeconds": 0.9,
+  "releaseSeconds": 1.1,
+  "sceneExitFadeSeconds": 0.5,
+  "scope": "Virtual audio envelope and gain checks; physical-device listening remains outstanding"
+}

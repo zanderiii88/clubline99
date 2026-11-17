@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "date": "2026-11-17",
+  "scope": "Desktop browser with same-origin 320px and 390px game iframe viewports; saved Streamlined Middlesbrough career",
+  "viewports": [
+    {
+      "width": 320,
+      "builderWidth": 276,
+      "builderScrollWidth": 276
+    },
+    {
+      "width": 390,
+      "builderWidth": 346,
+      "builderScrollWidth": 346
+    }
+  ],
+  "minimumArrowTarget": {
+    "width": 44,
+    "height": 44
+  },
+  "checks": [
+    "Roof above image; stand arrows at image sides; material below",
+    "Section map retains expanded state during multi-selection",
+    "Roof, stand and material previews update together",
+    "No preview payment; two-section quote 220000 with unchanged 8.96m cash",
+    "Separate construction review and Confirm & pay retained",
+    "Section map closed shows quote and actions with preview"
+  ],
+  "limits": [
+    "Physical Android, installed-PWA touch and narrow landscape not tested",
+    "In-depth browser journey not repeated; existing both-mode construction handler checks passed"
+  ]
+}

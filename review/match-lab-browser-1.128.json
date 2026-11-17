@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "date": "2026-11-17",
+  "scope": "Desktop browser and 320px/390px game iframe viewports",
+  "checks": [
+    "Main-menu Developer \u00b7 Match test opens directly without career setup",
+    "22 numbered shirts and tracked ball render at both phone widths",
+    "Pause holds the clock; Play resumes",
+    "Replay, scenario change, New test seed and live Blue tactic controls exercised",
+    "Next action advances while paused",
+    "8x wide-attack seed 100 test reaches 03:00, score 0-1 and Test complete",
+    "Sound switch changes state; listening quality not assessed",
+    "Top-level JSON diagnostic export downloaded and parsed: version 1.128.0, seed 99, 22 players",
+    "Menu then Continue returns to the existing Middlesbrough career at 20 Nov 1998 09:00 with balance 8963763"
+  ],
+  "widths": [
+    {
+      "viewport": 320,
+      "labWidth": 283,
+      "scrollWidth": 283,
+      "menuWidth": 318,
+      "menuScrollWidth": 318
+    },
+    {
+      "viewport": 390,
+      "labWidth": 353,
+      "scrollWidth": 353
+    }
+  ],
+  "limits": [
+    "Physical Android performance, battery and listening outstanding",
+    "Installed-PWA offline upgrade not exercised",
+    "An initial iframe download observer timed out; top-level download succeeded after attaching the download link to the document"
+  ]
+}
