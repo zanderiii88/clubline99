@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "scope": "Actual handlers in Node VM; arrow selection, quotes/completion, calendar request, target run, true Stop and saved state",
+  "summaries": [
+    {
+      "mode": "streamlined",
+      "doubleTierDays": 180,
+      "doubleTierOpens": "1999-01-30",
+      "calendarResults": 1,
+      "stopClearsTarget": true,
+      "saveReload": true
+    },
+    {
+      "mode": "in-depth",
+      "doubleTierDays": 180,
+      "doubleTierOpens": "1999-01-30",
+      "calendarResults": 2,
+      "stopClearsTarget": true,
+      "saveReload": true
+    }
+  ]
+}
