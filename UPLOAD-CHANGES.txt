@@ -1,7 +1,7 @@
-CLUBLINE 99 v1.132.0
+CLUBLINE 99 v1.141.0
 
-Use Update over v1.94–v1.131 or Complete for all runtime files. Back up your career, extract into the game root and replace matching files. No fresh career required. Main menu should show v1.132.0.
+Use Clubline-v1.131-onwards-to-v1.141-Update.zip over any v1.131–v1.140 installation. Intermediate updates are unnecessary. Keep existing assets/data. Older installations should use Complete. Extract directly beside index.html and replace matching files.
 
-Developer · Match test now includes long keeper kicks, support spacing, first touches, offside and basic restarts. Test controls offers direct examples. Normal career matches are unchanged.
+This run improves lab condition/workload, defensive spacing, ground-pass anticipation, cautious tackle choices, clean/loose tackle outcomes and contextual keeper saves. Three new lab situations support mobile testing. Normal career matches/saves remain separate. No fresh career required. No automatic publication.
 
-Historic notes/tests/tools stay out of the upload. Keep Development ZIP off the website. Extraction does not delete old files; see UPLOAD-CLEANUP.txt. No automatic publication.
+Historic release notes, tests and tools are omitted from website packages. Keep Development separately. ZIP extraction cannot delete old files; exact optional obsolete paths are in UPLOAD-CLEANUP.txt.

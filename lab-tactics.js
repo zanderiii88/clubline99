@@ -1,14 +1,16 @@
 // Experimental match-lab plans and fictional squad profiles; independent of careers.
 export const PRESETS={
- balanced:{label:'Balanced',keeper:'mixed',passing:'mixed',tempo:'normal',width:'normal',press:'normal',freedom:'balanced',win:'hold',loss:'regroup'},
- possession:{label:'Possession',keeper:'short',passing:'short',tempo:'patient',width:'wide',press:'normal',freedom:'balanced',win:'hold',loss:'counterpress'},
- counter:{label:'Counterattack',keeper:'long',passing:'direct',tempo:'quick',width:'normal',press:'deep',freedom:'balanced',win:'counter',loss:'regroup'},
- press:{label:'High Press',keeper:'mixed',passing:'mixed',tempo:'quick',width:'normal',press:'high',freedom:'balanced',win:'counter',loss:'counterpress'}
+ balanced:{label:'Balanced',fullbacks:'balanced',keeper:'mixed',passing:'mixed',tempo:'normal',width:'normal',press:'normal',freedom:'balanced',win:'hold',loss:'regroup'},
+ possession:{label:'Possession',fullbacks:'balanced',keeper:'short',passing:'short',tempo:'patient',width:'wide',press:'normal',freedom:'balanced',win:'hold',loss:'counterpress'},
+ counter:{label:'Counterattack',fullbacks:'stay',keeper:'long',passing:'direct',tempo:'quick',width:'normal',press:'deep',freedom:'balanced',win:'counter',loss:'regroup'},
+ press:{label:'High Press',fullbacks:'balanced',keeper:'mixed',passing:'mixed',tempo:'quick',width:'normal',press:'high',freedom:'balanced',win:'counter',loss:'counterpress'}
 };
-export const PLAN_OPTIONS={keeper:{label:'Goalkeeper distribution',values:{mixed:'Vary · favour long',short:'Play short',long:'Kick long'}},passing:{label:'Passing',values:{short:'Short',mixed:'Mixed',direct:'Direct'}},tempo:{label:'Tempo',values:{patient:'Patient',normal:'Normal',quick:'Quick'}},width:{label:'Width',values:{narrow:'Narrow',normal:'Normal',wide:'Wide'}},press:{label:'Pressing',values:{deep:'Drop deeper',normal:'Normal',high:'Press high'}},freedom:{label:'Freedom',values:{disciplined:'Hold shape',balanced:'Balanced',free:'More freedom'}},win:{label:'After winning it',values:{hold:'Keep possession',counter:'Counter quickly'}},loss:{label:'After losing it',values:{regroup:'Regroup',counterpress:'Counterpress'}}};
+export const PLAN_OPTIONS={fullbacks:{label:'Fullbacks',values:{stay:'Stay back',balanced:'Balanced · check cover',attack:'Overlap · accept risk'}},keeper:{label:'Goalkeeper distribution',values:{mixed:'Vary · favour long',short:'Play short',long:'Kick long'}},passing:{label:'Passing',values:{short:'Short',mixed:'Mixed',direct:'Direct'}},tempo:{label:'Tempo',values:{patient:'Patient',normal:'Normal',quick:'Quick'}},width:{label:'Width',values:{narrow:'Narrow',normal:'Normal',wide:'Wide'}},press:{label:'Pressing',values:{deep:'Drop deeper',normal:'Normal',high:'Press high'}},freedom:{label:'Freedom',values:{disciplined:'Hold shape',balanced:'Balanced',free:'More freedom'}},win:{label:'After winning it',values:{hold:'Keep possession',counter:'Counter quickly'}},loss:{label:'After losing it',values:{regroup:'Regroup',counterpress:'Counterpress'}}};
 export const INSTRUCTIONS={auto:'Follow team plan',hold:'Hold position',support:'Offer support',roam:'Roam into space',forward:'Run beyond',overlap:'Overlap'};
 export const STRENGTHS={elite:'Top-flight contender',standard:'Mid-level side',lower:'Lower-division side'};
-const QUALITY={elite:10,standard:0,lower:-10};
+// Fictional lab tiers: the shift compounds across every phase of play.
+// Keep a professional skill range instead of turning every attribute into an extreme.
+const QUALITY={elite:6,standard:0,lower:-6};
 export const PROFILES={balanced:'Balanced squad',technical:'Technical midfield',quick:'Quick counter side',physical:'Physical, limited technique'};
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 export function makePlan(key='balanced'){return {...(PRESETS[key]||PRESETS.balanced)};}
@@ -16,10 +18,10 @@ export function applyStrength(s,team,key){if(!STRENGTHS[key]||![0,1].includes(te
 export function applyProfile(s,team,key){
  if(!PROFILES[key]||![0,1].includes(team))return false;s.teams[team].profile=key;
  for(const p of s.players.filter(p=>p.team===team)){
-  p.base??=Object.fromEntries(['pass','dribbling','finish','tackle','pace','technique','decisions','composure','offball','positioning','teamwork','discipline','stamina','anticipation','handling','reflexes','roam'].map(k=>[k,p[k]]));Object.assign(p,p.base);
+  p.base??=Object.fromEntries(['pass','dribbling','finish','tackle','pace','technique','decisions','composure','offball','positioning','teamwork','discipline','stamina','anticipation','handling','reflexes','heading','strength','acceleration','agility','roam'].map(k=>[k,p[k]]));Object.assign(p,p.base);
   const add=(k,n)=>{p[k]=clamp(p[k]+n,k==='pace'?3.5:25,k==='pace'?6.5:95);};
   const quality=QUALITY[s.teams[team].strength]||0;
-  for(const attr of ['pass','dribbling','finish','tackle','technique','decisions','composure','offball','positioning','teamwork','discipline','stamina','anticipation','handling','reflexes'])add(attr,quality);add('pace',quality*.018);
+  for(const attr of ['pass','dribbling','finish','tackle','technique','decisions','composure','offball','positioning','teamwork','discipline','stamina','anticipation','handling','reflexes','heading','strength','acceleration','agility'])add(attr,quality);add('pace',quality*.018);
   if(key==='technical'){add('pass',p.role==='CM'?16:8);add('technique',15);add('dribbling',12);add('composure',12);add('decisions',10);add('stamina',-7);}
   if(key==='quick'){add('pace',.7);add('offball',12);add('dribbling',6);add('anticipation',8);add('pass',-8);add('stamina',6);add('positioning',6);}
   if(key==='physical'){add('tackle',12);add('stamina',15);add('teamwork',8);add('discipline',9);add('pass',-18);add('technique',-18);add('dribbling',-10);add('decisions',-9);add('pace',-.25);}
@@ -27,7 +29,7 @@ export function applyProfile(s,team,key){
  return true;
 }
 export function assessPlan(s,team=0){
- const squad=s.players.filter(p=>p.team===team&&p.role!=='GK'),plan=s.teams[team].plan;
+ const squad=s.players.filter(p=>p.team===team&&p.role!=='GK'&&!p.sentOff&&!p.bench&&!p.subbedOff&&!p.injuredOff),plan=s.teams[team].plan;
  const avg=(key,players=squad)=>players.reduce((n,p)=>n+(key==='pace'?clamp((p.pace-3)*25,0,100):p[key]),0)/(players.length||1);
  const demands=[['decisions',1],['teamwork',1],['positioning',.5]];
  if(plan.passing==='short')demands.push(['pass',2],['technique',1.5],['composure',1]);
