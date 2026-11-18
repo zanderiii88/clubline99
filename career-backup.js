@@ -4,7 +4,7 @@ import {validTacticalRecord} from './tactical-review.js?v=1.102.0';
 import {validMedia} from './manager-media.js?v=1.106.0';
 import {validLiveMatch} from './match-control.js?v=1.102.0';
 import {validClubHistory} from './club-history.js?v=1.80.0';
-import {validPlayerProgress} from './player-progress.js?v=1.116.0';
+import {validPlayerProgress} from './player-progress.js?v=1.165.0';
 import {validNegotiations,SQUAD_ROLES} from './negotiations.js?v=1.90.0';
 import {validLoanReport} from './loans.js?v=1.80.0';
 import {validManagerState} from './managers.js?v=1.96.0';
@@ -17,7 +17,7 @@ import {validFA} from './fa-cup.js?v=1.93.0';
 import {validMatchdays} from './matchday.js?v=1.93.0';
 import {validCup} from './league-cup.js?v=1.93.0';
 import {validDivisions,validPlayoffs} from './divisions.js?v=1.93.0';
-import {validClubLife} from './club-events.js?v=1.74.0';
+import {validClubLife} from './club-events.js?v=1.165.0';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);

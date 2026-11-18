@@ -66,3 +66,50 @@
 #match-lab.career-pitch :is(.lab-header a,[data-lab="full-match"],[data-lab="replay"],.lab-test-controls,
   .lab-adjust-plan:has([data-strength]),.lab-plan-setup label:has([data-profile]),club-screen-awake),
 #match-lab.career-pitch [data-career-status]:empty { display:none; }
+
+.lab-pitch-wrap.is-forming svg { touch-action:pan-y; }
+.lab-pitch-wrap.is-forming .lab-player[data-team="0"]:not([data-role="GK"]) { touch-action:none; }
+.lab-shape-name { visibility:hidden; text-anchor:middle; font:700 15px Arial,sans-serif; fill:white; stroke:#0b1924; stroke-width:4px; paint-order:stroke; pointer-events:none; }
+.lab-pitch-wrap.is-forming .lab-player[data-team="0"] .lab-shape-name { visibility:visible; }
+#match-lab.career-pitch :is(.lab-intro,.lab-limit,.lab-build,.lab-match-controls,.lab-header .eyebrow,
+  .lab-approach,[data-timing],.lab-assistant>p,.lab-bench>p:last-child) { display:none; }
+#match-lab.career-pitch .lab-header h1 { font-size:19px; }
+#match-lab.career-pitch .lab-layout { display:block; }
+#match-lab.career-pitch .lab-toolbar {
+ display:flex; align-items:center; flex-wrap:wrap; gap:4px; margin:4px 0;
+}
+#match-lab.career-pitch .lab-toolbar :is(button,select) { min-height:44px !important; padding:3px 5px; font-size:.77rem; }
+#match-lab.career-pitch .lab-toolbar [data-lab="fast-forward"] { margin-left:auto; }
+#match-lab.career-pitch .lab-toolbar [data-speed-control]:not([hidden]) { display:flex; }
+#match-lab.career-pitch .lab-toolbar [data-view-control] { margin:0; }
+#match-lab.career-pitch .lab-score { padding:4px; gap:2px 8px; }
+.career-match-controls {
+ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; margin:4px 0;
+}
+#match-lab.career-pitch .career-match-controls .btn { min-height:44px !important; padding:4px 6px; }
+.career-match-controls .btn[aria-expanded="true"] { outline:2px solid #9dc5dd; outline-offset:-5px; }
+#match-lab .career-control-panels>details[hidden], .career-control-panels>details>summary[hidden] { display:none; }
+#match-lab.career-pitch .lab-pitch-wrap svg {
+ height:clamp(300px,calc(100svh - 235px),640px); min-height:0; max-height:none;
+}
+#match-lab.career-pitch .lab-pitch-wrap.is-forming svg {
+ height:clamp(400px,calc(100svh - 195px),690px);
+}
+#match-lab.career-pitch .lab-restart { display:none; }
+#match-lab.career-pitch .lab-current { min-height:0; margin:4px 0; }
+
+.career-quick-orders { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; margin:4px 0; }
+#match-lab .career-match-stats .lab-support { padding:0; }
+#match-lab .career-pitch .lab-pitch-wrap.is-forming .lab-player[data-team="1"] { pointer-events:none; }
+
+.lab-pitch-wrap .lab-skip-highlight {
+ position:absolute; top:8px; right:8px; z-index:1;
+ min-height:44px; padding:4px 8px;
+}
+.lab-shape-dock {
+ position:sticky; bottom:max(8px,env(safe-area-inset-bottom));
+ display:flex; justify-content:flex-end; z-index:2; margin:6px 8px;
+ pointer-events:none;
+}
+.lab-shape-dock .btn { min-height:44px; pointer-events:auto; }
+.lab-shape-dock[hidden], .lab-skip-highlight[hidden] { display:none; }

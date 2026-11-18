@@ -1,5 +1,5 @@
-import {createSimulation, setTactic, adjustPlan, instructPlayer} from './possession-sim.js?v=1.164.0';
-import {labAnchor, labShape} from './lab-tactics.js?v=1.164.0';
+import {createSimulation, setTactic, adjustPlan, instructPlayer} from './possession-sim.js?v=1.167.0';
+import {labAnchor, labShape} from './lab-tactics.js?v=1.165.0';
 import {formationSlots} from './formations.js?v=1.100.0';
 
 const tactics = {'Possession':'possession', 'Counter':'counter', 'High press':'press'};

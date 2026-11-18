@@ -1,5 +1,5 @@
-import {judgeChallenge} from './lab-rules.js?v=1.164.0';
-import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.164.0';
+import {judgeChallenge} from './lab-rules.js?v=1.165.0';
+import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.165.0';
 // Experimental, deterministic spatial football model. No DOM, audio or career storage.
 export const STEP=.1;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -1053,16 +1053,28 @@ function advanceFlight(s){
     return;
    }
   }
-  if(f.kind==='shot')emit(s,'miss',f.team,f.actorId,`${player(s,f.actorId).name} shoots wide.`,{shotId:f.passEvent});
+  if(f.kind==='shot')emit(s,'miss',f.team,f.actorId,`${player(s,f.actorId).name} shoots wide.`,{shotId:f.passEvent,end:{...to},penalty:f.delivery==='penalty',close:exit.axis==='x'&&Math.abs(to.y-34)<6});
   boundaryRestart(s,f.team,exit,f.origin??f.delivery??f.kind);
   return;
  }
- if(f.kind!=='shot'&&(f.kind==='rebound'?f.age>=(f.duration??.5):((f.target.x>=0&&f.target.x<=105&&f.target.y>=0&&f.target.y<=68)
-   &&(distance(s.ball,f.target)<1.8||f.loft&&f.age>=f.duration))||f.age>5)){
-  if(f.mustLeaveArea){emit(s,'retake',f.team,f.actorId,'The kick must leave the penalty area. It will be retaken.');restart(s,f.team,f.restartKind,s.restartPoint);return;}
-  s.looseDelivery=f.kind==='rebound'?null:{...f,looseAt:s.time};s.flight=null;s.ball.z=0;s.looseSince=s.time;s.ball.x=to.x;s.ball.y=to.y;
-  emit(s,'loose',f.team,f.actorId,'The ball runs loose.');
+ if(f.rolling){
+  const decay=Math.exp(-1.5*STEP);
+  f.vx*=decay;f.vy*=decay;
+  if(Math.hypot(f.vx,f.vy)>=.65)return;
+ }else if(f.loft&&f.age>=f.duration){
+  // Continue along the incoming line once the delivery reaches the turf.
+  f.rolling=true;f.loft=0;f.vx*=.38;f.vy*=.38;
+  s.ball.z=0;
+  return;
+ }else{
+  const inBounds=f.target.x>=0&&f.target.x<=105&&f.target.y>=0&&f.target.y<=68;
+  const settled=f.kind==='rebound'?f.age>=(f.duration??.5):!f.loft&&(f.age>5||inBounds&&distance(s.ball,f.target)<1.8);
+  if(f.kind==='shot'||!settled)return;
  }
+ if(f.mustLeaveArea){emit(s,'retake',f.team,f.actorId,'The kick must leave the penalty area. It will be retaken.');restart(s,f.team,f.restartKind,s.restartPoint);return;}
+ s.looseDelivery=f.kind==='rebound'?null:{...f,looseAt:s.time};
+ s.flight=null;s.ball.z=0;s.looseSince=s.time;s.ball.x=to.x;s.ball.y=to.y;
+ emit(s,'loose',f.team,f.actorId,'The ball runs loose.');
 }
 export function suggestedReplacement(s,outgoingId){
  const out=player(s,outgoingId);if(!out)return null;

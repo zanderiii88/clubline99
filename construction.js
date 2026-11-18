@@ -1,6 +1,6 @@
 import {recordStadiumProject} from './stadium-history.js?v=1.109.0';
 import {bookingWindow} from './club-events.js';
-import {fixedSiteError} from './fixed-surroundings.js?v=1.120.0';
+import {fixedSiteError} from './fixed-surroundings.js?v=1.165.0';
 import {SECTIONS,STANDS,capacity,changeCost} from './stadium-model.js';
 const daysAfter=(date,n)=>new Date(Date.parse(date+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
 const units=(s,c)=>STANDS[c.stand].tiers.reduce((n,t)=>n+t[0]*s.bays*(s.corner?.55:1),0);
@@ -32,6 +32,12 @@ export function startConstruction(career,club,draft){
 export function advanceConstruction(career){
  career.construction??=[];
  const ready=career.construction.filter(job=>job.opens<=career.date);
- for(const job of ready){recordStadiumProject(career,job);Object.assign(career.stadium.sections,job.sections);career.news.push({date:career.date,kind:'stadium',text:'Stadium works completed. The refurbished sections are now open.'});}
+ for(const job of ready){
+  recordStadiumProject(career,job);
+  Object.assign(career.stadium.sections,job.sections);
+  const change=job.capacityAfter-job.capacityBefore;
+  const capacityNote=change>0?` The ground can now hold ${job.capacityAfter.toLocaleString('en-GB')} spectators.`:'';
+  career.news.push({date:career.date,kind:'stadium',text:`Stadium works completed. The refurbished sections are now open.${capacityNote}`});
+ }
  career.construction=career.construction.filter(job=>job.opens>career.date);return ready.length;
 }

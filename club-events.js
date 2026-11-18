@@ -5,6 +5,11 @@ const clamp=(n,min=0,max=100)=>Math.max(min,Math.min(max,n));
 const choice=(id,label,effects,result)=>({id,label,effects,result});
 export const CLUB_STORIES=[
  {id:'mascot-mischief',title:'The mascot wins the training session',text:'The club mascot joined the crossbar challenge after training. Three attempts, three hits. The captain has asked the kit staff to check whether there is a professional hiding inside the costume.',effects:{clubMorale:1,squadHappiness:1},result:'The mascot won the crossbar challenge and celebrated with a lap of honour. The squad are demanding a rematch. Club morale +1; squad happiness +1. No money spent.'},
+ {id:'old-shirt',title:'The kit room turns up an old favourite',text:'A preseason stocktake turned up a match shirt that had been tucked away for years.',effects:{clubMorale:1,squadHappiness:1},result:'The kit staff brought the old shirt into the dressing room. By the end of training everyone had heard a different story about who wore it.'},
+ {id:'touchline-crowd',title:'Supporters stay for the last drill',text:'A few early visitors stopped to watch the squad finish training.',effects:{clubMorale:1,squadHappiness:1},result:'The last finishing drill drew a small crowd. A round of applause for the final goal put the squad in good spirits.'},
+ {id:'keeper-free-kick',title:'The goalkeeper wins the free-kick contest',text:'The keepers and outfield players swapped jobs for the final drill.',effects:{clubMorale:1,squadHappiness:1},result:'One of the keepers curled the last attempt in off the post. The outfield players have asked for a rematch.'},
+ {id:'old-photos',title:'Supporters help name the faces',text:'The club dug out a box of unlabelled team photographs.',effects:{clubMorale:1,squadHappiness:1},result:'Regulars helped identify the players in several old team photos. The staff have put their favourites up in the tunnel.'},
+ {id:'training-derby',title:'Bib derby settled by a last-minute goal',text:'The coaches ended training with a short match between two mixed sides.',effects:{clubMorale:1,squadHappiness:1},result:'A last-minute goal settled the first training match of the season. The winning side made sure the rest of the staff heard about it.'},
  {id:'charity',title:'A visit to the children’s ward',text:'A local charity asks whether a few players can visit the children’s ward after training.',choices:[choice('visit','Arrange the visit',{cash:-1500,clubMorale:2,supporters:3,squadHappiness:1},'The players made time for the visit. The families and supporters appreciated it.'),choice('later','Politely postpone',{},'The charity understands and hopes to arrange another visit later.')]},
  {id:'disagreement',title:'A training-ground disagreement',text:'Two senior players have had a disagreement during training. The coach suggests a quiet conversation.',choices:[choice('talk','Bring them together',{clubMorale:2,squadHappiness:2},'A calm conversation cleared the air.'),choice('leave','Let them settle it',{clubMorale:-2,squadHappiness:-1},'The tension lingered around the training ground.')]},
  {id:'fundraiser',title:'Supporters rally round',text:'The supporters’ association has organised a small fundraiser for the club.',effects:{cash:4500,supporters:2,clubMorale:1},result:'The supporters handed over their donation. A welcome gesture from the community.'},
@@ -107,11 +112,11 @@ export function advanceClubLife(c,league,{generate=true}={}){
  life.lastProcessed=c.date;
  for(const b of life.bookings){if(b.status==='offered'&&c.date>b.deadline)b.status='expired';else settleBooking(c,league,b)}
  for(const s of life.stories.filter(s=>s.status==='pending'&&c.date>s.deadline)){s.status='resolved';s.expired=true;s.resolvedOn=c.date;s.effects={cash:0,clubMorale:0,supporters:0,players:[]};s.result='No decision was recorded before the deadline. The matter was deferred without additional spending.';c.news.push({date:c.date,kind:'club-story',eventId:s.id,text:`${s.title}: ${s.result}`})}
- // Temporary testing guarantee: one cheerful story on day three of the first season,
- // including Streamlined mode. Existing careers past the first week are unaffected.
+ // Pick a light opening story once per new career.
  const start=c.seasonStart,openingWeek=start&&c.date>=eventAfter(start,2)&&c.date<=eventAfter(start,6);
  if(openingWeek&&(c.season||1)===1&&!life.firstWeekEvent){
-  const story=createClubStory(c,league,'mascot-mischief');
+  const opening=['mascot-mischief','old-shirt','touchline-crowd','keeper-free-kick','old-photos','training-derby'];
+  const story=createClubStory(c,league,opening[(life.seed+Math.floor(Math.random()*opening.length))%opening.length]);
   if(story){life.firstWeekEvent={id:story.id,read:false};c.news.at(-1).important=true;}
  }
  if(!generate)return;
