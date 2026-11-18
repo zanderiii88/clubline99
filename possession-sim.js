@@ -1,5 +1,5 @@
 import {judgeChallenge} from './lab-rules.js?v=1.165.0';
-import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.165.0';
+import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.169.0';
 // Experimental, deterministic spatial football model. No DOM, audio or career storage.
 export const STEP=.1;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -560,7 +560,7 @@ function launch(s,p,kind,target,receiver=null,details={}){
  const assistId=kind==='shot'&&lead?.receiverId===p.id&&s.time-lead.receivedAt<=ASSIST_WINDOW
   ?lead.playerId:null;
  s.assist=null;
- s.flight={assistId,restartKind,mustLeaveArea:restartKind==='goal-kick'||['indirect','direct'].includes(restartKind)&&inPenalty(p,p.team),kind,team:p.team,actorId:p.id,receiverId:receiver?.id||null,target:{...target},vx:(target.x-start.x)/d*speed,vy:(target.y-start.y)/d*speed,age:0,duration:d/speed,loft,passEvent:s.serial+1,receiverReadyAt:s.time+readyDelay,delivery:details.style||kind,contacted:[]};s.ball.owner=null;
+ s.flight={assistId,dangerous:kind==='shot'&&inPenalty(start,1-p.team),restartKind,mustLeaveArea:restartKind==='goal-kick'||['indirect','direct'].includes(restartKind)&&inPenalty(p,p.team),kind,team:p.team,actorId:p.id,receiverId:receiver?.id||null,target:{...target},vx:(target.x-start.x)/d*speed,vy:(target.y-start.y)/d*speed,age:0,duration:d/speed,loft,passEvent:s.serial+1,receiverReadyAt:s.time+readyDelay,delivery:details.style||kind,contacted:[]};s.ball.owner=null;
  const st=s.stats[p.team];
  if(details.style==='through-ball')st.throughBalls=(st.throughBalls||0)+1;
  if(details.style==='one-two-start')st.oneTwos=(st.oneTwos||0)+1;
@@ -947,7 +947,7 @@ function deflect(s,f,p,from,to){
  const incoming=Math.atan2(f.vy,f.vx);
  const turn=(random(s)-.5)*3.8;
  const speed=6+random(s)*7;
- const event=emit(s,'block',p.team,p.id,`${p.name} blocks the shot.`,{opponentId:f.actorId,shotId:f.passEvent});
+ const event=emit(s,'block',p.team,p.id,`${p.name} blocks the shot.`,{opponentId:f.actorId,shotId:f.passEvent,dangerous:f.dangerous});
  const vx=Math.cos(incoming+turn)*speed,vy=Math.sin(incoming+turn)*speed;
  const behindGoal=wouldReachOwnMouth(p.team,point,vx,vy,.8);
  // A planted block in front of the goal generally sends the ball back into play.
@@ -1053,7 +1053,7 @@ function advanceFlight(s){
     return;
    }
   }
-  if(f.kind==='shot')emit(s,'miss',f.team,f.actorId,`${player(s,f.actorId).name} shoots wide.`,{shotId:f.passEvent,end:{...to},penalty:f.delivery==='penalty',close:exit.axis==='x'&&Math.abs(to.y-34)<6});
+  if(f.kind==='shot')emit(s,'miss',f.team,f.actorId,`${player(s,f.actorId).name} shoots wide.`,{shotId:f.passEvent,end:{...to},penalty:f.delivery==='penalty',dangerous:f.dangerous,close:exit.axis==='x'&&Math.abs(to.y-34)<6});
   boundaryRestart(s,f.team,exit,f.origin??f.delivery??f.kind);
   return;
  }

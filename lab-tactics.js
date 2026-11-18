@@ -127,3 +127,20 @@ export function assessPlan(s,team=0){
  const energy=squad.reduce((n,p)=>n+p.energy,0)/squad.length;if(energy<82)reasons.push('Current energy is falling: consider easing the press.');
  return {score:Math.round(score),label:score>=73?'Suited':score>=62?'Mixed fit':'Demanding',reasons:reasons.slice(0,3),energy:Math.round(energy)};
 }
+
+export function matchShirtColours(clubs,homeSide=0){
+ const fallback=['#2474ca','#c94151'];
+ if(!clubs)return fallback;
+ const home=homeSide===1?1:0,away=1-home;
+ const usable=colour=>/^#[0-9a-f]{6}$/i.test(colour??'');
+ const colourFor=club=>[club.kits?.[0]?.[0],club.colour].find(usable);
+ const rgb=colour=>[1,3,5].map(i=>parseInt(colour.slice(i,i+2),16));
+ const homeKit=colourFor(clubs[home])??fallback[home],homeRgb=rgb(homeKit);
+ const visitor=clubs[away];
+ const awayKit=[colourFor(visitor),visitor.kits?.[1]?.[0],visitor.kits?.[2]?.[0],'#f1e3ad','#101522']
+  .filter(usable).find(colour=>Math.hypot(...rgb(colour).map((value,i)=>value-homeRgb[i]))>=110);
+ const ordered=[];
+ ordered[home]=homeKit;
+ ordered[away]=awayKit??fallback[away];
+ return ordered;
+}

@@ -1,12 +1,12 @@
 // Derive match performance from recorded actions; never invent pass/tackle totals.
 export function playerMatchInsight(match,id,teamId,position,baseCondition=100){
- const p=match.participants?.[id];
+ const p=match.participants?.[id]??match.pitchOpposition?.[id];
  const end=p?.end??match.events.find(e=>e.playerId===id&&['red','injury'].includes(e.type))?.minute??match.minute;
  const elapsed=Math.max(0,end-(p?.start??0));
  const events=(match.events||[]).filter(e=>e.playerId===id);
- const shots=events.filter(e=>['goal','chance'].includes(e.type)).length;
+ const shots=events.filter(e=>(e.type==='goal'&&!e.ownGoal)||e.type==='chance').length;
  const goals=match.goalCounts?.[id]||0,assists=match.assistCounts?.[id]||0;
- const onTarget=events.filter(e=>e.type==='goal'||e.type==='chance'&&(e.onTarget===true||e.onTarget===undefined&&/\bsav(?:ed|e|es)\b/i.test(e.text||''))).length;
+ const onTarget=events.filter(e=>e.type==='goal'&&!e.ownGoal||e.type==='chance'&&(e.onTarget===true||e.onTarget===undefined&&/\bsav(?:ed|e|es)\b/i.test(e.text||''))).length;
  const saves=(match.events||[]).filter(e=>e.keeperId===id&&e.type==='chance'&&e.onTarget).length;
  const red=events.some(e=>e.type==='red'),yellow=events.some(e=>e.type==='yellow'||e.secondYellow),injured=events.some(e=>e.type==='injury');
  const conceded=(match.events||[]).filter(e=>e.type==='goal'&&e.team!==teamId&&e.minute>=(p?.start??0)&&e.minute<=end).length;

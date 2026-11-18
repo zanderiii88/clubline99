@@ -6,6 +6,7 @@ export function ambienceForGame({view,career,match,panelOpen=false,section,sub,t
   if(matchExitOpen)return 'paused';
   if(match.phase==='report')return 'changing';
   if(match.phase!=='live')return 'prematch';
+  if(match.pitch)return 'off';
   if(match.paused&&match.pauseReason==='half')return 'interval';
   const highlight=match.pauseReason==='skip'&&(match.events||[]).some(e=>e.minute===match.minute&&['goal','chance'].includes(e.type));
   if(match.drawerOpen||match.paused&&!['goal','yellow'].includes(match.pauseReason)&&!highlight)return 'paused';

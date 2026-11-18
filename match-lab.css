@@ -113,3 +113,5 @@
 }
 .lab-shape-dock .btn { min-height:44px; pointer-events:auto; }
 .lab-shape-dock[hidden], .lab-skip-highlight[hidden] { display:none; }
+
+#match-lab .lab-view select { width:auto; min-width:7rem; }

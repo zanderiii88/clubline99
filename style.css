@@ -1122,3 +1122,5 @@ club-screen-awake small:not(:empty) { display:block; }
   .stream-club-card .next-fixture-card { align-content:center; margin:0; }
   .club-overview-actions { grid-template-columns:repeat(4,minmax(0,1fr)); }
 }
+
+#app > .match-exit-overlay { z-index:101; }

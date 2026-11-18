@@ -1,5 +1,6 @@
-import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan,labShape} from './lab-tactics.js?v=1.165.0';
-import {createSimulation,stepSimulation,matchFlow,startSecondHalf,simulationSnapshot,setTactic,adjustPlan,instructPlayer,formationPosition,formationGrid,snapFormationPosition,moveFormationPosition,resetFormationPositions,assessBuildUp,onPitch,requestSubstitution,continueAfterInjury,cancelQueuedSubstitutions,suggestedReplacement,STEP} from './possession-sim.js?v=1.167.0';
+import {createAmbience} from './ambience.js?v=1.169.0';
+import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan,labShape,matchShirtColours} from './lab-tactics.js?v=1.169.0';
+import {createSimulation,stepSimulation,matchFlow,startSecondHalf,simulationSnapshot,setTactic,adjustPlan,instructPlayer,formationPosition,formationGrid,snapFormationPosition,moveFormationPosition,resetFormationPositions,assessBuildUp,onPitch,requestSubstitution,continueAfterInjury,cancelQueuedSubstitutions,suggestedReplacement,STEP} from './possession-sim.js?v=1.169.0';
 import {registerRealNames,applyRealNames} from './real-names.js?v=1.93.0';
 import {realNamesEnabled} from './preferences.js?v=1.125.0';
 import {scottishPlayable} from './scottish-world.js?v=1.89.0';
@@ -9,10 +10,11 @@ let editingShape=false,shapeDrag=null;
 let showCareerControls=()=>{}, updateQuickOrders=()=>{};
 let fullMatch=false,fastForward=false,view='full';
 let lastHighlight='',highlightFrames=[],clip=null;
-const highlights=()=>fullMatch&&view==='highlights';
+const highlights=()=>fullMatch&&view!=='full';
 const scanning=()=>highlights()&&!clip;
 const triggersHighlight=e=>e.type==='goal'||e.type==='save'&&e.onTarget||
- e.type==='miss'&&(e.close||e.penalty);
+ e.type==='miss'&&(e.close||e.penalty)||
+ view==='extended'&&e.dangerous&&['block','miss'].includes(e.type);
 const currentClipMoment=()=>clip?.frames[Math.min(Math.floor(clip.cursor),clip.frames.length-1)];
 function clearClip(){clip=null;highlightFrames=[];}
 function rememberFrame(){
@@ -30,11 +32,13 @@ if(careerPitch){
  sim=careerPitch.sim;
  previous=simulationSnapshot(sim);
  fullMatch=true;
- view='highlights';
+ view=careerPitch.playback?.view??'highlights';
+ speed=careerPitch.playback?.speed??2;
+ sound=careerPitch.playback?.sound??true;
  eventCursor=sim.events.length;
  root.classList.add('career-pitch');
 }
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let ambience=null,audioLoading=false;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let ambience=null;
 let prefs={};try{prefs=JSON.parse(localStorage.getItem('clubline-audio-settings')||'{}')}catch{}
 const configureAudio=()=>ambience?.configure({muted:!sound||prefs.ambienceMuted===true,volume:prefs.ambienceVolume??.25,effectsMuted:!sound||prefs.effectsMuted===true,effectsVolume:prefs.effectsVolume??.65,hidden:document.hidden});
 configureAudio();
@@ -43,23 +47,13 @@ let strengths=['standard','standard'],initialInstructions={},lastAdviceSecond=-1
 const formations=['4-4-2','4-4-2'];
 let useClubRatings=false,clubCatalog=null,clubRosters=null,useLineups=true,clubIds=['EU051','SC05'],homeSide=null,clubLoadPending=false;
 const ratedFixture=()=>fullMatch&&useClubRatings?clubIds.map(id=>clubCatalog.get(id)):null;
-const defaultShirts=['#2474ca','#c94151'];
-function shirtColours(clubs){
- if(!clubs)return defaultShirts;
- const usable=colour=>/^#[0-9a-f]{6}$/i.test(colour??'');
- const colourFor=club=>[club.kits?.[0]?.[0],club.colour].find(usable);
- const rgb=colour=>[1,3,5].map(i=>parseInt(colour.slice(i,i+2),16));
- const first=colourFor(clubs[0])??defaultShirts[0],home=rgb(first);
- const other=clubs[1];
- const away=[colourFor(other),other.kits?.[1]?.[0],other.kits?.[2]?.[0],'#f1e3ad','#101522']
-  .filter(usable).find(colour=>Math.hypot(...rgb(colour).map((value,i)=>value-home[i]))>=110);
- return [first,away??defaultShirts[1]];
-}
-let shirts=careerPitch?shirtColours(careerPitch.shirts):defaultShirts;
+let shirts=matchShirtColours(careerPitch?.shirts,careerPitch?.homeSide);
 if(careerPitch){
  draftPreset=appliedPreset=sim.teams[0].tactic;
  appliedPlan=draftPlan={...sim.teams[0].plan};
  query('[data-view]').value=view;
+ query('[data-speed]').value=String(speed);
+ updateSoundControl();
  query('.lab-header h1').textContent='Career match';
  query('.lab-header .eyebrow').textContent='Pitch view · Pilot';
  const toolbar=query('.lab-toolbar');
@@ -109,6 +103,7 @@ if(careerPitch){
  const heading=document.createElement('summary');
  heading.textContent='Stats';
  stats.append(heading,query('.lab-support'));
+ query('.lab-log summary').textContent='Match incidents';
  const controls=document.createElement('div');
  controls.className='career-match-controls';
  const panels=document.createElement('div');
@@ -148,9 +143,27 @@ let lastCheckpoint=Date.now(),finishing=false;
 function checkpointCareer(exit=false){
  if(!careerPitch)return;
  lastCheckpoint=Date.now();
- const saved=careerHost.checkpoint(window,sim,exit);
+ const saved=careerHost.checkpoint(window,sim,exit,{view,speed,sound});
  const status=query('[data-career-status]');
  status.textContent=saved?'':'Could not save the match on this device.';
+}
+if(careerPitch){
+ window.clublinePitchNavigation={
+  pause(){
+   const playback={running,fastForward};
+   running=false;fastForward=false;accumulator=0;lastFrame=null;
+   checkpointCareer();
+   syncAudio();paint(1);
+   return playback;
+  },
+  resume(playback){
+   if(['ended','half-time','injury'].includes(sim.phase))return;
+   running=playback?.running===true;
+   fastForward=playback?.fastForward===true;
+   accumulator=0;lastFrame=null;
+   syncAudio();paint(1);
+  }
+ };
 }
 async function toggleClubRatings(){
  if(clubLoadPending)return;
@@ -254,9 +267,26 @@ for(const p of sim.players){
  const shirt=document.createElementNS(svgNS,'path');shirt.setAttribute('d','M-13 -20 L-26 -10 L-19 1 L-13 -3 L-13 20 L13 20 L13 -3 L19 1 L26 -10 L13 -20 L6 -15 L-6 -15Z');shirt.setAttribute('class','lab-shirt');shirt.setAttribute('fill',p.role==='GK'?(p.team===0?'#e4af34':'#65a178'):shirts[p.team]);g.append(shirt);
  const number=document.createElementNS(svgNS,'text');number.setAttribute('class','lab-number');number.setAttribute('y','9');number.textContent=p.number;g.append(number,label);query('[data-shirts]').append(g);nodes.set(p.id,g);
 }
-async function enableAudio(){if(audioLoading)return;if(ambience){ambience.unlock();syncAudio();return;}audioLoading=true;try{const {createAmbience}=await import('./ambience.js?v=1.126.0');ambience=createAmbience();configureAudio();if(sound&&!disposed)ambience.unlock();syncAudio();}catch{sound=false;query('[data-lab="sound"]').textContent='Sound unavailable';query('[data-lab="sound"]').setAttribute('aria-pressed','false');}finally{audioLoading=false;}}
+function enableAudio(){
+ try{
+  ambience??=createAmbience();
+  syncAudio();
+  ambience.unlock();
+ }catch{
+  sound=false;
+  updateSoundControl();
+  query('[data-lab="sound"]').textContent='Sound unavailable';
+ }
+}
+function updateSoundControl(){
+ const control=query('[data-lab="sound"]');
+ control.textContent=sound?'Sound on':'Sound off';
+ control.setAttribute('aria-pressed',String(sound));
+}
 function syncMatchAudio(){
- ambience?.setContext(running&&!document.hidden&&sim.phase!=='ended'?'match':'paused');
+ if(!ambience)return;
+ const mode=document.hidden||sim.phase==='ended'?'off':sim.phase==='half-time'?'interval':running?'match':'paused';
+ ambience.setContext(mode);
 }
 function syncAudio(){configureAudio();syncMatchAudio();}
 function consumeEvents(){
@@ -420,8 +450,25 @@ function paint(alpha=1){
  if(sim.pendingInjury)pauseReason=sim.events.findLast(e=>e.type==='injury')?.text||'An injury needs a decision.';query('[data-intervention]').hidden=!pauseReason;query('[data-intervention]').textContent=pauseReason?`${pauseReason} ${sim.pendingInjury?'Choose a replacement below or continue short-handed.':sim.phase==='half-time'?'Use Start second half when ready.':'Adjust your plan or press Play to continue.'}`:'';
  query('[data-lab="pause"]').disabled=!!sim.pendingInjury;query('[data-lab="step"]').disabled=!!sim.pendingInjury||sim.phase==='half-time';updateBench();
  const total=sim.stats.reduce((n,s)=>n+s.possession,0),home=total?Math.round(sim.stats[0].possession/total*100):50;query('[data-possession]').textContent=`${home}% – ${100-home}%`;
- const log=query('[data-log]');if(Number(log.dataset.last)!==sim.serial){log.dataset.last=sim.serial;log.replaceChildren(...sim.events.slice(-12).reverse().map(e=>{const li=document.createElement('li');li.textContent=`${format(e.second)} · ${e.text}`;return li;}));}
+ updateMatchLog();
  query('[data-seed]').textContent=`Seed ${sim.seed}`;if(sim.time===0||Math.floor(sim.time)!==lastAdviceSecond){lastAdviceSecond=Math.floor(sim.time);updateAdvice();}if(inspected){const p=sim.players.find(p=>p.id===inspected);query('[data-instruction]').disabled=p.team!==0||!onPitch(sim).some(q=>q.id===p.id);query('[data-player-intent]').textContent=`Now: ${p.intent}. Energy ${Math.round(p.energy)}%.`;}
+}
+const careerIncidentTypes=new Set(['goal','card','penalty','injury','substitution','half-time','end']);
+let logSource=null,logCursor=0,logIncidents=[];
+function updateMatchLog(){
+ if(logSource!==sim.events){
+  logSource=sim.events;logCursor=0;logIncidents=[];
+  query('[data-log]').replaceChildren();
+ }
+ if(logCursor===sim.events.length)return;
+ const recent=sim.events.slice(logCursor);
+ logCursor=sim.events.length;
+ const additions=careerPitch?recent.filter(e=>careerIncidentTypes.has(e.type)):recent;
+ if(!additions.length)return;
+ logIncidents=[...logIncidents,...additions].slice(-12);
+ query('[data-log]').replaceChildren(...logIncidents.slice().reverse().map(e=>{
+  const li=document.createElement('li');li.textContent=`${format(e.second)} · ${e.text}`;return li;
+ }));
 }
 function advance(visual=true){
  if(visual)previous=simulationSnapshot(sim);
@@ -493,7 +540,7 @@ function restart(seed=sim.seed,scenario=query('[data-scenario]').value,autoplay=
  const custom=sim.teams[0].shape===formations[0]?sim.teams[0].customAnchors:null;
  stopShapeEdit();
  fastForward=false;clearClip();lastHighlight='';benchSignature='';query('[data-sub-feedback]').textContent='';runGeneration++;ambience?.setContext('off');const clubs=ratedFixture();
- shirts=shirtColours(clubs);
+ shirts=matchShirtColours(clubs,homeSide);
  const rosters=clubs&&useLineups?clubs.map(club=>clubRosters.get(club.id)):null;
  sim=createSimulation({seed,scenario,profile,strengths,preset:appliedPreset,managedTeam:0,fullMatch,clubs,homeSide,rosters,formations});
  if(fullMatch&&custom){
@@ -578,6 +625,7 @@ root.addEventListener('click',event=>{
   }else if(sim.phase==='ended')restart(sim.seed,undefined,true);
   else if(!running&&sim.time===0&&pendingPlan()){applyDraft();running=true;}
   else running=!running;
+  if(running&&sound&&careerPitch)enableAudio();
   accumulator=0;
   lastFrame=null;
  }
@@ -585,9 +633,14 @@ root.addEventListener('click',event=>{
  if(action==='apply')applyDraft();if(action==='replay')restart(sim.seed,undefined,true);if(action==='new')restart((sim.seed+1)>>>0);
  if(action==='skip-setup'){fastForward=false;const wasRunning=running;running=false;let interrupted=false;for(let i=0;i<700&&sim.phase==='restart'&&!interrupted;i++)interrupted=advance(false);running=wasRunning&&!interrupted&&!sim.pendingInjury&&sim.phase!=='ended';previous=simulationSnapshot(sim);accumulator=0;lastFrame=null;}
  if(action==='step'&&sim.phase!=='half-time'){pauseReason='';running=false;fastForward=false;const serial=sim.serial,budget=200+(sim.phase==='restart'?Math.ceil(Math.max(0,sim.restartUntil-sim.time)/STEP):0);for(let i=0;i<budget&&sim.serial===serial&&sim.phase!=='ended';i++)advance();previous=simulationSnapshot(sim);accumulator=0;}
- if(action==='sound'){sound=!sound;query('[data-lab="sound"]').textContent=sound?'Sound on':'Sound off';query('[data-lab="sound"]').setAttribute('aria-pressed',String(sound));if(sound)enableAudio();}
+ if(action==='sound'){
+  sound=!sound;
+  updateSoundControl();
+  if(sound)enableAudio();
+  checkpointCareer();
+ }
  if(action==='export'){
-  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.167.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,formations:sim.teams.map(t=>t.shape),clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?'highlights':'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.170.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,formations:sim.teams.map(t=>t.shape),clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?view:'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  syncAudio();paint(1);
  if(careerPitch&&!running&&!fastForward)checkpointCareer();
@@ -616,12 +669,13 @@ root.addEventListener('change',event=>{
   stopShapeEdit();
   view=el.value;
   clearClip();
+  checkpointCareer();
   accumulator=0;
   lastFrame=null;
   previous=simulationSnapshot(sim);
   syncAudio();
  }
- if(el.matches('[data-speed]'))speed=Number(el.value);
+ if(el.matches('[data-speed]')){speed=Number(el.value);checkpointCareer();}
  if(el.matches('[data-tactic]')){draftPreset=el.value;draftPlan={...PRESETS[draftPreset]};syncPlanControls();}
  if(el.matches('[data-plan-field]')){draftPlan[el.dataset.planField]=el.value;syncPlanControls();}
  if(el.matches('[data-rated-club]')){

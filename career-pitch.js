@@ -1,5 +1,5 @@
-import {createSimulation, setTactic, adjustPlan, instructPlayer} from './possession-sim.js?v=1.167.0';
-import {labAnchor, labShape} from './lab-tactics.js?v=1.165.0';
+import {createSimulation, setTactic, adjustPlan, instructPlayer} from './possession-sim.js?v=1.169.0';
+import {labAnchor, labShape} from './lab-tactics.js?v=1.169.0';
 import {formationSlots} from './formations.js?v=1.100.0';
 
 const tactics = {'Possession':'possession', 'Counter':'counter', 'High press':'press'};
@@ -36,6 +36,8 @@ export function careerPitchResult(sim, clubs, homeSide) {
  const played=Object.fromEntries(participants);
  const goals={}, assists={}, cards={}, injured=[];
  const events=[];
+ const shots=new Map(sim.events.filter(e=>e.type==='shot').map(e=>[e.id,e]));
+ const resolvedShots=new Set();
  const minuteAt=seconds=>Math.max(1,Math.min(90,Math.ceil(seconds/60)));
  for(const e of sim.events){
   const minute=minuteAt(e.second), playerId=ids.get(e.actorId), team=clubs[e.team];
@@ -44,13 +46,21 @@ export function careerPitchResult(sim, clubs, homeSide) {
    const out=ids.get(e.outgoingId);
    played[out].end??=minute;
    played[playerId]={start:minute,end:null};
-   events.push({...note,type:'substitution'});
+   events.push({...note,type:'substitution',outgoingId:out});
   }else if(e.type==='card'||e.type==='injury'){
    const type=e.type==='card'?e.colour:'injury';
    if(type==='injury')injured.push(playerId);
    else cards[playerId]=(cards[playerId]||0)+1;
    if(type==='red'||type==='injury')played[playerId].end??=minute;
    events.push({...note,type,secondYellow:!!e.secondYellow});
+  }else if(['save','block','miss'].includes(e.type)&&shots.has(e.shotId)&&!resolvedShots.has(e.shotId)){
+   const shot=shots.get(e.shotId);
+   resolvedShots.add(e.shotId);
+   const shooter=ids.get(shot.actorId);
+   if(!shooter)continue;
+   events.push({...note,type:'chance',playerId:shooter,team:clubs[shot.team],
+    onTarget:e.type==='save'&&e.onTarget===true,
+    keeperId:e.type==='save'&&e.onTarget?playerId:null});
   }else if(e.type==='goal'){
    if(!e.ownGoal)goals[playerId]=(goals[playerId]||0)+1;
    const assistId=!e.ownGoal&&e.assistId!==e.actorId?ids.get(e.assistId):null;
@@ -59,7 +69,8 @@ export function careerPitchResult(sim, clubs, homeSide) {
   }
  }
  const totals=sim.stats[0].possession+sim.stats[1].possession;
- const statLine=({shots,shotsOnTarget,yellows,reds})=>({shots,onTarget:shotsOnTarget,yellow:yellows,red:reds});
+ const statLine=({shots,shotsOnTarget,yellows,reds,passes,completed,corners,fouls,offsides,saves,blocks})=>
+  ({shots,onTarget:shotsOnTarget,yellow:yellows,red:reds,passes,completed,corners,fouls,offsides,saves,blocks});
  return {homeGoals:sim.score[homeSide],awayGoals:sim.score[1-homeSide],played,events,
   goalCounts:goals,assistCounts:assists,cardCounts:cards,injured,stats:{home:statLine(sim.stats[homeSide]),
    away:statLine(sim.stats[1-homeSide]),possession:totals?[{minute:90,home:100*sim.stats[homeSide].possession/totals}]:[]}};
