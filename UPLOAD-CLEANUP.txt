@@ -1,4 +1,4 @@
-CLUBLINE 99 v1.154.0 - optional cleanup of an existing upload
+CLUBLINE 99 v1.159.0 - optional cleanup of an existing upload
 
 ZIP extraction does not remove old files. The exact relative paths below are obsolete development/docs or the previously withdrawn synthetic audio. Remove only these paths if present. Current game code, data, recorded audio, credits and source/licence material are not on this list. Nothing has been deleted from your live site.
 
@@ -63,6 +63,11 @@ RELEASE-1.150.0-NOTES.md
 RELEASE-1.151.0-NOTES.md
 RELEASE-1.152.0-NOTES.md
 RELEASE-1.153.0-NOTES.md
+RELEASE-1.154.0-NOTES.md
+RELEASE-1.155.0-NOTES.md
+RELEASE-1.156.0-NOTES.md
+RELEASE-1.157.0-NOTES.md
+RELEASE-1.158.0-NOTES.md
 RELEASE-1.49-NOTES.md
 RELEASE-1.50-NOTES.md
 RELEASE-1.51-NOTES.md

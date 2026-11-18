@@ -1,7 +1,5 @@
-CLUBLINE 99 v1.154.0
+CLUBLINE 99 v1.159.0
 
-Use Clubline-v1.131-onwards-to-v1.154-Update.zip over any v1.131–v1.153 installation. Keep existing assets and data. For older installations or a clean setup, use Complete. Extract beside index.html and replace matching files.
+Use Clubline-v1.131-onwards-to-v1.159-Update.zip over an existing v1.131–v1.158 installation. Keep existing assets and data. Use Complete for a clean setup. Extract beside index.html and replace matching files.
 
-This update adds starting database lineups to the developer match lab. Existing careers can continue after updating.
-
-Historic release notes, tests and tools stay in Development. ZIP extraction cannot delete files from an existing installation. Optional cleanup paths are listed in UPLOAD-CLEANUP.txt.
+This update adds drag and keyboard formation editing in the developer match lab. Historical release notes, tests and tools stay in Development.

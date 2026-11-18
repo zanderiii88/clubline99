@@ -1,4 +1,4 @@
-# CLUBLINE 99 - v1.154.0
+# CLUBLINE 99 - v1.159.0
 
 Retro football management with Streamlined and In-depth modes. v1.141 improves condition/workload, defensive spacing and pass anticipation, tackle commitment and loose-ball outcomes, and routine-versus-difficult saves in the experimental match lab. Three direct test situations support mobile review. The spatial engine remains separate from career matches and saves. v1.132 is the latest user-confirmed live checkpoint. No VAR.
 
@@ -17,13 +17,13 @@ Choose **Through ball · run in behind** or **One-two · run for the return** in
 If you installed v1.121, remove assets/audio/ambience/ and tools/build-ambience.py before uploading game files again. A ZIP extraction cannot delete old files. Playback is disabled regardless.
 
 1. Export a career backup from Options & Help before updating.
-2. Use Clubline-v1.131-onwards-to-v1.154-Update.zip over an existing v1.131–v1.153 installation, or Clubline-1.154.0-Complete.zip for the full game. This update contains everything needed from any of those baseline versions; intermediate update ZIPs are not required. Older installations should use Complete. Keep existing assets/data with the smaller Update.
+2. Use Clubline-v1.131-onwards-to-v1.159-Update.zip over an existing v1.131–v1.158 installation, or Clubline-1.159.0-Complete.zip for the full game. This update contains everything needed from any of those baseline versions; intermediate update ZIPs are not required. Older installations should use Complete. Keep existing assets/data with the smaller Update.
 3. Extract the chosen ZIP into the root of the existing game folder, replacing matching files and retaining subfolders. The files belong directly alongside index.html, not inside an extra parent folder. Keep existing assets/data when using the smaller update.
-4. When you choose to publish the files, let GitHub Pages finish, open the game, use Check for Updates and Load update if offered, then reopen it. The main menu should show v1.154.0.
+4. When you choose to publish the files, let GitHub Pages finish, open the game, use Check for Updates and Load update if offered, then reopen it. The main menu should show v1.159.0.
 
 No fresh career is required. Nothing has been published automatically. Existing careers retain their management mode; Options & Help lets you change Management depth without restarting.
 
-Read RELEASE-1.154.0-NOTES.md for changes and verification limits, and ROADMAP.md for priorities.
+Read RELEASE-1.159.0-NOTES.md for changes and verification limits, and ROADMAP.md for priorities.
 
 ## Cleaner uploads
 

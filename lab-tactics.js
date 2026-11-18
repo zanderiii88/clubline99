@@ -50,10 +50,18 @@ export function setRatedClubs(s,clubs,homeSide=null,rosterBased=false){
   });
  }
 }
-const lineupSlots=['GK','LB','CB','CB','RB','LW','CM','CM','RW','ST','ST'];
+export const LAB_FORMATIONS={
+ '4-4-2':[[5,34,'GK'],[25,9,'LB'],[23,25,'CB'],[23,43,'CB'],[25,59,'RB'],[47,8,'LW'],[45,26,'CM'],[45,42,'CM'],[47,60,'RW'],[68,26,'ST'],[68,42,'ST']],
+ '4-3-3':[[5,34,'GK'],[25,9,'LB'],[23,25,'CB'],[23,43,'CB'],[25,59,'RB'],[48,19,'CM'],[39,34,'DM'],[48,49,'CM'],[64,9,'LW'],[69,34,'ST'],[64,59,'RW']],
+ '3-5-2':[[5,34,'GK'],[23,19,'CB'],[21,34,'CB'],[23,49,'CB'],[38,7,'LB'],[49,22,'CM'],[40,34,'DM'],[49,46,'CM'],[38,61,'RB'],[68,25,'ST'],[68,43,'ST']]
+};
+export const labShape=key=>Object.hasOwn(LAB_FORMATIONS,key)?key:'4-4-2';
 const labRoles={GK:'GK',LB:'FB',RB:'FB',CB:'CB',LW:'W',RW:'W',CM:'CM',DM:'CM',AM:'CM',ST:'ST'};
+export const labAnchor=(shape,slot)=>LAB_FORMATIONS[labShape(shape)][slot];
+export const labRole=pos=>labRoles[pos];
 const fit=(p,pos)=>pos===p.primary?p.overall:p.positions?.[pos]??0;
-export function labLineup(pool){
+export function labLineup(pool,shape='4-4-2'){
+ const lineupSlots=LAB_FORMATIONS[labShape(shape)].map(([, ,pos])=>pos);
  if(!Array.isArray(pool)||pool.length<16)return null;
  const byId=new Map(pool.map(p=>[p.id,p]));
  const starters=assignSquad(pool,lineupSlots,fit).map(id=>byId.get(id));
@@ -72,9 +80,10 @@ export function labLineup(pool){
 export function applyLabLineups(s,lineups){
  for(const [team,lineup] of lineups.entries()){
   const players=s.players.filter(p=>p.team===team);
+  const shape=LAB_FORMATIONS[labShape(s.teams[team].shape)];
   for(const [index,p] of players.entries()){
    const source=lineup[index],a=attributes(source),keeper=source.primary==='GK';
-   const pos=lineupSlots[index]??source.primary;
+   const pos=shape[index]?.[2]??source.primary;
    const position=keeper?a.Positioning:(a.Positioning+fit(source,pos))/2;
    const mapped={
     pass:keeper?a.Kicking:a.Passing,technique:keeper?a.Handling:(a.Passing+a.Dribbling)/2,

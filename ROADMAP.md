@@ -1,8 +1,16 @@
 # Clubline 99 development priorities
 
-Updated 18 November 2026, after v1.154.0.
+Updated 18 November 2026, after v1.159.0.
 
 ## Current state
+v1.159 adds drag and keyboard editing with fixed snapping spots in full match tests. Changes apply to shape and movement, are inherited by substitutes, and survive replaying the same fixture. The next planned milestone is reviewing career fixture and save integration before an optional pilot.
+
+v1.158 adds per-side 4-4-2, 4-3-3 and 3-5-2 in full match tests. Database selection, position anchors and substitutions respect the chosen shape. Twenty-four full matches provide an initial check across club strength gaps. Next review the career fixture and save interfaces, then design an optional moving-match pilot.
+
+v1.157 lets a player act sooner once a cross is settled and a shooting lane is open. Across 48 matched fixtures, goals rose from 103 to 109 and wide-gap favourites won 14 of 16, up from 11. Close fixture scoring held steady. Next test alternative formations in the developer lab before reviewing how to connect it to careers.
+
+v1.156 restores the open-play shot tuning and adds geometry-aware header choice and a technique-based settling touch on crosses. Across 36 matched tests, headed attempts fell from 345 to 197. Total scoring and the higher-rated sides' win rate also fell. Check chance conversion and alternatives to a cross, then test different formations and review career integration.
+
 v1.154 adds database XIs and five-player benches to the match lab for all 88 playable English and Scottish clubs. The lab uses the opening roster and a fixed 4-4-2. Next, reduce excessive favourite shot volume in wide mismatches, test alternative formations and run a separate review of career state and save integration before the optional pilot.
 
 v1.153 lets the moving-match lab use the game's club attack and defence ratings, with a neutral or designated home venue and fictional lineups. The 24 English and Scottish fixtures cover near-equal sides and moderate and wide rating gaps. Before a career pilot, compare more seeds and venue swaps, then map career player attributes, positions, kits and substitutions into the spatial engine and validate the results.

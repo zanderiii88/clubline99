@@ -1,10 +1,11 @@
-import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan} from './lab-tactics.js?v=1.154.0';
-import {createSimulation,stepSimulation,matchFlow,startSecondHalf,simulationSnapshot,setTactic,adjustPlan,instructPlayer,assessBuildUp,onPitch,requestSubstitution,continueAfterInjury,cancelQueuedSubstitutions,suggestedReplacement,STEP} from './possession-sim.js?v=1.154.0';
+import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan,labShape} from './lab-tactics.js?v=1.160.0';
+import {createSimulation,stepSimulation,matchFlow,startSecondHalf,simulationSnapshot,setTactic,adjustPlan,instructPlayer,formationPosition,formationGrid,snapFormationPosition,moveFormationPosition,resetFormationPositions,assessBuildUp,onPitch,requestSubstitution,continueAfterInjury,cancelQueuedSubstitutions,suggestedReplacement,STEP} from './possession-sim.js?v=1.160.0';
 import {registerRealNames,applyRealNames} from './real-names.js?v=1.93.0';
 import {realNamesEnabled} from './preferences.js?v=1.125.0';
 import {scottishPlayable} from './scottish-world.js?v=1.89.0';
 const root=document.querySelector('#match-lab'),query=selector=>root.querySelector(selector),svgNS='http://www.w3.org/2000/svg';
 let pauseReason='';
+let editingShape=false,shapeDrag=null;
 let fullMatch=false,fastForward=false,view='full';
 let highlightUntil=0,lastHighlight='';
 const highlights=()=>fullMatch&&view==='highlights';
@@ -20,6 +21,7 @@ const configureAudio=()=>ambience?.configure({muted:!sound||prefs.ambienceMuted=
 configureAudio();
 let draftPreset='balanced',draftPlan={...sim.teams[0].plan},appliedPlan={...draftPlan},appliedPreset='balanced',profile='balanced';
 let strengths=['standard','standard'],initialInstructions={},lastAdviceSecond=-1;
+const formations=['4-4-2','4-4-2'];
 let useClubRatings=false,clubCatalog=null,clubRosters=null,useLineups=true,clubIds=['EU051','SC05'],homeSide=null,clubLoadPending=false;
 const ratedFixture=()=>fullMatch&&useClubRatings?clubIds.map(id=>clubCatalog.get(id)):null;
 const defaultShirts=['#2474ca','#c94151'];
@@ -109,8 +111,10 @@ function syncPlanControls(){
  for(const el of root.querySelectorAll('[data-rated-club]'))el.value=clubIds[Number(el.dataset.ratedClub)];
  query('[data-rated-venue]').value=homeSide??'neutral';
  query('[data-rated-lineups]').checked=useLineups;
+ query('[data-formation-setup]').hidden=!fullMatch;
+ for(const el of root.querySelectorAll('[data-formation]'))el.value=formations[Number(el.dataset.formation)];
  query('[data-roster-status]').textContent=sim.teams.every(team=>team.rosterBased)
-  ?'Database lineups · 4-4-2':'Fictional lineups';
+  ?'Database lineups':'Fictional lineups';
  if(rated)query('[data-strength-summary]').textContent=rated.map(c=>c.name).join(' v ');
  for(const el of root.querySelectorAll('[data-team-name]'))el.textContent=sim.teams[Number(el.dataset.teamName)].name;
  query('[data-pitch]').setAttribute('aria-label',`Top-down football test. ${sim.teams[0].name} attack the top goal.`);
@@ -121,8 +125,13 @@ function syncPlanControls(){
 function applyDraft(){setTactic(sim,0,draftPreset);for(const key of Object.keys(PLAN_OPTIONS))if(sim.teams[0].plan[key]!==draftPlan[key])adjustPlan(sim,0,key,draftPlan[key]);appliedPreset=draftPreset;appliedPlan={...sim.teams[0].plan};syncPlanControls();}
 for(const [key,field]of Object.entries(PLAN_OPTIONS)){const label=document.createElement('label');label.textContent=field.label;const select=document.createElement('select');select.className='select';select.dataset.planField=key;select.setAttribute('aria-label',field.label);for(const [value,text]of Object.entries(field.values)){const option=document.createElement('option');option.value=value;option.textContent=text;select.append(option);}label.append(select);query('[data-plan-fields]').append(label);}
 const nodes=new Map(),format=seconds=>`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(Math.floor(seconds%60)).padStart(2,'0')}`;
+for(const x of formationGrid.depths)for(const y of formationGrid.lanes){
+ const spot=document.createElementNS(svgNS,'circle');
+ spot.setAttribute('cx',String(y*10));spot.setAttribute('cy',String((105-x)*10));spot.setAttribute('r','4');
+ query('[data-shape-spots]').append(spot);
+}
 for(const p of sim.players){
- const g=document.createElementNS(svgNS,'g');g.setAttribute('class','lab-player');g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('data-player-id',p.id);g.setAttribute('aria-label',`${sim.teams[p.team].name}, number ${p.shirtNumber??p.number}, ${p.name}, ${p.role}`);
+ const g=document.createElementNS(svgNS,'g');g.setAttribute('class','lab-player');g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('data-player-id',p.id);g.setAttribute('data-team',String(p.team));g.setAttribute('aria-label',`${sim.teams[p.team].name}, number ${p.shirtNumber??p.number}, ${p.name}, ${p.role}`);
  const title=document.createElementNS(svgNS,'title');title.textContent=`${p.name} · #${p.shirtNumber??p.number} · ${p.role}`;g.append(title);
  const shirt=document.createElementNS(svgNS,'path');shirt.setAttribute('d','M-13 -20 L-26 -10 L-19 1 L-13 -3 L-13 20 L13 20 L13 -3 L19 1 L26 -10 L13 -20 L6 -15 L-6 -15Z');shirt.setAttribute('class','lab-shirt');shirt.setAttribute('fill',p.role==='GK'?(p.team===0?'#e4af34':'#65a178'):shirts[p.team]);g.append(shirt);
  const number=document.createElementNS(svgNS,'text');number.setAttribute('class','lab-number');number.setAttribute('y','9');number.textContent=p.number;g.append(number);query('[data-shirts]').append(g);nodes.set(p.id,g);
@@ -165,10 +174,60 @@ function updateBench(){
  query('[data-lab="substitute"]').disabled=!outgoing.length||!incoming.length||(sim.subsUsed?.[0]||0)+queued>=3||sim.phase==='ended';query('[data-lab="cancel-subs"]').hidden=!queued;query('[data-lab="continue-injury"]').hidden=!sim.pendingInjury;
  const p=sim.players.find(p=>p.id===query('[data-sub-in]').value);query('[data-bench-attributes]').textContent=p?`${p.name}: passing ${Math.round(p.pass)}, technique ${Math.round(p.technique)}, stamina ${Math.round(p.stamina)}, energy ${Math.round(p.energy)}%.`:'';
 }
+function stopShapeEdit(){
+ editingShape=false;
+ if(shapeDrag)delete nodes.get(shapeDrag.id).dataset.dragging;
+ shapeDrag=null;
+}
+function draggablePlayer(id){
+ return onPitch(sim).find(p=>p.id===id&&p.team===0&&p.role!=='GK');
+}
+function pitchPoint(event){
+ const pitch=query('[data-pitch]'),matrix=pitch.getScreenCTM();
+ if(!matrix)return null;
+ const point=pitch.createSVGPoint();
+ point.x=event.clientX;point.y=event.clientY;
+ const local=point.matrixTransform(matrix.inverse());
+ return {x:105-local.y/10,y:local.x/10};
+}
+root.addEventListener('pointerdown',event=>{
+ if(!editingShape||shapeDrag||event.button!==0)return;
+ const id=event.target.closest('[data-player-id]')?.dataset.playerId;
+ if(!draggablePlayer(id))return;
+ shapeDrag={id,pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,point:null};
+ query('[data-pitch]').setPointerCapture(event.pointerId);
+ nodes.get(id).dataset.dragging='true';
+ event.preventDefault();
+});
+root.addEventListener('pointermove',event=>{
+ if(shapeDrag?.pointerId!==event.pointerId)return;
+ if(!shapeDrag.point&&Math.hypot(event.clientX-shapeDrag.startX,event.clientY-shapeDrag.startY)<5)return;
+ const player=draggablePlayer(shapeDrag.id),point=pitchPoint(event);
+ if(player&&point)shapeDrag.point=snapFormationPosition(sim,player,point);
+ paint(1);
+});
+function finishShapeDrag(event,apply){
+ if(shapeDrag?.pointerId!==event.pointerId)return;
+ const {id,point}=shapeDrag;
+ delete nodes.get(id).dataset.dragging;
+ shapeDrag=null;
+ if(apply&&point)moveFormationPosition(sim,id,point);
+ paint(1);
+}
+root.addEventListener('pointerup',event=>finishShapeDrag(event,true));
+root.addEventListener('pointercancel',event=>finishShapeDrag(event,false));
+root.addEventListener('lostpointercapture',event=>finishShapeDrag(event,false));
 function paint(alpha=1){
  const quiet=running&&scanning();
  query('[data-quiet]').hidden=!quiet;
  query('.lab-pitch-wrap').classList.toggle('is-scanning',quiet);
+ query('.lab-pitch-wrap').classList.toggle('is-forming',editingShape);
+ query('[data-shape-controls]').hidden=!fullMatch||sim.phase==='ended';
+ query('[data-shape-hint]').hidden=!editingShape;
+ query('[data-lab="edit-shape"]').textContent=editingShape?'Done':'Edit shape';
+ query('[data-lab="edit-shape"]').setAttribute('aria-pressed',String(editingShape));
+ query('[data-lab="edit-shape"]').disabled=!!sim.pendingInjury;
+ query('[data-lab="reset-shape"]').hidden=!editingShape||!sim.teams[0].customAnchors;
  if(quiet){
   const [blue,red]=sim.stats;
   query('[data-quiet-update]').textContent=`Shots ${blue.shots}–${red.shots} · On target ${blue.shotsOnTarget}–${red.shotsOnTarget}`;
@@ -177,7 +236,11 @@ function paint(alpha=1){
   const now=simulationSnapshot(sim),old=new Map(previous.players.map(p=>[p.id,p])),blend=reduced?1:alpha;
   for(const p of now.players){const before=old.get(p.id)||p,x=before.x+(p.x-before.x)*blend,y=before.y+(p.y-before.y)*blend;const node=nodes.get(p.id);node.style.display=p.onField?'':'none';if(node.dataset.role!==p.role||node.dataset.shirt!==shirts[p.team]||node.dataset.playerName!==p.name||node.dataset.shirtNumber!==String(p.number)){node.dataset.role=p.role;node.dataset.shirt=shirts[p.team];node.dataset.playerName=p.name;node.dataset.shirtNumber=String(p.number);
     node.querySelector('title').textContent=`${p.name} · #${p.shirtNumber??p.number} · ${p.role}`;
-    node.querySelector('.lab-number').textContent=p.number;node.setAttribute('aria-label',`${sim.teams[p.team].name}, number ${p.shirtNumber??p.number}, ${p.name}, ${p.role}`);node.querySelector('.lab-shirt').setAttribute('fill',p.role==='GK'?(p.team===0?'#e4af34':'#65a178'):shirts[p.team]);}nodes.get(p.id).setAttribute('transform',`translate(${y*10} ${(105-x)*10})`);}
+    node.querySelector('.lab-number').textContent=p.number;node.setAttribute('aria-label',`${sim.teams[p.team].name}, number ${p.shirtNumber??p.number}, ${p.name}, ${p.role}`);node.querySelector('.lab-shirt').setAttribute('fill',p.role==='GK'?(p.team===0?'#e4af34':'#65a178'):shirts[p.team]);}
+   const live=editingShape&&p.onField?sim.players.find(q=>q.id===p.id):null;
+   const position=editingShape&&p.onField?(shapeDrag?.id===p.id&&shapeDrag.point||formationPosition(sim,live)):{x,y};
+   node.setAttribute('transform',`translate(${position.y*10} ${(105-position.x)*10})`);
+  }
   const height=now.ball.z||0;query('[data-ball]').setAttribute('r',String(9+Math.min(height,16)*.45));
   const x=previous.ball.x+(now.ball.x-previous.ball.x)*blend,y=previous.ball.y+(now.ball.y-previous.ball.y)*blend;
   for(const sel of ['[data-ball]','[data-ball-halo]']){query(sel).setAttribute('cx',y*10);query(sel).setAttribute('cy',(105-x)*10);}
@@ -267,10 +330,18 @@ function frame(timestamp){
  requestAnimationFrame(frame);
 }
 function restart(seed=sim.seed,scenario=query('[data-scenario]').value,autoplay=false){
+ const custom=sim.teams[0].shape===formations[0]?sim.teams[0].customAnchors:null;
+ stopShapeEdit();
  fastForward=false;highlightUntil=5;lastHighlight='';benchSignature='';query('[data-sub-feedback]').textContent='';runGeneration++;ambience?.setContext('off');const clubs=ratedFixture();
  shirts=shirtColours(clubs);
  const rosters=clubs&&useLineups?clubs.map(club=>clubRosters.get(club.id)):null;
- sim=createSimulation({seed,scenario,profile,strengths,preset:appliedPreset,managedTeam:0,fullMatch,clubs,homeSide,rosters});
+ sim=createSimulation({seed,scenario,profile,strengths,preset:appliedPreset,managedTeam:0,fullMatch,clubs,homeSide,rosters,formations});
+ if(fullMatch&&custom){
+  sim.teams[0].customAnchors=structuredClone(custom);
+  for(const p of onPitch(sim).filter(p=>p.team===0&&p.role!=='GK')){
+   if(custom[p.number-1])p.role=custom[p.number-1][2];
+  }
+ }
  sim.teams[0].plan={...appliedPlan};for(const [id,instruction]of Object.entries(initialInstructions))instructPlayer(sim,id,instruction);
  pauseReason=sim.events.findLast(e=>e.type==='injury'&&e.team===0||e.type==='penalty'||e.type==='card'&&e.colour==='red'||e.type==='knock'&&e.team===0)?.text||'';previous=simulationSnapshot(sim);accumulator=0;lastFrame=null;eventCursor=sim.events.length;inspected=null;query('.lab-player-instructions').hidden=true;lastAdviceSecond=-1;
  running=autoplay&&!reduced;syncPlanControls();syncAudio();paint();
@@ -279,8 +350,14 @@ function inspectPlayer(id){
  const p=sim.players.find(p=>p.id===id);if(!p)return;inspected=id;const panel=query('.lab-player-instructions');panel.hidden=false;panel.open=true;query('[data-selected-player]').textContent=`${sim.teams[p.team].name} · #${p.shirtNumber??p.number} ${p.name}`;query('[data-player-attributes]').textContent=`${p.role==='GK'?`Handling ${Math.round(p.handling)} · Reflexes ${Math.round(p.reflexes)} · Distribution ${Math.round(p.pass)}`:`Passing ${Math.round(p.pass)} · Finishing ${Math.round(p.finish)} · Dribbling ${Math.round(p.dribbling)} · Heading ${Math.round(p.heading)} · Pace ${Math.round(Math.max(0,Math.min(100,(p.pace-3)*25)))} · Acceleration ${Math.round(p.acceleration)} · Agility ${Math.round(p.agility)}`}  · Off-ball ${Math.round(p.offball)} · Decisions ${Math.round(p.decisions)} · Discipline ${Math.round(p.discipline)} · Teamwork ${Math.round(p.teamwork)}`;const control=query('[data-instruction]');control.disabled=p.team!==0;control.value=p.instruction;for(const option of control.options)option.disabled=p.role==='GK'&&!['hold','auto'].includes(option.value);paint(1);
 }
 root.addEventListener('click',event=>{
- const person=event.target.closest('[data-player-id]');if(person){inspectPlayer(person.dataset.playerId);return;}
+ const person=event.target.closest('[data-player-id]');if(person){if(!editingShape)inspectPlayer(person.dataset.playerId);return;}
  const action=event.target.closest('[data-lab]')?.dataset.lab;if(!action)return;
+ if(action==='edit-shape'&&fullMatch&&sim.phase!=='ended'&&!sim.pendingInjury){
+  if(editingShape)stopShapeEdit();
+  else{editingShape=true;running=false;fastForward=false;accumulator=0;lastFrame=null;}
+ }
+ if(action==='reset-shape'&&editingShape){resetFormationPositions(sim,0);}
+ if(['pause','step','skip-setup','fast-forward'].includes(action)&&editingShape)stopShapeEdit();
  if(action==='club-ratings'){void toggleClubRatings();return;}
  if(sim.pendingInjury&&['pause','step','skip-setup'].includes(action))return;
  if(action==='substitute'){const result=requestSubstitution(sim,0,query('[data-sub-out]').value,query('[data-sub-in]').value);query('[data-sub-feedback]').textContent=result.ok?(result.queued?'Change queued for the next stoppage.':'Substitution made.') : result.reason;if(!sim.pendingInjury)pauseReason='';previous=simulationSnapshot(sim);}
@@ -317,11 +394,27 @@ root.addEventListener('click',event=>{
  if(action==='step'&&sim.phase!=='half-time'){pauseReason='';running=false;fastForward=false;const serial=sim.serial,budget=200+(sim.phase==='restart'?Math.ceil(Math.max(0,sim.restartUntil-sim.time)/STEP):0);for(let i=0;i<budget&&sim.serial===serial&&sim.phase!=='ended';i++)advance();previous=simulationSnapshot(sim);accumulator=0;}
  if(action==='sound'){sound=!sound;query('[data-lab="sound"]').textContent=sound?'Sound on':'Sound off';query('[data-lab="sound"]').setAttribute('aria-pressed',String(sound));if(sound)enableAudio();}
  if(action==='export'){
-  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.154.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?'highlights':'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.160.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,formations:sim.teams.map(t=>t.shape),clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?'highlights':'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  syncAudio();paint(1);
 });
-root.addEventListener('keydown',event=>{if(event.target.matches('[data-player-id]')&&['Enter',' '].includes(event.key)){event.preventDefault();inspectPlayer(event.target.dataset.playerId);}});
+root.addEventListener('keydown',event=>{
+ if(editingShape){
+  if(event.key==='Escape'){stopShapeEdit();paint(1);return;}
+  if(!event.target.matches('[data-player-id]'))return;
+  const player=draggablePlayer(event.target.dataset.playerId);
+  const delta={ArrowUp:[1,0],ArrowDown:[-1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]}[event.key];
+  if(!player||!delta)return;
+  event.preventDefault();
+  const {x,y}=formationPosition(sim,player);
+  const step=(values,value,direction)=>direction>0?values.find(option=>option>value)??value
+   :direction<0?values.findLast(option=>option<value)??value:value;
+  moveFormationPosition(sim,player.id,{x:step(formationGrid.depths,x,delta[0]),y:step(formationGrid.lanes,y,delta[1])});
+  paint(1);
+ }else if(event.target.matches('[data-player-id]')&&['Enter',' '].includes(event.key)){
+  event.preventDefault();inspectPlayer(event.target.dataset.playerId);
+ }
+});
 root.addEventListener('change',event=>{
  const el=event.target;
  if(el.matches('[data-view]')){
@@ -337,6 +430,14 @@ root.addEventListener('change',event=>{
  if(el.matches('[data-plan-field]')){draftPlan[el.dataset.planField]=el.value;syncPlanControls();}
  if(el.matches('[data-rated-club]')){
   if(clubCatalog?.has(el.value)){clubIds[Number(el.dataset.ratedClub)]=el.value;restart();}
+ }
+ if(el.matches('[data-formation]')&&fullMatch){
+  const team=Number(el.dataset.formation),shape=labShape(el.value);
+  if(formations[team]!==shape){
+   formations[team]=shape;
+   if(team===0)initialInstructions={};
+   restart();
+  }
  }
  if(el.matches('[data-rated-lineups]')){useLineups=el.checked;restart();}
  if(el.matches('[data-rated-venue]')){

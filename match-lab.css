@@ -41,3 +41,15 @@
 .lab-adjust-plan [data-lab="club-ratings"]{min-height:44px;margin:4px 0}
 
 .lab-plan-setup>.lab-roster-option{flex-direction:row;align-items:center;gap:7px;min-height:40px}
+
+.lab-extra[hidden],.lab-shape-hint[hidden]{display:none}
+.lab-shape-hint{margin:6px 0;font-size:13px;color:#d3e4ee}
+.lab-pitch-wrap.is-forming svg{touch-action:none}
+.lab-pitch-wrap.is-forming .lab-player[data-team="0"]:not([data-role="GK"]){cursor:grab}
+.lab-pitch-wrap.is-forming .lab-player[data-team="1"]{opacity:.28}
+.lab-pitch-wrap.is-forming .lab-player[data-dragging="true"]{cursor:grabbing}
+.lab-pitch-wrap.is-forming [data-ball],.lab-pitch-wrap.is-forming [data-ball-halo],.lab-pitch-wrap.is-forming .lab-play-state{visibility:hidden}
+
+.lab-pitch-wrap [data-shape-spots]{visibility:hidden;pointer-events:none}
+.lab-pitch-wrap.is-forming [data-shape-spots]{visibility:visible}
+.lab-pitch-wrap [data-shape-spots] circle{fill:#fff;opacity:.42}
