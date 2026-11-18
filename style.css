@@ -1092,3 +1092,6 @@ button,[role="button"],a,select{touch-action:manipulation}.comparison-head small
 club-screen-awake { display:block; padding:6px 0; }
 club-screen-awake label { display:inline-flex; align-items:center; min-height:48px; gap:8px; cursor:pointer; }
 club-screen-awake small:not(:empty) { display:block; }
+
+.career-pitch-overlay { position:fixed; inset:0; z-index:100; background:#0e202f; }
+.career-pitch-overlay iframe { display:block; border:0; width:100%; height:100%; }

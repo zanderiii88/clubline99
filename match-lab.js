@@ -1,5 +1,5 @@
-import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan,labShape} from './lab-tactics.js?v=1.161.0';
-import {createSimulation,stepSimulation,matchFlow,startSecondHalf,simulationSnapshot,setTactic,adjustPlan,instructPlayer,formationPosition,formationGrid,snapFormationPosition,moveFormationPosition,resetFormationPositions,assessBuildUp,onPitch,requestSubstitution,continueAfterInjury,cancelQueuedSubstitutions,suggestedReplacement,STEP} from './possession-sim.js?v=1.161.0';
+import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan,labShape} from './lab-tactics.js?v=1.162.0';
+import {createSimulation,stepSimulation,matchFlow,startSecondHalf,simulationSnapshot,setTactic,adjustPlan,instructPlayer,formationPosition,formationGrid,snapFormationPosition,moveFormationPosition,resetFormationPositions,assessBuildUp,onPitch,requestSubstitution,continueAfterInjury,cancelQueuedSubstitutions,suggestedReplacement,STEP} from './possession-sim.js?v=1.162.0';
 import {registerRealNames,applyRealNames} from './real-names.js?v=1.93.0';
 import {realNamesEnabled} from './preferences.js?v=1.125.0';
 import {scottishPlayable} from './scottish-world.js?v=1.89.0';
@@ -15,6 +15,16 @@ const triggersHighlight=e=>['shot','save','goal','penalty','cross','cutback'].in
 const pausesMatch=e=>e.type==='half-time'||e.type==='penalty'||e.type==='card'&&e.colour==='red'
  ||e.team===0&&['injury','knock'].includes(e.type);
 let sim=createSimulation({managedTeam:0}),previous=simulationSnapshot(sim),running=false,speed=2,lastFrame=null,accumulator=0,eventCursor=0,sound=false,inspected=null,disposed=false,runGeneration=0;
+const careerHost=globalThis.location?.search.includes('career=1')&&window.parent!==window?window.parent.clublineCareerPitch:null;
+const careerPitch=careerHost?.open(window);
+if(careerPitch){
+ sim=careerPitch.sim;
+ previous=simulationSnapshot(sim);
+ fullMatch=true;
+ view='highlights';
+ eventCursor=sim.events.length;
+ root.classList.add('career-pitch');
+}
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let ambience=null,audioLoading=false;
 let prefs={};try{prefs=JSON.parse(localStorage.getItem('clubline-audio-settings')||'{}')}catch{}
 const configureAudio=()=>ambience?.configure({muted:!sound||prefs.ambienceMuted===true,volume:prefs.ambienceVolume??.25,effectsMuted:!sound||prefs.effectsMuted===true,effectsVolume:prefs.effectsVolume??.65,hidden:document.hidden});
@@ -36,7 +46,23 @@ function shirtColours(clubs){
   .filter(usable).find(colour=>Math.hypot(...rgb(colour).map((value,i)=>value-home[i]))>=110);
  return [first,away??defaultShirts[1]];
 }
-let shirts=defaultShirts;
+let shirts=careerPitch?shirtColours(careerPitch.shirts):defaultShirts;
+if(careerPitch){
+ draftPreset=appliedPreset=sim.teams[0].tactic;
+ appliedPlan=draftPlan={...sim.teams[0].plan};
+ query('[data-view]').value=view;
+ query('.lab-header h1').textContent='Career match';
+ query('.lab-header .eyebrow').textContent='Pitch view · Pilot';
+ query('.lab-intro').textContent=sim.teams.map(t=>`${t.name} (${t.venue})`).join(' v ');
+}
+let lastCheckpoint=Date.now(),finishing=false;
+function checkpointCareer(exit=false){
+ if(!careerPitch)return;
+ lastCheckpoint=Date.now();
+ const saved=careerHost.checkpoint(window,sim,exit);
+ const status=query('[data-career-status]');
+ status.textContent=saved?'Match saved.':'Could not save the match on this device.';
+}
 async function toggleClubRatings(){
  if(clubLoadPending)return;
  if(useClubRatings){
@@ -111,7 +137,7 @@ function syncPlanControls(){
  for(const el of root.querySelectorAll('[data-rated-club]'))el.value=clubIds[Number(el.dataset.ratedClub)];
  query('[data-rated-venue]').value=homeSide??'neutral';
  query('[data-rated-lineups]').checked=useLineups;
- query('[data-formation-setup]').hidden=!fullMatch;
+ query('[data-formation-setup]').hidden=!fullMatch||!!careerPitch;
  for(const el of root.querySelectorAll('[data-formation]'))el.value=formations[Number(el.dataset.formation)];
  query('[data-roster-status]').textContent=sim.teams.every(team=>team.rosterBased)
   ?'Database lineups':'Fictional lineups';
@@ -170,7 +196,7 @@ function updateBench(){
  if(signature!==benchSignature){benchSignature=signature;for(const [selector,players]of [['[data-sub-out]',outgoing],['[data-sub-in]',incoming]]){const control=query(selector),prior=control.value;control.replaceChildren(...players.map(p=>{const option=document.createElement('option');option.value=p.id;option.textContent=`#${p.shirtNumber??p.number} ${p.name} · ${p.role}${p.injuredOff?' · injured':''}`;return option;}));if(players.some(p=>p.id===prior))control.value=prior;}
   if(sim.pendingInjury?.team===0){query('[data-sub-out]').value=sim.pendingInjury.playerId;const match=suggestedReplacement(sim,sim.pendingInjury.playerId);if(match)query('[data-sub-in]').value=match.id;query('.lab-bench').open=true;}
  }
- const queued=(sim.pendingSubs||[]).filter(q=>q.team===0).length;query('[data-sub-count]').textContent=`${sim.subsUsed?.[0]||0}/3 substitutions used${queued?`; ${queued} queued`:''}. Five named substitutes.`;
+ const queued=(sim.pendingSubs||[]).filter(q=>q.team===0).length;query('[data-sub-count]').textContent=`${sim.subsUsed?.[0]||0}/3 substitutions used${queued?`; ${queued} queued`:''}. ${careerPitch?'':' Five named substitutes.'}`;
  query('[data-lab="substitute"]').disabled=!outgoing.length||!incoming.length||(sim.subsUsed?.[0]||0)+queued>=3||sim.phase==='ended';query('[data-lab="cancel-subs"]').hidden=!queued;query('[data-lab="continue-injury"]').hidden=!sim.pendingInjury;
  const p=sim.players.find(p=>p.id===query('[data-sub-in]').value);query('[data-bench-attributes]').textContent=p?`${p.name}: passing ${Math.round(p.pass)}, technique ${Math.round(p.technique)}, stamina ${Math.round(p.stamina)}, energy ${Math.round(p.energy)}%.`:'';
 }
@@ -269,7 +295,7 @@ function paint(alpha=1){
  query('[data-flow-clearances]').textContent=`After clearing · Opponent controls within 5s ${pair(row=>row.quickOppositionRegains)} · Opponent shoots within 12s ${pair(row=>row.returnShots)}`;
  query('[data-score]').textContent=`${sim.score[0]} – ${sim.score[1]}`;query('[data-clock]').textContent=`${format(sim.time)} / ${format(sim.duration)}`;
  query('[data-play-state]').textContent=sim.phase==='ended'?(fullMatch?'Full-time':'Test complete'):sim.phase==='half-time'?'Half-time':fastForward?'Fast-forwarding':!running?(sim.time===0?'Pre-match setup':'Paused'):sim.phase==='restart'?(({'direct':'Direct free kick','penalty':'Penalty kick','kickoff':'Kick-off','goal-kick':'Goal kick','throw-in':'Throw-in','corner':'Corner','indirect':'Indirect free kick'}[sim.restartKind]||'Restart')):sim.flight?.kind==='shot'?'Shot':sim.flight?.kind==='kick'?'Long keeper kick':sim.flight?.kind==='long-ball'?'Ball over the top':sim.flight?.kind==='cross'?'Cross into the box':sim.flight?.kind==='cutback'?'Cutback':sim.flight?.kind==='clearance'?'Headed clearance':`${sim.teams[sim.possession].name} possession`;
- query('[data-lab="pause"]').textContent=sim.phase==='half-time'?'Start second half':sim.phase==='ended'?'Replay':running||fastForward?'Pause':'Play';query('[data-lab="pause"]').setAttribute('aria-label',sim.phase==='half-time'?'Start second half':sim.phase==='ended'?'Replay test':running||fastForward?'Pause simulation':'Play simulation');
+ query('[data-lab="pause"]').textContent=sim.phase==='half-time'?'Start second half':sim.phase==='ended'?(careerPitch?'Match report':'Replay'):running||fastForward?'Pause':'Play';query('[data-lab="pause"]').setAttribute('aria-label',sim.phase==='half-time'?'Start second half':sim.phase==='ended'?(careerPitch?'Open match report':'Replay test'):running||fastForward?'Pause simulation':'Play simulation');
  const owner=sim.players.find(p=>p.id===(inspected||sim.ball.owner));query('[data-ball-owner]').textContent=owner?`${inspected?'Player':'Ball'}: #${owner.shirtNumber??owner.number} ${owner.name}`:sim.flight?'Ball in flight':'Loose ball';
  const recentGoal=sim.events.findLast(e=>e.type==='goal'&&sim.time-e.second<2),recentFlag=sim.events.findLast(e=>e.type==='offside'&&sim.time-e.second<3),latest=recentGoal||recentFlag||sim.events.at(-1);query('[data-current]').textContent=quiet?(lastHighlight||'Both teams are settling into the match.'):(latest?.text||'Ready to play.');if(recentGoal&&!['ended','half-time'].includes(sim.phase))query('[data-play-state]').textContent='GOAL!';else if(recentFlag&&!['ended','half-time'].includes(sim.phase))query('[data-play-state]').textContent='Offside · Indirect free kick';
  query('[data-through-balls]').textContent=sim.stats.map(row=>
@@ -296,6 +322,10 @@ function advance(visual=true){
  if(visual&&sim.phase!==phase)previous=simulationSnapshot(sim);
  const interrupted=sim.serial!==serial&&consumeEvents();
  if(sim.phase==='ended'){running=false;fastForward=false;}
+ if(careerPitch&&interrupted){
+  if(sim.phase==='half-time')query('.lab-bench').open=true;
+  checkpointCareer();
+ }else if(careerPitch&&sim.phase==='ended')checkpointCareer();
  return interrupted;
 }
 function advanceBatch(limit,keepGoing){
@@ -333,6 +363,7 @@ function frame(timestamp){
    paint(running&&!scanning()?Math.min(1,accumulator/STEP):1);
   }
   syncMatchAudio();
+  if(careerPitch&&Date.now()-lastCheckpoint>=15000&&(running||fastForward))checkpointCareer();
  }
  requestAnimationFrame(frame);
 }
@@ -359,6 +390,18 @@ function inspectPlayer(id){
 root.addEventListener('click',event=>{
  const person=event.target.closest('[data-player-id]');if(person){if(!editingShape)inspectPlayer(person.dataset.playerId);return;}
  const action=event.target.closest('[data-lab]')?.dataset.lab;if(!action)return;
+ if(careerPitch&&['full-match','replay','mismatch','even','new','club-ratings'].includes(action))return;
+ if(careerPitch&&action==='save-exit'){running=false;fastForward=false;checkpointCareer(true);paint(1);return;}
+ if(careerPitch&&action==='pause'&&sim.phase==='ended'){
+  if(!finishing){
+   finishing=true;
+   careerHost.finish(window,sim).then(saved=>{
+    if(!saved)query('[data-career-status]').textContent='Could not record the result.';
+   }).catch(()=>{query('[data-career-status]').textContent='Could not record the result.';})
+    .finally(()=>{finishing=false;});
+  }
+  return;
+ }
  if(action==='edit-shape'&&fullMatch&&sim.phase!=='ended'&&!sim.pendingInjury){
   if(editingShape)stopShapeEdit();
   else{editingShape=true;running=false;fastForward=false;accumulator=0;lastFrame=null;}
@@ -401,9 +444,10 @@ root.addEventListener('click',event=>{
  if(action==='step'&&sim.phase!=='half-time'){pauseReason='';running=false;fastForward=false;const serial=sim.serial,budget=200+(sim.phase==='restart'?Math.ceil(Math.max(0,sim.restartUntil-sim.time)/STEP):0);for(let i=0;i<budget&&sim.serial===serial&&sim.phase!=='ended';i++)advance();previous=simulationSnapshot(sim);accumulator=0;}
  if(action==='sound'){sound=!sound;query('[data-lab="sound"]').textContent=sound?'Sound on':'Sound off';query('[data-lab="sound"]').setAttribute('aria-pressed',String(sound));if(sound)enableAudio();}
  if(action==='export'){
-  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.161.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,formations:sim.teams.map(t=>t.shape),clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?'highlights':'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.162.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,formations:sim.teams.map(t=>t.shape),clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?'highlights':'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  syncAudio();paint(1);
+ if(careerPitch&&!running&&!fastForward)checkpointCareer();
 });
 root.addEventListener('keydown',event=>{
  if(editingShape){
@@ -456,7 +500,7 @@ root.addEventListener('change',event=>{
  if(el.matches('[data-instruction]')&&inspected){if(instructPlayer(sim,inspected,el.value))initialInstructions[inspected]=el.value;}
  if(el.matches('[data-scenario]'))restart();paint(1);
 });
-document.addEventListener('visibilitychange',()=>{if(document.hidden){running=false;fastForward=false;accumulator=0;lastFrame=null;}syncAudio();paint(1);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){running=false;fastForward=false;accumulator=0;lastFrame=null;checkpointCareer();}syncAudio();paint(1);});
 window.addEventListener('pagehide',()=>{disposed=true;running=false;fastForward=false;ambience?.stop();});
 if(reduced)query('[data-current]').textContent='Reduced motion: press Play or Next action.';
 syncPlanControls();paint();requestAnimationFrame(frame);

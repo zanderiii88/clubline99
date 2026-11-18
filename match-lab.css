@@ -61,3 +61,8 @@
 .quiet-possession progress::-webkit-progress-value { background:#62b7df; }
 .quiet-possession progress::-moz-progress-bar { background:#62b7df; }
 .quiet-possession progress[hidden] { display:none; }
+
+#match-lab:not(.career-pitch) .career-only,
+#match-lab.career-pitch :is(.lab-header a,[data-lab="full-match"],[data-lab="replay"],.lab-test-controls,
+  .lab-adjust-plan:has([data-strength]),.lab-plan-setup label:has([data-profile]),club-screen-awake),
+#match-lab.career-pitch [data-career-status]:empty { display:none; }

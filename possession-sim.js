@@ -1,5 +1,5 @@
-import {judgeChallenge} from './lab-rules.js?v=1.161.0';
-import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.161.0';
+import {judgeChallenge} from './lab-rules.js?v=1.162.0';
+import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.162.0';
 // Experimental, deterministic spatial football model. No DOM, audio or career storage.
 export const STEP=.1;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -208,7 +208,7 @@ function boundaryRestart(s,lastTeam,exit,cause){
   {restartKind:kind,lastTouchTeam:lastTeam,point,cause});
  restart(s,team,kind,restartPoint);
 }
-export function createSimulation({seed=99,duration=180,scenario='open',profile='balanced',preset='balanced',strengths=['standard','standard'],kickoffTeam=0,managedTeam=null,fullMatch=false,clubs=null,homeSide=null,rosters=null,formations=null}={}){
+export function createSimulation({seed=99,duration=180,scenario='open',profile='balanced',preset='balanced',strengths=['standard','standard'],kickoffTeam=0,managedTeam=null,fullMatch=false,clubs=null,homeSide=null,rosters=null,formations=null,selectedLineups=null}={}){
  const initialSeed=Number(seed)>>>0;
  const s={version:19,flow:{possession:null,clearance:null,teams:[0,1].map(()=>({
   spells:0,seconds:0,shortSpells:0,losses:[0,0,0],clearances:0,quickOppositionRegains:0,returnShots:0
@@ -223,7 +223,17 @@ export function createSimulation({seed=99,duration=180,scenario='open',profile='
   s.players.push(q);
  }
  if(fullMatch){
-  const lineups=Array.isArray(rosters)&&rosters.length===2?rosters.map((pool,team)=>labLineup(pool,s.teams[team].shape)):null;
+  if(selectedLineups){
+   for(const [team,lineup] of selectedLineups.entries()){
+    const bench=s.players.filter(p=>p.team===team&&p.bench);
+    s.players=s.players.filter(p=>p.team!==team||!p.bench);
+    for(let i=0;i<lineup.length-11;i++){
+     const number=12+i;
+     s.players.push({...structuredClone(bench[i%bench.length]),id:`${team}-${number}`,number});
+    }
+   }
+  }
+  const lineups=selectedLineups??(Array.isArray(rosters)&&rosters.length===2?rosters.map((pool,team)=>labLineup(pool,s.teams[team].shape)):null);
   const rosterBased=lineups?.every(Boolean)===true;
   setRatedClubs(s,clubs,homeSide,rosterBased);
   if(rosterBased&&s.teams.every(team=>team.rosterBased))applyLabLineups(s,lineups);

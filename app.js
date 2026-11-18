@@ -127,7 +127,7 @@ import {initialiseDevelopment,promoteProspect,callUpProspect,returnProspect,deve
 import {sceneSvg,stadiumProfile} from './scene.js?v=1.120.0';
 import {SECTIONS,STANDS,ROOFS,REARS,FINISHES,defaultLayout,normaliseLayout,capacity,changeCost} from './stadium-model.js?v=1.74.0';
 
-const APP_VERSION='1.161.0';
+const APP_VERSION='1.162.0';
 const SAVE_KEY='clubline-career-98-r1';
 const SITES=SITE_CATALOGUE.map(s=>[s.id,s.name,s.limit]);
 const availableSites=c=>fixedSurroundings(c.id)?[[fixedSurroundings(c.id).id,fixedSurroundings(c.id).name,75000]]:SITES.filter(([, ,limit])=>c.capacity<=limit);
@@ -377,7 +377,7 @@ function exportCareer(previous=false){try{if(!previous&&career&&!save())return t
 async function readCareerFile(input){const file=input.files?.[0];input.value='';if(!file)return;try{if(file.size>32*1024*1024)throw Error('This backup is too large.');pendingRestore=parseBackup(await file.text(),originalLeague,Object.keys(FORMATIONS),STYLES);render()}catch(error){pendingRestore=null;toast(error.message||'This is not a compatible Clubline backup.')}}
 function restorePreview(){if(!pendingRestore)return '';const c=pendingRestore.career;return `<div class="overlay restore-preview" role="dialog" aria-modal="true" aria-label="Restore career"><div class="modal"><h2>Restore this career?</h2><p><b>${html(c.names?.[c.clubId]||club(c.clubId)?.name)}</b> · Season ${c.season||1}</p><p>${fmtDate(c.date)} · Balance ${fmtMoney(c.balance)}</p><p>This replaces the current career on this device. A copy of your previous career will remain available to download in Options. Music, FX and notification settings are retained.</p>${pendingRestore.match?.phase==='live'?'<p>Your live match will be restored paused.</p>':''}<div class="modal-actions"><button class="btn primary" data-action="backup-confirm">Restore career</button><button class="btn" data-action="backup-cancel">Cancel</button></div></div></div>`}
 function restoreCareer(){if(!pendingRestore)return;const incoming=structuredClone(pendingRestore),priorCareer=career,priorSource=source,priorMatch=match;let old,previous;restoreMatchControl(incoming.match);try{old=localStorage.getItem(SAVE_KEY);previous=localStorage.getItem('clubline-before-restore');if(old)localStorage.setItem('clubline-before-restore',old);localStorage.setItem(SAVE_KEY,encodeCareer(incoming));if(!load())throw Error('Could not load this career.');pendingRestore=null;navOpen=false;focusMode=false;noticesOpen=false;titleOptionsOpen=false;transferReview=null;instructionPlayer=null;selectedPlayer=null;selectedSlot=null;clearInterval(timer);clearTimeout(autoResumeTimer);rotationScroll.clear();view='career';save();render();toast('Career restored.')}catch{career=priorCareer;source=priorSource;match=priorMatch;try{if(old!==undefined){if(old)localStorage.setItem(SAVE_KEY,old);else localStorage.removeItem(SAVE_KEY);if(previous)localStorage.setItem('clubline-before-restore',previous);else localStorage.removeItem('clubline-before-restore');if(old)load()}}catch{}pendingRestore=null;render();toast('Restore failed. Your previous save has been retained.')}}
-function titleView(){const saved=hasSave();return `<div class="app-shell title-screen artwork-title"><div class="cover-haze" aria-hidden="true"></div><div class="cover-frame"><picture class="cover-picture"><source media="(orientation:portrait)" srcset="assets/clubline-99-cover-mobile.webp?v=${APP_VERSION}"><img class="cover-art" src="assets/clubline-99-cover.webp?v=${APP_VERSION}" alt="Clubline 99: retro football club management artwork"></picture><img class="cover-logo" src="assets/clubline-logo.png?v=1.74.0" alt="CLUBLINE 99"><nav class="cover-menu" aria-label="Main menu"><span class="cover-menu-heading">Your club. Your call.</span><button class="btn ${saved?'':'primary'}" data-action="new-game">New Career</button><button class="btn ${saved?'primary':''}" data-action="continue" ${saved?'':'disabled'}>Continue</button><button class="btn" data-action="title-options">Options</button><a class="btn lab-shortcut" href="match-lab.html?v=1.161.0">Developer · Match test</a><button class="btn" data-action="check-update" ${checkingUpdate?'disabled':''}>${checkingUpdate?'Checking…':'Check for Updates'}</button>${availableVersion?'<button class="btn primary" data-action="load-update">Load update</button>':''}<div class="start-audio" data-audio-controls><label><input type="checkbox" data-audio-setting="musicMuted" ${audioState().musicMuted?'checked':''}> Music off</label><label><input type="checkbox" data-audio-setting="effectsMuted" ${audioState().effectsMuted?'checked':''}> FX off</label></div><span class="cover-build">v${APP_VERSION}</span>${updateMessage?`<p class="cover-update-status" role="status">${html(updateMessage)}</p>`:''}</nav></div>${titleOptionsOpen?`<div class="overlay title-options-overlay" role="dialog" aria-modal="true" aria-label="Options"><div class="modal"><div class="modal-head"><h2>Options</h2><button class="btn slim" data-action="close-title-options">Close ×</button></div>${audioControls()}<club-screen-awake></club-screen-awake>${notificationOptions()}${backupControls()}${gettingStarted()}${leagueRules()}</div></div>`:''}${restorePreview()}</div>`}
+function titleView(){const saved=hasSave();return `<div class="app-shell title-screen artwork-title"><div class="cover-haze" aria-hidden="true"></div><div class="cover-frame"><picture class="cover-picture"><source media="(orientation:portrait)" srcset="assets/clubline-99-cover-mobile.webp?v=${APP_VERSION}"><img class="cover-art" src="assets/clubline-99-cover.webp?v=${APP_VERSION}" alt="Clubline 99: retro football club management artwork"></picture><img class="cover-logo" src="assets/clubline-logo.png?v=1.74.0" alt="CLUBLINE 99"><nav class="cover-menu" aria-label="Main menu"><span class="cover-menu-heading">Your club. Your call.</span><button class="btn ${saved?'':'primary'}" data-action="new-game">New Career</button><button class="btn ${saved?'primary':''}" data-action="continue" ${saved?'':'disabled'}>Continue</button><button class="btn" data-action="title-options">Options</button><a class="btn lab-shortcut" href="match-lab.html?v=1.162.0">Developer · Match test</a><button class="btn" data-action="check-update" ${checkingUpdate?'disabled':''}>${checkingUpdate?'Checking…':'Check for Updates'}</button>${availableVersion?'<button class="btn primary" data-action="load-update">Load update</button>':''}<div class="start-audio" data-audio-controls><label><input type="checkbox" data-audio-setting="musicMuted" ${audioState().musicMuted?'checked':''}> Music off</label><label><input type="checkbox" data-audio-setting="effectsMuted" ${audioState().effectsMuted?'checked':''}> FX off</label></div><span class="cover-build">v${APP_VERSION}</span>${updateMessage?`<p class="cover-update-status" role="status">${html(updateMessage)}</p>`:''}</nav></div>${titleOptionsOpen?`<div class="overlay title-options-overlay" role="dialog" aria-modal="true" aria-label="Options"><div class="modal"><div class="modal-head"><h2>Options</h2><button class="btn slim" data-action="close-title-options">Close ×</button></div>${audioControls()}<club-screen-awake></club-screen-awake>${notificationOptions()}${backupControls()}${gettingStarted()}${leagueRules()}</div></div>`:''}${restorePreview()}</div>`}
 async function checkForUpdates(){
  if(checkingUpdate)return;
  checkingUpdate=true;updateMessage='';availableVersion=null;render();
@@ -883,6 +883,7 @@ function frameCareerScene(){
 function render(){const previous=panelSquads,previousTables=renderTables;panelSquads=new Map();renderTables=new Map();try{return renderContent();}finally{panelSquads=previous;renderTables=previousTables;}}
 function syncGameAudio(){setAudioContext({view,career,match,panelOpen:careerPanelOpen,section,sub,trainingFocus:career?trainingMode(career,source,nextFixture()):null,matchExitOpen});}
 function renderContent(){
+ if(view==='career'&&match?.phase==='live'&&match.pitch&&root.querySelector('[data-career-pitch]'))return;
  if(calendarBatch)return;
  if(calendarAdvancing&&calendarRunTarget){setAudioContext({view,career,match:null,panelOpen:true,section:'calendar'});disposeStadiumLife();root.innerHTML=calendarProgressScreen();return;}
  syncGameAudio();
@@ -997,7 +998,7 @@ function beginMatch(mode){
  if(mode==='simulate'){match.participants=Object.fromEntries(match.lineup.map(id=>[id,{start:0,end:null}]));captureMatchTactics();while(match&&match.phase==='live'&&match.minute<96)simulateMinute();if(match?.phase!=='report')finishMatch();}
  save();render();
 }
-function startClock(){clearInterval(timer);timer=null;if(!match||match.phase!=='live'||match.paused||match.drawerOpen)return;const duration=(MATCH_PACES.includes(match.speed)?match.speed:4)*60*1000/45;timer=setInterval(()=>tickMatch(false),duration)}
+function startClock(){clearInterval(timer);timer=null;if(match?.pitch)return;if(!match||match.phase!=='live'||match.paused||match.drawerOpen)return;const duration=(MATCH_PACES.includes(match.speed)?match.speed:4)*60*1000/45;timer=setInterval(()=>tickMatch(false),duration)}
 function clockLabel(n){return n>90?`90+${n-90}′`:`${n}′`}
 function teamIds(id){return id===career.clubId?match.lineup:match.oppLineup}
 function onPitch(id,roles){const all=teamIds(id).map(x=>player(x)).filter(Boolean),narrow=all.filter(p=>roles.includes(p.primary));return rand(narrow.length?narrow:all)}
@@ -1141,8 +1142,8 @@ function finishMatch(){
  if(!match||match.phase==='report')return;
  sealTacticalRecord(match);
  const tableBefore=Object.fromEntries(standings().map((t,i)=>[t.id,i+1]));
- const round=career.schedule.find(r=>r.date===match.fixtureDate&&r.fixtures.some(f=>f.home===match.home&&f.away===match.away));
- const fixture=round.fixtures.find(f=>f.home===match.home&&f.away===match.away);
+ const round=career.schedule.find(r=>r.date===match.fixtureDate&&r.fixtures.some(f=>f.home===match.home&&f.away===match.away&&f.competition===match.competition));
+ const fixture=round.fixtures.find(f=>f.home===match.home&&f.away===match.away&&f.competition===match.competition);
  fixture.homeGoals=match.homeGoals;fixture.awayGoals=match.awayGoals;resolvePlayoff(career,fixture,quickScore);resolveCup(career,fixture,quickScore);resolveFA(career,fixture,quickScore);resolveCL(career,fixture,quickScore);resolveUC(career,fixture,quickScore);match.homeGoals=fixture.homeGoals;match.awayGoals=fixture.awayGoals;match.decision=fixture.decision;match.penalties=fixture.penalties;match.replayRequired=fixture.replayRequired;match.replayDate=fixture.replayDate;if(fixture.decision&&fixture.decision!=='full time')match.events.push({type:'info',minute:fixture.extraTime?120:90,text:fixture.replayRequired?`${cupName(fixture.competition)} replay arranged for ${fmtDate(fixture.replayDate)}.`:`${fixture.kind==='cup'?cupName(fixture.competition)+' tie':'Playoff'} decided by ${fixture.decision}: ${clubName(fixture.winner)} advance.`});
  for(const f of round.fixtures)if(f.homeGoals===null){[f.homeGoals,f.awayGoals]=scoreBackgroundFixture(f);resolvePlayoff(career,f,quickScore);resolveCup(career,f,quickScore);resolveFA(career,f,quickScore);resolveCL(career,f,quickScore);resolveUC(career,f,quickScore);}
  for(const f of round.fixtures){if(f.simulatedStats)continue;statsCompetition=f.competition;if(f.home!==career.clubId&&f.home!==opposition(match,career.clubId))recordSimulatedTeam(f.home,f.homeGoals,f.awayGoals);if(f.away!==career.clubId&&f.away!==opposition(match,career.clubId))recordSimulatedTeam(f.away,f.awayGoals,f.homeGoals);f.simulatedStats=true;statsCompetition=null;}
@@ -1159,16 +1160,17 @@ function finishMatch(){
   const p=player(id),minutes=Math.max(1,(participation.end??90)-participation.start),goals=match.goalCounts[id]||0,assists=match.assistCounts?.[id]||0,cards=match.cardCounts[id]||0;
   let rating=playerMatchInsight(match,id,career.clubId,p.primary,playerFitness(id)).rating??6.5;
   rating=Math.round(rating*10)/10;career.players[id].form=[...career.players[id].form.slice(-4),rating];
-  career.players[id].fitness=Math.max(34,career.players[id].fitness-Math.max(3,Math.round((12+Math.floor(Math.random()*9))*minutes/90)));
+  career.players[id].fitness=match.pitchFitness?.[id]??Math.max(34,career.players[id].fitness-Math.max(3,Math.round((12+Math.floor(Math.random()*9))*minutes/90)));
   if(!match.friendly)recordStats(id,{start:participation.start===0,minutes,goals,assists,conceded:Math.round(them*minutes/90),cleanSheet:them===0,rating});
   if(career.players[id].positionTrial&&slotsFor(career.formation)[match.lineup.indexOf(id)]===career.players[id].positionTrial)career.players[id].trialMinutes=(career.players[id].trialMinutes||0)+minutes;
   performances.push({id,rating,minutes,goals,assists,cards,fitness:career.players[id].fitness,injuryDays:career.players[id].injuryDays||0});
  }
  const opponentId=opposition(match,career.clubId),opponentPerformances=[];
- const opponentPlayers=[...new Set([...(match.oppStarters||match.oppLineup||[]),...match.events.filter(e=>e.playerId&&owner(e.playerId)===opponentId).map(e=>e.playerId)])].filter(Boolean);
- for(const id of opponentPlayers){const off=match.events.find(e=>e.playerId===id&&['red','injury'].includes(e.type)),minutes=off?off.minute:90,goals=match.goalCounts[id]||0,assists=match.assistCounts?.[id]||0,cards=match.cardCounts[id]||0;
+ const opponentPlayers=match.pitchOpposition?Object.keys(match.pitchOpposition):[...new Set([...(match.oppStarters||match.oppLineup||[]),...match.events.filter(e=>e.playerId&&owner(e.playerId)===opponentId).map(e=>e.playerId)])].filter(Boolean);
+ for(const id of opponentPlayers){const off=match.events.find(e=>e.playerId===id&&['red','injury'].includes(e.type)),entry=match.pitchOpposition?.[id],minutes=entry?(entry.end??90)-entry.start:off?off.minute:90,goals=match.goalCounts[id]||0,assists=match.assistCounts?.[id]||0,cards=match.cardCounts[id]||0;
   const rating=playerMatchInsight(match,id,opponentId,player(id).primary,playerFitness(id)).rating??6.5;
-  if(!match.friendly)recordStats(id,{start:true,minutes,goals,assists,conceded:Math.round(us*minutes/90),cleanSheet:us===0,rating});opponentPerformances.push({id,rating,minutes,goals,assists,cards});
+  if(entry&&match.pitchFitness[id]!==undefined)career.players[id].fitness=match.pitchFitness[id];
+  if(!match.friendly)recordStats(id,{start:!entry||entry.start===0,minutes,goals,assists,conceded:Math.round(us*minutes/90),cleanSheet:us===0,rating});opponentPerformances.push({id,rating,minutes,goals,assists,cards});
  }
  const playerOfMatch=[...performances,...opponentPerformances].sort((a,b)=>b.rating-a.rating)[0];
  updateHappiness();
@@ -1179,7 +1181,7 @@ function finishMatch(){
  career.lineup=career.lineup.map(id=>id&&(playerState(id).injuryDays||(!nextFixture()?.friendly&&playerState(id).suspensionMatches))?null:id);career.bench=career.bench.map(id=>id&&(playerState(id).injuryDays||(!nextFixture()?.friendly&&playerState(id).suspensionMatches))?null:id);
 
 
- prepareManagementReminders();updateExpectations(career,ownLeague(),standings());match.phase='report';match.paused=true;const finishMinutes=Number(match.kickoff.slice(0,2))*60+Number(match.kickoff.slice(3))+110;career.time=String(Math.floor(finishMinutes/60)%24).padStart(2,'0')+':'+String(finishMinutes%60).padStart(2,'0');save();
+ prepareManagementReminders();updateExpectations(career,ownLeague(),standings());delete match.pitch;delete match.pitchOpposition;delete match.pitchFitness;match.phase='report';match.paused=true;const finishMinutes=Number(match.kickoff.slice(0,2))*60+Number(match.kickoff.slice(3))+110;career.time=String(Math.floor(finishMinutes/60)%24).padStart(2,'0')+':'+String(finishMinutes%60).padStart(2,'0');save();
 }
 
 function matchVenue(f=match){return fixtureVenue(f,source,career,usableCapacity(career,myClub()));}
@@ -1255,10 +1257,12 @@ function updateLiveMatch(){syncGameAudio();if(!match||match.phase!=='live')retur
 function reportStatistics(r){if(!r.stats)return '';const home=r.homeId|| (r.home?career.clubId:r.opponent),away=r.awayId||(r.home?r.opponent:career.clubId),h=r.stats.home,a=r.stats.away,pos=possessionPercent(r.stats);return `<div class="match-statistics"><h3>Match statistics</h3>${r.stats.possessionStartMinute?`<p class="muted">Possession recorded from ${clockLabel(r.stats.possessionStartMinute)} after updating this saved match.</p>`:''}<div class="stat-team-head"><b>${html(clubName(home))}</b><b>${html(clubName(away))}</b></div>${[[pos+'%','Possession',100-pos+'%'],[h.shots,'Shots',a.shots],[h.onTarget,'On target',a.onTarget],[r.homeId===career.clubId||!r.homeId&&r.home?r.us:r.them,'Goals',r.homeId===career.clubId||!r.homeId&&r.home?r.them:r.us],[h.yellow,'Yellow cards',a.yellow],[h.red,'Red cards',a.red]].map(([x,label,y])=>`<div class="stat-comparison"><b>${x}</b><span>${label}</span><b>${y}</b></div>`).join('')}</div>`}
 function reportHeadline(r){const best=r.playerOfMatch||r.performances.slice().sort((a,b)=>b.rating-a.rating)[0];return `${r.replayRequired?`<p class="decision-note">Replay arranged: ${fmtDate(r.replayDate)}.</p>`:r.decision&&r.decision!=='full time'?`<p class="decision-note">Decided by ${html(r.decision)}${r.penalties?' · '+r.penalties.home+'–'+r.penalties.away+' on penalties':''}.</p>`:''}<p class="report-highlight">${best?(r.playerOfMatch?'Player of the match: ':'Your standout: ')+html(player(best.id)?.name)+(best.clubId?' ('+html(clubName(best.clubId))+')':'')+' · '+Number(best.rating).toFixed(1):''}${r.home?' · '+Math.round(r.attendance/(r.usableCapacity||myClub().capacity)*100)+'% of available seats filled':''}</p>`}
 function matchOverlay(includeGround=true){
+ if(match.phase==='live'&&match.pitch)return '<div class="career-pitch-overlay" role="dialog" aria-modal="true" aria-label="Career pitch match"><iframe data-career-pitch title="Career pitch match" src="match-lab.html?career=1&amp;v=1.162.0"></iframe></div>';
  const other=opposition(match,career.clubId),home=match.home===career.clubId;
  let body='';
  if(match.phase==='choice')body=`<span class="eyebrow date-pill ${Date.now()<dateFlashUntil?'date-flash':''}">${match.kind==='cup'?cupStage(match):match.friendly?'Pre-season friendly':'Matchday'} / ${fmtDate(career.date)} · ${career.time}</span><h2>${match.neutral?(match.kind==='cup'?cupStage(match)+' · ':'Neutral playoff final · '):match.friendly?'Friendly · ':''}${match.neutral?html(matchVenue().name):home?'Home at '+html(matchVenue().name):'Away at '+html(matchVenue().name)}</h2><div class="scoreline"><span>${html(clubName(match.home))}</span><strong>v</strong><span>${html(clubName(match.away))}</span></div>${!career.matchday?fixtureDayMarkup(match.fixtureDate):''}${matchReadinessBrief()}${isStreamlined()?'':preMatchBrief()}<p>Watch with live decisions, or simulate for a quick result. Choose whether your assistant handles injuries, sending offs and routine substitutions.</p><label class="assistant-choice"><input type="checkbox" data-assistant-choice ${match.assistant?'checked':''}> Delegate in-match decisions to assistant manager</label>${!validLineup()?'<div class="empty-note">Your XI or bench needs an available replacement. Auto pick an available side or review it before kick-off.</div>':''}<div class="modal-actions"><button class="btn primary arrow" data-action="watch-match">Watch match</button><button class="btn" data-action="simulate-match" ${!validLineup()?'disabled':''}>Simulate result</button><button class="btn" data-action="auto-lineup">Auto pick available XI</button><button class="btn ghost" data-action="close-choice">Back to club</button></div>`;
  if(match.phase==='choice'&&isStreamlined())body=streamlinedMatchChoice();
+ if(match.phase==='choice'&&match.kind==='league'&&!match.friendly&&!match.neutral)body+=`<button class="btn" data-action="career-pitch" ${validLineup()?'':'disabled'}>Watch on pitch (pilot)</button>`;
  if(match.phase==='confirm')body=`<span class="eyebrow">${match.kind==='cup'?cupStage(match):match.friendly?'Pre-season friendly':'Matchday'} / Lineup confirmation</span><h2>Pick your eleven</h2><p>Set your formation, play style, team orders and player instructions here before kick-off.</p><label class="assistant-choice"><input type="checkbox" data-assistant-choice ${match.assistant?'checked':''}> Delegate substitutions and sending offs to assistant manager</label>${matchReadinessBrief()}${isStreamlined()?'':preMatchBrief()}${lineupEditor(true)}<button class="btn ghost" data-action="choice-back" style="margin-top:12px">← Match options</button>`;
  if(match.phase==='live')body=liveMatchBody();
  if(match.phase==='report'){
@@ -1524,6 +1528,7 @@ root.addEventListener('click',event=>{
  else if(action==='slot'){const at=Number(el.dataset.index);if(selectedPlayer)swapLineup(at,selectedPlayer);else{selectedSlot=selectedSlot===at?null:at;syncSelectionUI()}}
  else if(action==='close-choice'){match=null;if(career.matchday)career.matchday.phase='await-match';career.time='09:00';save();render()}
  else if(action==='choice-back'){match.phase='choice';save();render()}
+ else if(action==='career-pitch')void openCareerPitch();
  else if(action==='watch-match'){beginMatch('watch');if(isStreamlined())confirmSelectedLineup();}
  else if(action==='simulate-match')beginMatch('simulate');
  else if(action==='confirm-lineup')confirmSelectedLineup();
@@ -1960,7 +1965,75 @@ function handleStreamlinedAction(el){const action=el.dataset.action;
 
 function streamlinedPlayerPanel(){const p=player(instructionPlayer);if(!p||owner(p.id)!==career.clubId)return '';return `<article class="player-panel" role="dialog" aria-label="Player details"><button class="panel-close" data-action="close-player-panel" aria-label="Close player details">×</button><h3>${namedPlayer(p)}</h3>${attributePanel(p)}<p>${p.primary} · Age ${p.age} · ${p.overall} OVR · ${playerFitness(p.id)}% condition</p><p>${html(clubAvailability(p.id))} · ${fmtMoney(p.wage)}/week</p><p>${html(playerState(p.id).reason||'')}</p>${!match&&!p.academy?`<button class="btn slim" data-action="renew-player" data-id="${p.id}">Negotiate contract</button><button class="btn slim" data-action="offer-loan" data-player="${p.id}">Review outgoing loan</button>`:''}</article>`;}
 
-function confirmSelectedLineup(){if(!validLineup()){toast('Select eleven available starters, including a goalkeeper. Bench places may be left empty.');return}updateChecklist(career,managerItems());setChecklistChecked(career,'lineup',true);scoutedPlayer=null;opponentScoutExpanded=false;match.lineup=[...career.lineup];match.bench=[...career.bench];match.participants=Object.fromEntries(match.lineup.map(id=>[id,{start:0,end:null}]));match.phase='live';selectedPlayer=null;selectedSlot=null;match.pendingSubIndex=null;ensureMatchStats(match);match.speed=4;match.drawerOpen=false;match.startConditions=Object.fromEntries([...match.lineup,...match.oppLineup].filter(Boolean).map(id=>[id,playerFitness(id)]));career.time=match.kickoff||'15:00';match.events.push({minute:0,type:'info',text:'Kick-off! The match is underway.'});captureMatchTactics();save();render()}
+let preparingCareerPitch=false;
+async function openCareerPitch(){
+ if(preparingCareerPitch||match?.phase!=='choice'||match.kind!=='league'||!validLineup())return;
+ const fixture=match;
+ preparingCareerPitch=true;
+ try{
+  const {createCareerPitch}=await import('./career-pitch.js?v=1.162.0');
+  if(view!=='career'||match!==fixture||match.phase!=='choice'||!validLineup())return;
+  const rival=opposition(match,career.clubId);
+  const ids=[career.clubId,rival],homeSide=ids.indexOf(match.home);
+  const opponent=bestLineup(rival,clubShape(rival));
+  if(opponent.lineup.some(id=>!id)){toast('The opponent needs eleven available players.');return;}
+  const selected=id=>({...player(id),fitness:playerFitness(id),instruction:playerState(id).instruction});
+  const sides=ids.map((id,team)=>{
+   const picks=team?opponent:career;
+   return {club:{...club(id),name:clubName(id)},shape:clubShape(id),style:clubStyle(id),
+    starters:picks.lineup.map(selected),bench:picks.bench.filter(Boolean).map(selected)};
+  });
+  if(homeSide<0)return;
+  const sim=createCareerPitch(sides,homeSide,Date.now(),career.order);
+  beginMatch('watch');
+  match.oppLineup=[...opponent.lineup];
+  match.oppStarters=[...opponent.lineup];
+  match.assistant=false;
+  confirmSelectedLineup({sim,clubs:ids,homeSide,shirts:sides.map(side=>side.club)});
+ }catch(error){console.error(error);toast('The pitch view could not open.');}
+ finally{preparingCareerPitch=false;}
+}
+
+function activePitchFrame(frame){
+ return view==='career'&&match?.phase==='live'&&match.pitch&&
+  root.querySelector('[data-career-pitch]')?.contentWindow===frame;
+}
+
+globalThis.clublineCareerPitch={
+ open(frame){
+  return activePitchFrame(frame)?structuredClone(match.pitch):null;
+ },
+ checkpoint(frame,state,exit=false){
+  if(!activePitchFrame(frame))return false;
+  match.pitch.sim=structuredClone(state);
+  match.minute=Math.floor(state.time/60);
+  match.homeGoals=state.score[match.pitch.homeSide];
+  match.awayGoals=state.score[1-match.pitch.homeSide];
+  const saved=save();
+  if(saved&&exit){view='title';render();}
+  return saved;
+ },
+ async finish(frame,state){
+  if(!activePitchFrame(frame)||state.phase!=='ended')return false;
+  const {careerPitchResult}=await import('./career-pitch.js?v=1.162.0');
+  if(!activePitchFrame(frame))return false;
+  const fixture=career.schedule.filter(r=>r.date===match.fixtureDate).flatMap(r=>r.fixtures)
+   .find(f=>f.home===match.home&&f.away===match.away&&f.competition===match.competition);
+  if(!fixture||fixture.homeGoals!==null)return false;
+  const {played,injured,...result}=careerPitchResult(state,match.pitch.clubs,match.pitch.homeSide);
+  const ours=new Set(state.players.filter(p=>p.team===0).map(p=>p.rosterId));
+  Object.assign(match,result,{minute:90,injured,participants:Object.fromEntries(Object.entries(played).filter(([id])=>ours.has(id))),
+   pitchOpposition:Object.fromEntries(Object.entries(played).filter(([id])=>!ours.has(id))),
+   pitchFitness:Object.fromEntries(state.players.filter(p=>played[p.rosterId]).map(p=>[p.rosterId,Math.round(p.energy)]))});
+  for(const id of new Set(injured))applyInjury(id,'Match injury');
+  finishMatch();
+  render();
+  if(saveWarning)toast(saveWarning);
+  return true;
+ }
+};
+
+function confirmSelectedLineup(pitch=null){if(!validLineup()){toast('Select eleven available starters, including a goalkeeper. Bench places may be left empty.');return}updateChecklist(career,managerItems());setChecklistChecked(career,'lineup',true);scoutedPlayer=null;opponentScoutExpanded=false;match.lineup=[...career.lineup];match.bench=[...career.bench];match.participants=Object.fromEntries(match.lineup.map(id=>[id,{start:0,end:null}]));match.phase='live';if(pitch){match.pitch=pitch;match.paused=true;}selectedPlayer=null;selectedSlot=null;match.pendingSubIndex=null;ensureMatchStats(match);match.speed=4;match.drawerOpen=false;match.startConditions=Object.fromEntries([...match.lineup,...match.oppLineup].filter(Boolean).map(id=>[id,playerFitness(id)]));career.time=match.kickoff||'15:00';match.events.push({minute:0,type:'info',text:'Kick-off! The match is underway.'});captureMatchTactics();save();render()}
 
 function streamlinedMatchChoice(){return `<span class="eyebrow">${match.kind==='cup'?cupStage(match):match.friendly?'Friendly':ownDivisionName()} · ${fmtDate(career.date)}</span><h2>${html(clubName(match.home))} v ${html(clubName(match.away))}</h2><p>${html(matchVenue().name)} · ${match.kickoff}</p>${matchReadinessBrief()}<details class="stream-match-team"><summary>Change XI & approach</summary>${lineupEditor(true)}</details><p class="compact-note">Your assistant handles routine match decisions. Open Team during the match to take control.</p><div class="modal-actions report-continue"><button class="btn primary" data-action="watch-match" ${!validLineup()?'disabled':''}>Watch match</button><button class="btn" data-action="simulate-match" ${!validLineup()?'disabled':''}>Simulate result</button><button class="btn ghost" data-action="close-choice">Back to club</button></div>`;}
 

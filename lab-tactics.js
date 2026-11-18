@@ -1,3 +1,4 @@
+import {FORMATIONS} from './formations.js?v=1.100.0';
 import {attributes} from './player-attributes.js?v=1.74.0';
 import {assignSquad} from './squad-selection.js?v=1.87.0';
 // Experimental match-lab plans and fictional squad profiles; independent of careers.
@@ -55,6 +56,13 @@ export const LAB_FORMATIONS={
  '4-3-3':[[5,34,'GK'],[25,9,'LB'],[23,25,'CB'],[23,43,'CB'],[25,59,'RB'],[48,19,'CM'],[39,34,'DM'],[48,49,'CM'],[64,9,'LW'],[69,34,'ST'],[64,59,'RW']],
  '3-5-2':[[5,34,'GK'],[23,19,'CB'],[21,34,'CB'],[23,49,'CB'],[38,7,'LB'],[49,22,'CM'],[40,34,'DM'],[49,46,'CM'],[38,61,'RB'],[68,25,'ST'],[68,43,'ST']]
 };
+for(const [shape,rows] of Object.entries(FORMATIONS)){
+ if(LAB_FORMATIONS[shape])continue;
+ LAB_FORMATIONS[shape]=rows.slice().reverse().flatMap((row,depth)=>row.map((role,lane)=>{
+  const width=['LB','LW'].includes(role)?8:['RB','RW'].includes(role)?60:10+(lane+1)*48/(row.length+1);
+  return [depth===0?5:Math.round(23+(depth-1)*46/(rows.length-2)),width,role];
+ }));
+}
 export const labShape=key=>Object.hasOwn(LAB_FORMATIONS,key)?key:'4-4-2';
 const labRoles={GK:'GK',LB:'FB',RB:'FB',CB:'CB',LW:'W',RW:'W',CM:'CM',DM:'CM',AM:'CM',ST:'ST'};
 export const labAnchor=(shape,slot)=>LAB_FORMATIONS[labShape(shape)][slot];

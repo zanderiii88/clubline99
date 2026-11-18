@@ -7,7 +7,7 @@ let requesting = false;
 let generation = 0;
 let message = '';
 let pageActive = true;
-const supported = Boolean(navigator.wakeLock?.request);
+const supported = window.parent === window && Boolean(navigator.wakeLock?.request);
 const wanted = () => supported && enabled && pageActive && !document.hidden;
 
 function refresh() {
