@@ -1,7 +1,7 @@
-CLUBLINE 99 v1.141.0
+CLUBLINE 99 v1.147.0
 
-Use Clubline-v1.131-onwards-to-v1.141-Update.zip over any v1.131–v1.140 installation. Intermediate updates are unnecessary. Keep existing assets/data. Older installations should use Complete. Extract directly beside index.html and replace matching files.
+Use Clubline-v1.131-onwards-to-v1.147-Update.zip over any v1.131–v1.146 installation. Intermediate updates are unnecessary. Keep existing assets/data. Older installations should use Complete. Extract directly beside index.html and replace matching files.
 
-This run improves lab condition/workload, defensive spacing, ground-pass anticipation, cautious tackle choices, clean/loose tackle outcomes and contextual keeper saves. Three new lab situations support mobile testing. Normal career matches/saves remain separate. No fresh career required. No automatic publication.
+This run adds deflections of wide passes, blocks of crosses and changes to touchline tackles and throw-ins. Normal career matches/saves remain separate. No fresh career required. No automatic publication.
 
 Historic release notes, tests and tools are omitted from website packages. Keep Development separately. ZIP extraction cannot delete old files; exact optional obsolete paths are in UPLOAD-CLEANUP.txt.

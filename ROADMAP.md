@@ -1,8 +1,20 @@
 # Clubline 99 development priorities
 
-Updated 17 November 2026, after v1.141.0.
+Updated 17 November 2026, after v1.147.0.
 
 ## Current state
+v1.147 diversifies touchline exits through glancing interceptions, blocked wide deliveries and tackled balls that carry sideways. Throw-ins preserve the surrounding shape and look for a nearby outlet. Retain the matched fixture results for the next calibration pass.
+
+v1.146 improves first boundary crossings and the momentum of rebounds, poor touches, and parries. Pressured wide players can clear up the touchline. Match detail includes goal kicks, and the seeded comparison records exits by cause.
+
+v1.145 adds ground through balls into space and short one-twos around a pressing defender. The developer lab includes two short scenarios and match-detail attempt and completion totals. Ball exits, deflections and restart frequency remain the main match-stat priority. Ground through-ball reception also needs another pass after one completion from 17 attempts across 12 matched games.
+
+v1.144 improves the choice and reception of ground passes and the selection and placement of open-play shots. The developer report compares both versions on held-out 90-minute fixtures and records match totals alongside the 1998/99 scoring reference. The sample improved goals, shots and pass completion. Stoppages are the next priority because the 12 fixtures averaged 84.1 minutes of live play and produced just one throw-in and one corner. Examine how the ball leaves play before further changes to passing tempo or scoring.
+
+v1.143 measures possession length, turnover locations and quick attacks following clearances. Carriers take more time when free of immediate pressure, and defenders can bring down high balls when they have time and sufficient control. Use the new full-match observations to check the balance of open-play chances and target the next round of tuning. Highlights remain a developer-lab milestone before career integration.
+
+v1.142 adds a full-match developer test with a half-time break and a fast-forward control that stops for key incidents and decisions. In-match tactical drafts require Apply plan. Substitutions during restart setup preserve the existing award and countdown. Next, use this full-match path to measure possession length, turnover location and repeated attacks, then compare highlights with normal playback at the same intervention times. Career integration remains a later milestone.
+
 v1.141 continues balance work in the developer lab. It repairs indiscriminate condition drain, separates defensive spacing from attacking support, adds physically reachable ground-pass interception targets, gives defenders a choice to stay on their feet, distinguishes clean tackles from short moving loose-ball pokes, and makes keeper contact difficulty depend on timing and stretch. Fictional tier shifts are ±6 rather than ±10 across attributes, reducing compounded extremes. Three direct tests support mobile review. Fair forced-injury contact now returns immediately from the action step, preserving the injury decision stop. No career integration or public-release preparation is indicated.
 
 Eighty-one mirrored pairs, new mechanics/condition fixtures and existing match/rules/tactics/bench checks pass. Six matched continuous 90-minute diagnostics per build record goals 5.17→1.50, shots 43.50→41.17, passing attempts 1389.67→1784.50 and completion 64.0%→56.3%. Twenty matched ten-minute passages record goals 0.80→0.25, shots 6.45→4.30 and completion 63.9%→56.2%. Scoring improves but passing volume/completion moves in the wrong direction; this is not full-match calibration.

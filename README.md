@@ -1,19 +1,29 @@
-# CLUBLINE 99 - v1.141.0
+# CLUBLINE 99 - v1.147.0
 
 Retro football management with Streamlined and In-depth modes. v1.141 improves condition/workload, defensive spacing and pass anticipation, tackle commitment and loose-ball outcomes, and routine-versus-difficult saves in the experimental match lab. Three direct test situations support mobile review. The spatial engine remains separate from career matches and saves. v1.132 is the latest user-confirmed live checkpoint. No VAR.
+
+## Full-match lab test
+
+Open Developer · Match test and choose **Full match test**. Play at a viewing speed or use **Fast-forward** to reach the next decision, half-time or full-time. Use **Apply plan** for tactical changes after kick-off. At half-time you can make substitutions and then select **Start second half**. Choose **Short tests** to return to the scenario picker.
+
+**Match detail** shows possession length, turnovers by pitch third and how often an opponent controls or shoots quickly after a clearance. The sides are shown in Blue–Red order.
+
+Choose **Through ball · run in behind** or **One-two · run for the return** in **Test controls** to see the new patterns. **Match detail** shows completions out of attempts for each side.
+
+**Match detail** now shows goal kicks alongside corners and throw-ins. The event log shows the boundary crossing before the restart.
 
 ## Install
 
 If you installed v1.121, remove assets/audio/ambience/ and tools/build-ambience.py before uploading game files again. A ZIP extraction cannot delete old files. Playback is disabled regardless.
 
 1. Export a career backup from Options & Help before updating.
-2. Use Clubline-v1.131-onwards-to-v1.141-Update.zip over an existing v1.131–v1.140 installation, or Clubline-1.141.0-Complete.zip for the full game. This update contains everything needed from any of those baseline versions; intermediate update ZIPs are not required. Older installations should use Complete. Keep existing assets/data with the smaller Update.
+2. Use Clubline-v1.131-onwards-to-v1.147-Update.zip over an existing v1.131–v1.146 installation, or Clubline-1.147.0-Complete.zip for the full game. This update contains everything needed from any of those baseline versions; intermediate update ZIPs are not required. Older installations should use Complete. Keep existing assets/data with the smaller Update.
 3. Extract the chosen ZIP into the root of the existing game folder, replacing matching files and retaining subfolders. The files belong directly alongside index.html, not inside an extra parent folder. Keep existing assets/data when using the smaller update.
-4. When you choose to publish the files, let GitHub Pages finish, open the game, use Check for Updates and Load update if offered, then reopen it. The main menu should show v1.141.0.
+4. When you choose to publish the files, let GitHub Pages finish, open the game, use Check for Updates and Load update if offered, then reopen it. The main menu should show v1.147.0.
 
 No fresh career is required. Nothing has been published automatically. Existing careers retain their management mode; Options & Help lets you change Management depth without restarting.
 
-Read RELEASE-1.141.0-NOTES.md for changes and verification limits, and ROADMAP.md for priorities.
+Read RELEASE-1.147.0-NOTES.md for changes and verification limits, and ROADMAP.md for priorities.
 
 ## Cleaner uploads
 

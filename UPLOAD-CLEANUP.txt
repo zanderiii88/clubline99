@@ -1,4 +1,4 @@
-CLUBLINE 99 v1.141.0 - optional cleanup of an existing upload
+CLUBLINE 99 v1.147.0 - optional cleanup of an existing upload
 
 ZIP extraction does not remove old files. The exact relative paths below are obsolete development/docs or the previously withdrawn synthetic audio. Remove only these paths if present. Current game code, data, recorded audio, credits and source/licence material are not on this list. Nothing has been deleted from your live site.
 
@@ -50,6 +50,12 @@ RELEASE-1.137.0-NOTES.md
 RELEASE-1.138.0-NOTES.md
 RELEASE-1.139.0-NOTES.md
 RELEASE-1.140.0-NOTES.md
+RELEASE-1.141.0-NOTES.md
+RELEASE-1.142.0-NOTES.md
+RELEASE-1.143.0-NOTES.md
+RELEASE-1.144.0-NOTES.md
+RELEASE-1.145.0-NOTES.md
+RELEASE-1.146.0-NOTES.md
 RELEASE-1.49-NOTES.md
 RELEASE-1.50-NOTES.md
 RELEASE-1.51-NOTES.md
@@ -109,6 +115,7 @@ review-tests/check-audio-offline.mjs
 review-tests/check-balance-heldout.mjs
 review-tests/check-balance-timing.mjs
 review-tests/check-board-finances.mjs
+review-tests/check-boundary-events.mjs
 review-tests/check-build-up.mjs
 review-tests/check-cache-integrity.cjs
 review-tests/check-calibration-comparison.mjs
@@ -116,6 +123,7 @@ review-tests/check-career-season.mjs
 review-tests/check-cash-outlook.mjs
 review-tests/check-cl-app.mjs
 review-tests/check-cl.mjs
+review-tests/check-combinations.mjs
 review-tests/check-contact-rules.mjs
 review-tests/check-cover-acceleration.mjs
 review-tests/check-cup.mjs
@@ -125,6 +133,7 @@ review-tests/check-divisions.mjs
 review-tests/check-fa-app.mjs
 review-tests/check-fa-cup.mjs
 review-tests/check-firstweek-patch.mjs
+review-tests/check-full-match.mjs
 review-tests/check-generated-identities.mjs
 review-tests/check-injuries-substitutions.mjs
 review-tests/check-integrated-planning.mjs
@@ -164,6 +173,7 @@ review-tests/check-season-stories.mjs
 review-tests/check-seller-app.mjs
 review-tests/check-seller-policy.mjs
 review-tests/check-seller-season-evidence.mjs
+review-tests/check-shot-placement.mjs
 review-tests/check-simple-stadium-commentary.mjs
 review-tests/check-simulation-journey.mjs
 review-tests/check-soft-ambience-126.mjs
@@ -198,6 +208,8 @@ review-tests/check-venues-app.mjs
 review-tests/check-venues.mjs
 review-tests/check-workspace-navigation.mjs
 review-tests/check-youth-opportunities.mjs
+review-tests/measure-match-flow.mjs
+review-tests/measure-scorelines.mjs
 review-tests/varied-career-policy.mjs
 review-tests/vm-game-harness.mjs
 review/accepted-clearance-checks.json
@@ -226,6 +238,7 @@ review/audio-removal.json
 review/balance-heldout-1.140.json
 review/balance-heldout-1.141.json
 review/balance-timing-1.140.json
+review/balance-timing-1.141.json
 review/browser-checks.json
 review/browser-finances-1.116.json
 review/browser-navigation-1.115.json
@@ -240,6 +253,7 @@ review/build-up-1.138.json
 review/build-up-1.139.json
 review/build-up-1.140.json
 review/build-up-1.141.json
+review/build-up-1.144.json
 review/calibration-comparison-1.134.json
 review/calibration-comparison-1.135.json
 review/calibration-comparison-1.136.json
@@ -279,6 +293,7 @@ review/deliveries-1.138.json
 review/deliveries-1.139.json
 review/deliveries-1.140.json
 review/deliveries-1.141.json
+review/deliveries-1.144.json
 review/europe-cl-data-validation.json
 review/europe-cl-mapping.json
 review/fa-cup-app.json
@@ -302,6 +317,8 @@ review/keeper-angles-1.138.json
 review/keeper-angles-1.139.json
 review/keeper-angles-1.140.json
 review/keeper-angles-1.141.json
+review/keeper-angles-1.144.json
+review/keeper-angles-1.146.json
 review/keeper-distribution-1.132.json
 review/keeper-distribution-1.133.json
 review/keeper-distribution-1.134.json
@@ -337,9 +354,14 @@ review/loose-ball-129-repro.json
 review/match-audio-app-1.123.json
 review/match-audio-app-1.125.json
 review/match-audio-app-1.126.json
+review/match-flow-1.143.json
+review/match-flow-aerial-only-1.143.json
+review/match-flow-baseline-1.142.json
+review/match-flow-initial-trial-1.144.json
 review/match-lab-browser-1.128.json
 review/match-lab-export-1.128.json
 review/media-reliability-1.97.json
+review/mirror-divergence.json
 review/mirror-movement-1.134.json
 review/mirror-movement-1.135.json
 review/mirror-movement-1.136.json
@@ -347,6 +369,9 @@ review/mirror-movement-1.138.json
 review/mirror-movement-1.139.json
 review/mirror-movement-1.140.json
 review/mirror-movement-1.141.json
+review/mirror-movement-1.144.json
+review/mirror-movement-1.145.json
+review/mirror-movement-1.146.json
 review/mobile-balance-1.140.json
 review/mobile-builder-1.127.json
 review/mobile-defending-1.141.json
@@ -394,6 +419,21 @@ review/rules-support-1.139.json
 review/rules-support-1.140.json
 review/rules-support-1.141.json
 review/scene-mapping.json
+review/scorelines-backpass-trial-1.146.json
+review/scorelines-baseline-1.143.json
+review/scorelines-baseline-1.145-boundaries.json
+review/scorelines-development-trial-1.144.json
+review/scorelines-final-1.144.json
+review/scorelines-final-1.145.json
+review/scorelines-final-1.146.json
+review/scorelines-final-1.147.json
+review/scorelines-placement-trial-1.144.json
+review/scorelines-reaction-trial-1.145.json
+review/scorelines-rebound-trial-1.146.json
+review/scorelines-secondary-1.146.json
+review/scorelines-secondary-1.147.json
+review/scorelines-trial-1.146.json
+review/scorelines-trial-1.147.json
 review/scottish-surroundings-1.119-layouts.json
 review/scottish-surroundings-1.120-layouts.json
 review/season-plausibility-1.125.json
@@ -462,6 +502,12 @@ review/source-integrity-1.138.json
 review/source-integrity-1.139.json
 review/source-integrity-1.140.json
 review/source-integrity-1.141.json
+review/source-integrity-1.142.json
+review/source-integrity-1.143.json
+review/source-integrity-1.144.json
+review/source-integrity-1.145.json
+review/source-integrity-1.146.json
+review/source-integrity-1.147.json
 review/source-integrity-1.96.json
 review/source-integrity-1.97.json
 review/source-integrity-1.98.json
@@ -503,6 +549,12 @@ review/uefa-roster-validation.json
 review/update-baselines-1.138.json
 review/update-baselines-1.139.json
 review/update-baselines-1.140.json
+review/update-baselines-1.141.json
+review/update-baselines-1.142.json
+review/update-baselines-1.143.json
+review/update-baselines-1.144.json
+review/update-baselines-1.145.json
+review/update-baselines-1.146.json
 review/upload-packaging-1.129.json
 review/upload-packaging-1.130.json
 review/upload-packaging-1.131.json
@@ -515,6 +567,12 @@ review/upload-packaging-1.137.json
 review/upload-packaging-1.138.json
 review/upload-packaging-1.139.json
 review/upload-packaging-1.140.json
+review/upload-packaging-1.141.json
+review/upload-packaging-1.142.json
+review/upload-packaging-1.143.json
+review/upload-packaging-1.144.json
+review/upload-packaging-1.145.json
+review/upload-packaging-1.146.json
 review/usability-1.126.json
 review/varied-careers-1.116-final-C01.json
 review/varied-careers-1.116-final-C45.json
@@ -541,6 +599,12 @@ tools/curate-upload-138.py
 tools/curate-upload-139.py
 tools/curate-upload-140.py
 tools/curate-upload-141.py
+tools/curate-upload-142.py
+tools/curate-upload-143.py
+tools/curate-upload-144.py
+tools/curate-upload-145.py
+tools/curate-upload-146.py
+tools/curate-upload-147.py
 tools/package-129.py
 tools/package-130.py
 tools/package-131.py
@@ -554,4 +618,10 @@ tools/package-138.py
 tools/package-139.py
 tools/package-140.py
 tools/package-141.py
+tools/package-142.py
+tools/package-143.py
+tools/package-144.py
+tools/package-145.py
+tools/package-146.py
+tools/package-147.py
 tools/source-checks.mjs
