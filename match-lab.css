@@ -16,3 +16,28 @@
 .lab-bench .btn,.lab-bench .select{min-height:44px}
 
 .lab-restart{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:8px 0;font-size:.85rem}.lab-restart[hidden]{display:none}.lab-restart .btn{min-height:44px}
+
+.lab-match-controls{align-items:end;margin-bottom:8px}
+.lab-view{display:grid;gap:2px;font-size:11px}
+.lab-view[hidden],.lab-quiet[hidden],.lab-toolbar label[hidden]{display:none}
+.lab-view .select{min-height:44px;padding:4px 8px;font-size:13px}
+.lab-quiet{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;gap:8px;padding:16px;text-align:center;background:#142838;color:#d4e3eb}
+.lab-quiet b{color:#f3e6ae;font:700 24px 'Clubline Condensed',Arial,sans-serif}
+.lab-quiet span{font-size:13px;line-height:1.4;max-width:28ch}
+.lab-pitch-wrap.is-scanning svg,.lab-pitch-wrap.is-scanning .lab-play-state{visibility:hidden}
+.lab-match-setup{margin:8px 0;border-top:1px solid #3b5362}
+.lab-match-setup summary,.lab-bench summary{cursor:pointer;min-height:44px;padding:11px 0;font-size:13px}
+.lab-match-setup .lab-adjust-plan{margin:8px 0}
+@media(max-width:650px){
+ .match-lab-body{padding-left:max(10px,env(safe-area-inset-left))}
+ .lab-toolbar{flex-wrap:wrap}
+ .lab-toolbar label,.lab-toolbar .btn{min-width:0}
+ .lab-toolbar .select{min-height:35px}
+ .lab-pitch-wrap svg{height:clamp(260px,calc(100svh - 255px),520px);min-height:0;max-height:none}
+}
+
+.lab-plan-setup[hidden]{display:none}
+.lab-score .lab-blue,.lab-score .lab-red{min-width:0;overflow-wrap:anywhere}
+.lab-adjust-plan [data-lab="club-ratings"]{min-height:44px;margin:4px 0}
+
+.lab-plan-setup>.lab-roster-option{flex-direction:row;align-items:center;gap:7px;min-height:40px}

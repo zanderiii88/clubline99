@@ -1,7 +1,7 @@
-CLUBLINE 99 v1.147.0
+CLUBLINE 99 v1.154.0
 
-Use Clubline-v1.131-onwards-to-v1.147-Update.zip over any v1.131–v1.146 installation. Intermediate updates are unnecessary. Keep existing assets/data. Older installations should use Complete. Extract directly beside index.html and replace matching files.
+Use Clubline-v1.131-onwards-to-v1.154-Update.zip over any v1.131–v1.153 installation. Keep existing assets and data. For older installations or a clean setup, use Complete. Extract beside index.html and replace matching files.
 
-This run adds deflections of wide passes, blocks of crosses and changes to touchline tackles and throw-ins. Normal career matches/saves remain separate. No fresh career required. No automatic publication.
+This update adds starting database lineups to the developer match lab. Existing careers can continue after updating.
 
-Historic release notes, tests and tools are omitted from website packages. Keep Development separately. ZIP extraction cannot delete old files; exact optional obsolete paths are in UPLOAD-CLEANUP.txt.
+Historic release notes, tests and tools stay in Development. ZIP extraction cannot delete files from an existing installation. Optional cleanup paths are listed in UPLOAD-CLEANUP.txt.

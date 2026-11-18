@@ -1,8 +1,22 @@
 # Clubline 99 development priorities
 
-Updated 17 November 2026, after v1.147.0.
+Updated 18 November 2026, after v1.154.0.
 
 ## Current state
+v1.154 adds database XIs and five-player benches to the match lab for all 88 playable English and Scottish clubs. The lab uses the opening roster and a fixed 4-4-2. Next, reduce excessive favourite shot volume in wide mismatches, test alternative formations and run a separate review of career state and save integration before the optional pilot.
+
+v1.153 lets the moving-match lab use the game's club attack and defence ratings, with a neutral or designated home venue and fictional lineups. The 24 English and Scottish fixtures cover near-equal sides and moderate and wide rating gaps. Before a career pilot, compare more seeds and venue swaps, then map career player attributes, positions, kits and substitutions into the spatial engine and validate the results.
+
+v1.152 recalibrates background results in the English and Scottish top flights. A 200-season sample per division moves goals, draws, home advantage and table spread closer to 1998–99. The existing career match view remains in use. The spatial lab's 12 new fixtures bring its fictional elite-versus-lower evidence to 20 stronger-side wins in 20. Before a career pilot, map real club ratings into the spatial model and compare adjacent skill levels and home advantage. Review lower-division title spreads alongside that work.
+
+v1.151 adds a highlights view to full matches in the developer lab. The match clock and stats continue between short clips. The bench and folded tactics sit beneath the pitch. An automated fixture verifies that identical manager decisions produce identical state in full play, highlights and fast-forward. Physical phone and listening checks remain open. Next run broader English and Scottish season-balance comparisons before considering a career pilot.
+
+v1.150 improves pass selection into the box and rejects crosses to runners who cannot meet them, with a separate clear-lane requirement for cutbacks. Across 38 matched fixtures the 24 even games produced 196 to 219 close central open-play foot shots and 61 to 60 goals. Weaker squads in 14 mismatches produced 38 to 28 shots and still had two matches without an attempt. The next planned batch is mobile match presentation and highlights, with timing and decision parity checks. Larger English and Scottish season-balance tests follow before the career pilot.
+
+v1.149 records shot outcomes and adds shots on target to the developer lab. Keepers leave clearly wide attempts and find fully stretched saves harder. The 30 matched fixtures went from 65 to 78 goals. Goalless matches rose from two to six, while three-goal margins rose from seven to nine. Next look at shot creation and chance quality by team, formation and opposition strength before further tuning keeper saves.
+
+v1.148 refines open-play shot selection and finishing in the developer lab. Two matched batches produced 582 to 532 shots and 36 goals in each build. The twelve-fixture set also produced three more wide-margin results. Next measure how many open-play looks become blocks, saves or goals, and test any keeper changes alongside the strength mismatches before considering career integration.
+
 v1.147 diversifies touchline exits through glancing interceptions, blocked wide deliveries and tackled balls that carry sideways. Throw-ins preserve the surrounding shape and look for a nearby outlet. Retain the matched fixture results for the next calibration pass.
 
 v1.146 improves first boundary crossings and the momentum of rebounds, poor touches, and parries. Pressured wide players can clear up the touchline. Match detail includes goal kicks, and the seeded comparison records exits by cause.

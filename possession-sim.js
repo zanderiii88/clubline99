@@ -1,5 +1,5 @@
-import {judgeChallenge} from './lab-rules.js?v=1.147.0';
-import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength} from './lab-tactics.js?v=1.147.0';
+import {judgeChallenge} from './lab-rules.js?v=1.154.0';
+import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups} from './lab-tactics.js?v=1.154.0';
 // Experimental, deterministic spatial football model. No DOM, audio or career storage.
 export const STEP=.1;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -11,6 +11,11 @@ export const onPitch=s=>s.players.filter(p=>!p.sentOff&&!p.bench&&!p.subbedOff&&
 const player=(s,id)=>s.players.find(p=>p.id===id);
 const direction=team=>team===0?1:-1;
 const goalX=team=>team===0?105:0;
+const GOAL_HALF_WIDTH=3.66;
+const KEEPER_WIDE_MARGIN=.59;
+function shotGoalOffset(f,ball){
+ return Math.abs(ball.y+f.vy*(goalX(f.team)-ball.x)/f.vx-34);
+}
 function emit(s,type,team,actorId,text,extra={}){const e={id:++s.serial,second:Number(s.time.toFixed(1)),type,team,actorId,text,...extra};s.events.push(e);return e;}
 function homeSpace(p,team){return team===0?p.x:105-p.x;}
 function nearest(s,team,pos,exclude=null){return onPitch(s).filter(p=>p.team===team&&p.id!==exclude).sort((a,b)=>Math.round(distance(a,pos)*1e8)-Math.round(distance(b,pos)*1e8)||a.number-b.number);}
@@ -153,11 +158,11 @@ function boundaryRestart(s,lastTeam,exit,cause){
   {restartKind:kind,lastTouchTeam:lastTeam,point,cause});
  restart(s,team,kind,restartPoint);
 }
-export function createSimulation({seed=99,duration=180,scenario='open',profile='balanced',preset='balanced',strengths=['standard','standard'],kickoffTeam=0,managedTeam=null,fullMatch=false}={}){
+export function createSimulation({seed=99,duration=180,scenario='open',profile='balanced',preset='balanced',strengths=['standard','standard'],kickoffTeam=0,managedTeam=null,fullMatch=false,clubs=null,homeSide=null,rosters=null}={}){
  const initialSeed=Number(seed)>>>0;
  const s={version:19,flow:{possession:null,clearance:null,teams:[0,1].map(()=>({
   spells:0,seconds:0,shortSpells:0,losses:[0,0,0],clearances:0,quickOppositionRegains:0,returnShots:0
- }))},timing:{live:0,stopped:0},seed:initialSeed,rng:initialSeed,time:0,duration:fullMatch?5400:clamp(Number(duration)||180,30,600),fullMatch:fullMatch?{firstKickoff:kickoffTeam===1?1:0,half:1}:null,phase:'restart',serial:0,events:[],players:[],ball:{x:52.5,y:34,owner:null},flight:null,score:[0,0],managedTeam:managedTeam===0||managedTeam===1?managedTeam:null,subsUsed:[0,0],pendingSubs:[],teams:[{name:'Blue XI',tactic:preset,plan:makePlan(preset),profile},{name:'Red XI',tactic:'balanced',plan:makePlan(),profile:'balanced'}],stats:[0,1].map(()=>({passes:0,completed:0,recycles:0,switches:0,shots:0,fouls:0,penalties:0,yellows:0,reds:0,knocks:0,injuries:0,substitutions:0,saves:0,parries:0,blocks:0,tackles:0,interceptions:0,carries:0,takeOns:0,longKicks:0,miscontrols:0,offsides:0,corners:0,throwIns:0,longBalls:0,crosses:0,cutbacks:0,errantPasses:0,aerials:0,clearances:0,possession:0})),possession:0,decisionAt:0,immunity:0,restartUntil:0,scenario:!fullMatch&&['open','counter','wide','keeper','offside','support','corner','throw-in','long-ball','early-cross','byline-cross','cutback','passing','overlap-safe','overlap-threat','overlap-risk','recovery','shot-angle','shot-close','box-defence','build-up','switch-play','pressed-build-up','foul-demo','penalty-demo','appeal-demo','advantage-demo','red-demo','knock-demo','injury-demo','strain-demo','keeper-injury-demo','substitution-demo','through-ball','one-two','pass-lane','tackle-duel','tired-press'].includes(scenario)?scenario:'open'};
+ }))},timing:{live:0,stopped:0},seed:initialSeed,rng:initialSeed,time:0,duration:fullMatch?5400:clamp(Number(duration)||180,30,600),fullMatch:fullMatch?{firstKickoff:kickoffTeam===1?1:0,half:1}:null,phase:'restart',serial:0,events:[],players:[],ball:{x:52.5,y:34,owner:null},flight:null,score:[0,0],managedTeam:managedTeam===0||managedTeam===1?managedTeam:null,subsUsed:[0,0],pendingSubs:[],teams:[{name:'Blue XI',tactic:preset,plan:makePlan(preset),profile},{name:'Red XI',tactic:'balanced',plan:makePlan(),profile:'balanced'}],stats:[0,1].map(()=>({passes:0,completed:0,recycles:0,switches:0,shots:0,shotsOnTarget:0,fouls:0,penalties:0,yellows:0,reds:0,knocks:0,injuries:0,substitutions:0,saves:0,parries:0,blocks:0,tackles:0,interceptions:0,carries:0,takeOns:0,longKicks:0,miscontrols:0,offsides:0,corners:0,throwIns:0,longBalls:0,crosses:0,cutbacks:0,errantPasses:0,aerials:0,clearances:0,possession:0})),possession:0,decisionAt:0,immunity:0,restartUntil:0,scenario:!fullMatch&&['open','counter','wide','keeper','offside','support','corner','throw-in','long-ball','early-cross','byline-cross','cutback','passing','overlap-safe','overlap-threat','overlap-risk','recovery','shot-angle','shot-close','box-defence','build-up','switch-play','pressed-build-up','foul-demo','penalty-demo','appeal-demo','advantage-demo','red-demo','knock-demo','injury-demo','strain-demo','keeper-injury-demo','substitution-demo','through-ball','one-two','pass-lane','tackle-duel','tired-press'].includes(scenario)?scenario:'open'};
  for(let team=0;team<2;team++)for(let i=0;i<11;i++){const [x,y,role]=anchors[i];s.players.push({id:`${team}-${i+1}`,team,number:i+1,name:names[team][i],role,x:team===0?x:105-x,y:team===0?y:68-y,vx:0,vy:0,pass:62+random(s)*25,finish:role==='ST'?70+random(s)*16:50+random(s)*23,tackle:role==='CB'?78:60+random(s)*20,pace:4.7+random(s)*.8});}
  for(const p of onPitch(s)){for(const key of ['technique','decisions','composure','offball','positioning','teamwork','discipline','stamina','anticipation','handling','reflexes'])p[key]=56+random(s)*26;p.acceleration=clamp((p.pace-3)*20+p.stamina*.28,25,95);p.agility=clamp(p.technique*.65+p.decisions*.35,25,95);p.dribbling=p.technique;p.heading=clamp((p.technique+p.finish)/2+(['ST','CB'].includes(p.role)?6:0),25,95);p.strength=(p.tackle+p.stamina)/2;p.roam=random(s);p.energy=100;p.instruction='auto';p.thinkAt=0;p.target=null;p.intent='Keep shape';}applyProfile(s,0,profile);for(let team=0;team<2;team++)applyStrength(s,team,strengths[team]||'standard');
  const reserveNames=[['W. Morris','X. Duncan','Y. Cameron','Z. Miller','A. Watson'],['W. Ellis','X. Turner','Y. Bennett','Z. Harris','A. Lewis']];
@@ -165,6 +170,12 @@ export function createSimulation({seed=99,duration=180,scenario='open',profile='
   const original=s.players[team*11+index],q=JSON.parse(JSON.stringify(original));q.id=`${team}-${12+i}`;q.number=12+i;q.name=reserveNames[team][i];q.bench=true;q.played=false;q.intent='Named substitute';q.target=null;q.vx=q.vy=0;q.energy=100;q.base={...original.base};
   for(const key of Object.keys(q.base))if(typeof q.base[key]==='number'&&key!=='roam'){const delta=(random(s)-.6)*(key==='pace'?.3:10);q.base[key]=clamp(q.base[key]+delta,key==='pace'?3.5:25,key==='pace'?6.5:95);}
   s.players.push(q);
+ }
+ if(fullMatch){
+  const lineups=Array.isArray(rosters)&&rosters.length===2?rosters.map(labLineup):null;
+  const rosterBased=lineups?.every(Boolean)===true;
+  setRatedClubs(s,clubs,homeSide,rosterBased);
+  if(rosterBased&&s.teams.every(team=>team.rosterBased))applyLabLineups(s,lineups);
  }
  for(let team=0;team<2;team++)applyProfile(s,team,s.teams[team].profile);
  restart(s,kickoffTeam===1?1:0,s.scenario==='keeper'?'goal-kick':'kickoff');
@@ -310,7 +321,7 @@ export function keeperTarget(s,p){
  const local=homeSpace(s.ball,p.team),depth=clamp(local*.12,1.5,7),ratio=depth/Math.max(depth,local);
  let y=34+(s.ball.y-34)*ratio,intent='Cover the goal angle';
  const f=s.flight;
- if(f?.kind==='shot'&&f.team!==p.team&&f.age>=.16+(100-(p.reflexes??70))*.003){
+ if(f?.kind==='shot'&&f.team!==p.team&&shotGoalOffset(f,s.ball)<=GOAL_HALF_WIDTH+KEEPER_WIDE_MARGIN&&f.age>=.16+(100-(p.reflexes??70))*.003){
   const plane=p.team===0?depth:105-depth,time=(plane-s.ball.x)/f.vx;
   if(time>=0){y=s.ball.y+f.vy*time;intent='React to the shot';}
  }
@@ -346,7 +357,9 @@ export function keeperSaveChance(p,f,contactDistance){
  const reflexes=p.reflexes??70,reaction=.16+(100-reflexes)*.003;
  const reach=f.delivery==='penalty'?.8+reflexes*.009:1.5+reflexes*.017;
  const stretch=clamp(contactDistance/reach,0,1),late=clamp((reaction+.2-f.age)/.2,0,1);
- return clamp(.975+reflexes*.0002-stretch*stretch*(.12+(100-reflexes)*.001)-late*(.04+(100-reflexes)*.0006),.6,.995);
+ const stretchCost=f.delivery==='penalty'?.12:.27;
+ return clamp(.975+reflexes*.0002-stretch*stretch*(stretchCost+(100-reflexes)*.001)
+  -late*(.04+(100-reflexes)*.0006),.6,.995);
 }
 // Assess the same physical space for movement and passing; no score/rate targets.
 export function assessBuildUp(s,p){
@@ -366,8 +379,12 @@ export function assessPass(s,p,q){
  const safety=Math.min(space,10)*.35+clamp(margin,-5,4)*(.45+awareness)
   -Math.max(0,2-lane)*(1+awareness);
  const distanceCost=plan.passing==='short'?.14:plan.passing==='direct'?.055:.085;
+ const intoBox=progress>2&&d<23&&space>3&&margin>1&&lane>2
+  &&!inPenalty(p,1-p.team)&&inPenalty(q,1-p.team)
+  &&!offsidePositions(s,p.team).some(candidate=>candidate.id===q.id);
+ const boxBonus=intoBox?2.4*awareness:0;
  const build=assessBuildUp(s,p),recycle=progress< -3&&space>4&&lane>2&&build.blocked,switchPlay=Math.abs(q.y-p.y)>24&&Math.abs(progress)<18&&space>5;
- return {distance:d,progress,space,lane,margin,recycle,switchPlay,weight:Math.max(.05,3+progress*forwardWeight+safety-d*distanceCost+(recycle?(plan.passing==='direct'?1:3)*awareness:0)+(switchPlay&&plan.width==='wide'?2*awareness:0))};
+ return {distance:d,progress,space,lane,margin,recycle,switchPlay,intoBox,weight:Math.max(.05,3+progress*forwardWeight+safety-d*distanceCost+boxBonus+(recycle?(plan.passing==='direct'?1:3)*awareness:0)+(switchPlay&&plan.width==='wide'?2*awareness:0))};
 }
 function movePlayers(s){
  const owner=player(s,s.ball.owner),ball=s.ball,targets=new Map(),recent=s.transition&&s.time-s.transition.at<5;
@@ -497,17 +514,40 @@ function deliver(s,p,kind,aim,q,pressure,style,context={}){
  const attempt=deliveryTarget(s,p,aim,kind,pressure);launch(s,p,kind,attempt.target,q,{style:style||kind,intendedEnd:attempt.aim,accuracyError:attempt.error,...context});
  if(attempt.errant){s.stats[p.team].errantPasses=(s.stats[p.team].errantPasses||0)+1;const phrase=attempt.mode==='underhit'?'underhits the delivery':attempt.mode==='overhit'?'puts too much on the delivery':'sends the delivery off target';emit(s,'misplaced',p.team,p.id,`${p.name} ${phrase}.`,{receiverId:q?.id??null,mode:attempt.mode,attemptEvent:s.flight.passEvent});}
 }
+// Crosses need an onside runner who can reach the delivery as it drops.
+export function wideDeliveryOptions(s,p,cutback=false){
+ const opponents=onPitch(s).filter(q=>q.team!==p.team);
+ const flagged=new Set(offsidePositions(s,p.team).map(q=>q.id));
+ const local=homeSpace(p,p.team),dir=direction(p.team);
+ return onPitch(s).filter(q=>q.team===p.team&&q.id!==p.id&&q.role!=='GK'&&!flagged.has(q.id)
+  &&homeSpace(q,p.team)>70&&Math.abs(q.y-34)<20&&(!cutback||homeSpace(q,p.team)<local-3))
+ .flatMap(q=>{
+  const anticipationDelay=.18+(100-q.anticipation)/110;
+  const depth=clamp(homeSpace(q,p.team)+4,89,99);
+  const aim=cutback?{x:q.x+q.vx*.35,y:q.y+q.vy*.35}
+   :{x:dir===1?depth:105-depth,y:clamp(q.y+q.vy*.5,22,46)};
+  const flightTime=distance(s.ball,aim)/15;
+  const travel=q.pace*Math.max(0,flightTime-anticipationDelay)+1.35;
+  if(distance(q,aim)>travel)return [];
+  const space=Math.min(...opponents.map(o=>distance(o,aim)));
+  if(cutback&&(space<1.8||opponents.some(o=>segmentDistance(o,s.ball,aim)<1.25)))return [];
+  return [{q,aim,score:(q.role==='ST'?2:0)+Math.min(space,10)*.55+q.offball*.03}];
+ });
+}
 function wideDelivery(s,p,pressure){
- const plan=s.teams[p.team].plan,local=homeSpace(p,p.team),wide=Math.abs(p.y-34)>17;
- if(p.role==='GK'||!wide||local<67||!['W','FB','CM'].includes(p.role))return false;
- const receivers=onPitch(s).filter(q=>q.team===p.team&&q.id!==p.id&&q.role!=='GK'&&homeSpace(q,p.team)>70&&Math.abs(q.y-34)<20);
- if(!receivers.length||random(s)>(plan.width==='wide'?.78:.6))return false;
- const byline=local>92,cutback=byline&&receivers.some(q=>homeSpace(q,p.team)<local-3)&&random(s)<.65;
- const candidates=receivers.filter(q=>!cutback||homeSpace(q,p.team)<local-3).map(q=>({q,score:(q.role==='ST'?3:0)+Math.min(distance(q,nearest(s,1-p.team,q)[0]),10)*.4+q.offball*.03+random(s)*(100-p.decisions)/25})).sort((a,b)=>b.score-a.score);
- const q=candidates[0]?.q;if(!q)return false;
+ const plan=s.teams[p.team].plan,local=homeSpace(p,p.team);
+ if(p.role==='GK'||Math.abs(p.y-34)<=17||local<67||!['W','FB','CM'].includes(p.role))return false;
+ const byline=local>92;
+ const cutbacks=byline?wideDeliveryOptions(s,p,true):[];
+ const cutback=cutbacks.length>0&&random(s)<.65;
+ const candidates=cutback?cutbacks:wideDeliveryOptions(s,p);
+ if(!candidates.length||random(s)>(plan.width==='wide'?.78:.6))return false;
+ for(const choice of candidates)choice.score+=random(s)*(100-p.decisions)/25;
+ candidates.sort((a,b)=>Math.round((b.score-a.score)*1e8)||a.q.number-b.q.number);
+ const {q,aim}=candidates[0];
  const style=cutback?'cutback':local<83?'early':byline?'byline':'box';
- const aim=cutback?{x:q.x+q.vx*.35,y:q.y+q.vy*.35}:{x:p.team===0?clamp(homeSpace(q,p.team)+4,89,99):105-clamp(homeSpace(q,p.team)+4,89,99),y:clamp(q.y+q.vy*.5,22,46)};
- deliver(s,p,cutback?'cutback':'cross',aim,q,pressure,style);return true;
+ deliver(s,p,cutback?'cutback':'cross',aim,q,pressure,style);
+ return true;
 }
 function overTheTop(s,p,pressure){
  if(p.role==='GK')return false;const plan=s.teams[p.team].plan,dir=direction(p.team),flagged=offsidePositions(s,p.team).map(p=>p.id);
@@ -538,27 +578,40 @@ function keeperKick(s,p,pressure){
  const target={x:clamp(chosen.x+chosen.vx*.7+(random(s)-.5)*error*direction(p.team),3,102),y:clamp(chosen.y+chosen.vy*.7+(random(s)-.5)*error*direction(p.team),3,65)};
  launch(s,p,'kick',target,chosen);return true;
 }
-// Compare the keeper's position and the defenders in both shooting lanes.
-export function openPlayShotAim(s,p,errorRoll){
- const directionOfAttack=direction(p.team);
- const goal=goalX(p.team);
- const depth=Math.max(1,Math.abs(goal-s.ball.x));
- const opponents=onPitch(s).filter(q=>q.team!==p.team);
+// Assess the opening from the ball and the better of two shooting lanes.
+export function assessOpenPlayShot(s,p,opponents){
+ const dir=direction(p.team),goal=goalX(p.team);
+ const depth=Math.max(1,(goal-s.ball.x)*dir);
+ const range=Math.hypot(depth,s.ball.y-34);
+ const opening=Math.atan2(37.66-s.ball.y,depth)-Math.atan2(30.34-s.ball.y,depth);
+ const defenders=opponents.filter(q=>q.role!=='GK');
  const keeper=opponents.find(q=>q.role==='GK');
- const targets=[-1,1].map(side=>{
-  const y=34+side*2.65*directionOfAttack;
-  const target={x:goal+directionOfAttack,y};
-  const lane=Math.min(4,...opponents.filter(q=>q.role!=='GK')
-   .map(q=>segmentDistance(q,s.ball,target)));
+ const lanes=[-1,1].map(side=>{
+  const y=34+side*2.55*dir;
+  const target={x:goal,y};
+  const clearance=Math.min(4,...defenders.map(q=>segmentDistance(q,s.ball,target)));
   const cover=keeper?segmentDistance(keeper,s.ball,target):0;
-  return {y,score:lane*.55+Math.min(4,cover)};
+  return {y,clearance,score:clearance*.85+Math.min(4,cover)};
  });
- const preferred=targets[1].score>targets[0].score+1e-8?targets[1]:targets[0];
+ const preferred=lanes[1].score>lanes[0].score+1e-8?lanes[1]:lanes[0];
+ const pressure=Math.min(5,...opponents.map(q=>distance(p,q)));
+ const openingFactor=clamp(opening/.41,0,1);
+ const distanceFactor=clamp((30-range)/18,0,1);
+ const laneFactor=clamp((preferred.clearance-.25)/2.5,.15,1);
+ const pressureFactor=.55+.45*clamp((pressure-1)/3,0,1);
+ const chance=.50*openingFactor**1.4*distanceFactor*laneFactor*pressureFactor;
+ return {preferred,depth,range,opening,pressure,chance};
+}
+export function openPlayShotAim(s,p,errorRoll,look=assessOpenPlayShot(s,p,onPitch(s).filter(q=>q.team!==p.team))){
+ const dir=direction(p.team),goal=goalX(p.team);
  const quality=p.finish*.75+p.composure*.25;
- const pressure=Math.min(...opponents.map(q=>distance(q,p)));
- const spread=1.5+depth*.12+(100-quality)*.085+Math.max(0,3-pressure)*.65;
- const aim=34+(preferred.y-34)*clamp(.55+quality*.006,.6,1);
- return {x:goal+directionOfAttack,y:aim+(errorRoll-.5)*2*spread*directionOfAttack};
+ const pressureStress=Math.max(0,4-look.pressure)/4;
+ const spread=1.05+look.range*.062+(100-quality)*.075
+  +pressureStress*(1.2+(100-p.composure)*.025)+(100-p.energy)*.018;
+ const aim=34+(look.preferred.y-34)*clamp(.55+quality*.006,.6,1);
+ const crossing=aim+(errorRoll-.5)*2*spread*dir;
+ // The flight aims beyond the line. Project the intended crossing onto that plane.
+ return {x:goal+dir,y:crossing+(crossing-s.ball.y)/look.depth};
 }
 // Match the pass to a moving, legally positioned runner and assess space
 // at the destination as well as the lane the ball will travel down.
@@ -675,13 +728,13 @@ function chooseAction(s,p){
  if(returnWallPass(s,p,defenders,pressure))return;
  if(p.role==='GK'&&keeperKick(s,p,pressure))return;
  if(wideDelivery(s,p,pressure)||overTheTop(s,p,pressure))return;
- const shotLane=Math.min(...defenders.filter(q=>q.role!=='GK').map(q=>segmentDistance(q,p,{x:goalX(p.team),y:34})));
- const opening=Math.abs(Math.atan2(37.66-p.y,toGoal)-Math.atan2(30.34-p.y,toGoal));
- const angleFactor=clamp(opening/.4,.12,1);
- const shotChance=(toGoal<17?.42:.065)*angleFactor**1.35
-  *(pressure<2?.65:1)*(shotLane<1.2?.4:1);
- if(p.role!=='GK'&&toGoal<27&&random(s)<shotChance){
-  const target=openPlayShotAim(s,p,random(s));launch(s,p,'shot',target,null,{pressure,goalOpening:opening,shotLane});return;
+ if(p.role!=='GK'&&toGoal<30){
+  const look=assessOpenPlayShot(s,p,defenders);
+  if(random(s)<look.chance){
+   const target=openPlayShotAim(s,p,random(s),look);
+   launch(s,p,'shot',target,null,{pressure:look.pressure,goalOpening:look.opening,shotLane:look.preferred.clearance});
+   return;
+  }
  }
  if(p.role!=='GK'){
   const through=throughBallOption(s,p);
@@ -719,7 +772,7 @@ function chooseAction(s,p){
   const exponent=1+p.decisions/45,pool=candidates.slice(0,4).map(o=>({...o,preference:o.weight**exponent})),total=pool.reduce((n,x)=>n+x.preference,0);let roll=random(s)*total,chosen=pool.at(-1).q;for(const x of pool){roll-=x.preference;if(roll<=0){chosen=x.q;break;}}
   const offer=assessPass(s,p,chosen);if(offer.progress< -3)s.stats[p.team].recycles=(s.stats[p.team].recycles||0)+1;if(offer.switchPlay)s.stats[p.team].switches=(s.stats[p.team].switches||0)+1;
   const lead=clamp(offer.distance/15*.45,.1,.65);
-  deliver(s,p,'pass',{x:chosen.x+chosen.vx*lead,y:chosen.y+chosen.vy*lead},chosen,pressure,'pass',{choice:offer.recycle?'recycle':offer.switchPlay?'switch':offer.progress>3?'forward':'retain',laneMargin:offer.margin,text:offer.recycle?`${p.name} recycles possession through ${chosen.name}.`:offer.switchPlay?`${p.name} switches play towards ${chosen.name}.`:`${p.name} looks for ${chosen.name}.`});
+  deliver(s,p,'pass',{x:chosen.x+chosen.vx*lead,y:chosen.y+chosen.vy*lead},chosen,pressure,'pass',{choice:offer.intoBox?'box-entry':offer.recycle?'recycle':offer.switchPlay?'switch':offer.progress>3?'forward':'retain',laneMargin:offer.margin,text:offer.recycle?`${p.name} recycles possession through ${chosen.name}.`:offer.switchPlay?`${p.name} switches play towards ${chosen.name}.`:`${p.name} looks for ${chosen.name}.`});
  }else{s.stats[p.team].carries++;emit(s,'carry',p.team,p.id,`${p.name} carries the ball forward.`,{start:{x:p.x,y:p.y}});s.decisionAt=s.time+.8+random(s)*.8;}
 }
 function aerialContact(s,f,from,to){
@@ -785,7 +838,7 @@ function deflect(s,f,p,from,to){
  const incoming=Math.atan2(f.vy,f.vx);
  const turn=(random(s)-.5)*3.8;
  const speed=6+random(s)*7;
- const event=emit(s,'block',p.team,p.id,`${p.name} blocks the shot.`,{opponentId:f.actorId});
+ const event=emit(s,'block',p.team,p.id,`${p.name} blocks the shot.`,{opponentId:f.actorId,shotId:f.passEvent});
  const vx=Math.cos(incoming+turn)*speed,vy=Math.sin(incoming+turn)*speed;
  const behindGoal=wouldReachOwnMouth(p.team,point,vx,vy,.8);
  // A planted block in front of the goal generally sends the ball back into play.
@@ -828,6 +881,7 @@ function advanceFlight(s){
  const intended={x:from.x+f.vx*travel,y:from.y+f.vy*travel};
  const exit=pitchExit(from,intended);
  const to=exit?.point??intended;
+ const shotOffset=f.kind==='shot'?shotGoalOffset(f,from):null;
  if(f.mustLeaveArea&&!exit&&!inPenalty(to,f.team))f.mustLeaveArea=false;
  const progress=f.loft?clamp((f.age-STEP+travel*(exit?.fraction??1))/f.duration,0,1):0;s.ball.z=f.loft?4*f.loft*progress*(1-progress):0;
  if(!f.mustLeaveArea&&aerialContact(s,f,from,to))return;
@@ -837,17 +891,23 @@ function advanceFlight(s){
   const contactDistance=segmentDistance(p,from,to);
   if(contactDistance>reach)continue;
   if(f.kind==='shot'){
-   if(p.team===f.team)continue;f.contacted.push(p.id);
-   if(p.role==='GK'){if(random(s)<keeperSaveChance(p,f,segmentDistance(p,from,to))){
-    s.stats[p.team].saves++;const hold=clamp(.35+(p.handling??70)*.006-segmentDistance(p,from,to)*.12,.15,.94);
-    if(random(s)<hold){own(s,p);emit(s,'save',p.team,p.id,`${p.name} saves and gathers.`,{opponentId:f.actorId,outcome:'held'});}
+   if(p.team===f.team||p.role==='GK'&&shotOffset>GOAL_HALF_WIDTH+KEEPER_WIDE_MARGIN)continue;
+   f.contacted.push(p.id);
+   if(p.role==='GK'){if(random(s)<keeperSaveChance(p,f,contactDistance)){
+    const onTarget=shotOffset<=GOAL_HALF_WIDTH;
+    if(onTarget){
+     s.stats[f.team].shotsOnTarget=(s.stats[f.team].shotsOnTarget||0)+1;
+     s.stats[p.team].saves++;
+    }
+    const hold=clamp(.35+(p.handling??70)*.006-contactDistance*.12,.15,.94);
+    if(random(s)<hold){own(s,p);emit(s,'save',p.team,p.id,onTarget?`${p.name} saves and gathers.`:`${p.name} gathers the ball near the post.`,{opponentId:f.actorId,shotId:f.passEvent,onTarget,outcome:'held'});}
     else{
-     s.stats[p.team].parries=(s.stats[p.team].parries||0)+1;
+     if(onTarget)s.stats[p.team].parries=(s.stats[p.team].parries||0)+1;
      const point=contactPoint(p,from,to);
      const wide=Math.abs(point.y-34)>2.1&&segmentDistance(p,from,to)>1.35;
      const vx=wide?f.vx*.27:direction(p.team)*8;
      const vy=wide?Math.sign(point.y-34)*(7+random(s)*4):(random(s)-.5)*10*direction(p.team);
-     const event=emit(s,'save',p.team,p.id,`${p.name} parries! The rebound is loose.`,{opponentId:f.actorId,outcome:'parried'});
+     const event=emit(s,'save',p.team,p.id,onTarget?`${p.name} parries! The rebound is loose.`:`${p.name} gets a touch near the post. The ball is loose.`,{opponentId:f.actorId,shotId:f.passEvent,onTarget,outcome:'parried'});
      const duration=wide?.9:.5;
      const push=wouldReachOwnMouth(p.team,point,vx,vy,duration)?direction(p.team)*Math.abs(vx):vx;
      setRebound(s,p,point,push,vy,duration,event,'parry');
@@ -875,14 +935,15 @@ function advanceFlight(s){
    const ownRestart=f.restartKind&&scoringTeam!==f.team;
    if(to.y>=30.34&&to.y<=37.66&&(s.ball.z||0)<=2.44&&!['throw-in','indirect'].includes(f.restartKind)&&!ownRestart){
     s.score[scoringTeam]++;
+    if(f.kind==='shot'&&scoringTeam===f.team)s.stats[f.team].shotsOnTarget=(s.stats[f.team].shotsOnTarget||0)+1;
     emit(s,'goal',scoringTeam,f.actorId,scoringTeam===f.team?`GOAL! ${player(s,f.actorId).name} scores for ${s.teams[scoringTeam].name}.`:
      `Own goal! ${player(s,f.actorId).name} puts the ball into his own net.`,
-     {ownGoal:scoringTeam!==f.team,start:{...from},end:{...to}});
+     {ownGoal:scoringTeam!==f.team,shotId:f.kind==='shot'?f.passEvent:null,start:{...from},end:{...to}});
     restart(s,1-scoringTeam,'kickoff');
     return;
    }
-   if(f.kind==='shot')emit(s,'miss',f.team,f.actorId,`${player(s,f.actorId).name} shoots wide.`);
   }
+  if(f.kind==='shot')emit(s,'miss',f.team,f.actorId,`${player(s,f.actorId).name} shoots wide.`,{shotId:f.passEvent});
   boundaryRestart(s,f.team,exit,f.origin??f.delivery??f.kind);
   return;
  }
@@ -1066,4 +1127,4 @@ export function stepSimulation(s){
  const urgent=distance(owner,nearest(s,1-owner.team,owner)[0])<3.2&&s.time>=(owner.readyAt??0)&&s.time>=(owner.controlUntil??0)&&s.time>=(owner.lastActionAt??-99)+.8&&s.time>=(owner.dribbleUntil??0);
  if(urgent||s.time>=s.decisionAt)chooseAction(s,owner);return s;
 }
-export function simulationSnapshot(s){return {time:s.time,phase:s.phase,ball:{...s.ball},players:s.players.map(p=>({id:p.id,team:p.team,number:p.number,name:p.name,role:p.role,x:p.x,y:p.y,sentOff:!!p.sentOff,onField:!p.sentOff&&!p.bench&&!p.subbedOff&&!p.injuredOff})),score:[...s.score]};}
+export function simulationSnapshot(s){return {time:s.time,phase:s.phase,ball:{...s.ball},players:s.players.map(p=>({id:p.id,team:p.team,number:p.shirtNumber??p.number,name:p.name,role:p.role,x:p.x,y:p.y,sentOff:!!p.sentOff,onField:!p.sentOff&&!p.bench&&!p.subbedOff&&!p.injuredOff})),score:[...s.score]};}

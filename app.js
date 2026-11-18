@@ -127,7 +127,7 @@ import {initialiseDevelopment,promoteProspect,callUpProspect,returnProspect,deve
 import {sceneSvg,stadiumProfile} from './scene.js?v=1.120.0';
 import {SECTIONS,STANDS,ROOFS,REARS,FINISHES,defaultLayout,normaliseLayout,capacity,changeCost} from './stadium-model.js?v=1.74.0';
 
-const APP_VERSION='1.147.0';
+const APP_VERSION='1.154.0';
 const SAVE_KEY='clubline-career-98-r1';
 const SITES=SITE_CATALOGUE.map(s=>[s.id,s.name,s.limit]);
 const availableSites=c=>fixedSurroundings(c.id)?[[fixedSurroundings(c.id).id,fixedSurroundings(c.id).name,75000]]:SITES.filter(([, ,limit])=>c.capacity<=limit);
@@ -377,7 +377,7 @@ function exportCareer(previous=false){try{if(!previous&&career&&!save())return t
 async function readCareerFile(input){const file=input.files?.[0];input.value='';if(!file)return;try{if(file.size>32*1024*1024)throw Error('This backup is too large.');pendingRestore=parseBackup(await file.text(),originalLeague,Object.keys(FORMATIONS),STYLES);render()}catch(error){pendingRestore=null;toast(error.message||'This is not a compatible Clubline backup.')}}
 function restorePreview(){if(!pendingRestore)return '';const c=pendingRestore.career;return `<div class="overlay restore-preview" role="dialog" aria-modal="true" aria-label="Restore career"><div class="modal"><h2>Restore this career?</h2><p><b>${html(c.names?.[c.clubId]||club(c.clubId)?.name)}</b> · Season ${c.season||1}</p><p>${fmtDate(c.date)} · Balance ${fmtMoney(c.balance)}</p><p>This replaces the current career on this device. A copy of your previous career will remain available to download in Options. Music, FX and notification settings are retained.</p>${pendingRestore.match?.phase==='live'?'<p>Your live match will be restored paused.</p>':''}<div class="modal-actions"><button class="btn primary" data-action="backup-confirm">Restore career</button><button class="btn" data-action="backup-cancel">Cancel</button></div></div></div>`}
 function restoreCareer(){if(!pendingRestore)return;const incoming=structuredClone(pendingRestore),priorCareer=career,priorSource=source,priorMatch=match;let old,previous;restoreMatchControl(incoming.match);try{old=localStorage.getItem(SAVE_KEY);previous=localStorage.getItem('clubline-before-restore');if(old)localStorage.setItem('clubline-before-restore',old);localStorage.setItem(SAVE_KEY,encodeCareer(incoming));if(!load())throw Error('Could not load this career.');pendingRestore=null;navOpen=false;focusMode=false;noticesOpen=false;titleOptionsOpen=false;transferReview=null;instructionPlayer=null;selectedPlayer=null;selectedSlot=null;clearInterval(timer);clearTimeout(autoResumeTimer);rotationScroll.clear();view='career';save();render();toast('Career restored.')}catch{career=priorCareer;source=priorSource;match=priorMatch;try{if(old!==undefined){if(old)localStorage.setItem(SAVE_KEY,old);else localStorage.removeItem(SAVE_KEY);if(previous)localStorage.setItem('clubline-before-restore',previous);else localStorage.removeItem('clubline-before-restore');if(old)load()}}catch{}pendingRestore=null;render();toast('Restore failed. Your previous save has been retained.')}}
-function titleView(){return `<div class="app-shell title-screen artwork-title"><div class="cover-haze" aria-hidden="true"></div><div class="cover-frame"><picture class="cover-picture"><source media="(orientation:portrait)" srcset="assets/clubline-99-cover-mobile.webp?v=${APP_VERSION}"><img class="cover-art" src="assets/clubline-99-cover.webp?v=${APP_VERSION}" alt="Clubline 99: retro football club management artwork"></picture><img class="cover-logo" src="assets/clubline-logo.png?v=1.74.0" alt="CLUBLINE 99"><nav class="cover-menu" aria-label="Main menu"><span class="cover-menu-heading">Your club. Your call.</span><button class="btn primary" data-action="new-game">New Career</button><button class="btn" data-action="continue" ${hasSave()?'':'disabled'}>Continue</button><button class="btn" data-action="title-options">Options</button><a class="btn lab-shortcut" href="match-lab.html?v=1.147.0">Developer · Match test</a><button class="btn" data-action="check-update" ${checkingUpdate?'disabled':''}>${checkingUpdate?'Checking…':'Check for Updates'}</button>${availableVersion?'<button class="btn primary" data-action="load-update">Load update</button>':''}<div class="start-audio" data-audio-controls><label><input type="checkbox" data-audio-setting="musicMuted" ${audioState().musicMuted?'checked':''}> Music off</label><label><input type="checkbox" data-audio-setting="effectsMuted" ${audioState().effectsMuted?'checked':''}> FX off</label></div><span class="cover-build">v${APP_VERSION}</span>${updateMessage?`<p class="cover-update-status" role="status">${html(updateMessage)}</p>`:''}</nav></div>${titleOptionsOpen?`<div class="overlay title-options-overlay" role="dialog" aria-modal="true" aria-label="Options"><div class="modal"><div class="modal-head"><h2>Options</h2><button class="btn slim" data-action="close-title-options">Close ×</button></div>${audioControls()}${notificationOptions()}${backupControls()}${gettingStarted()}${leagueRules()}</div></div>`:''}${restorePreview()}</div>`}
+function titleView(){return `<div class="app-shell title-screen artwork-title"><div class="cover-haze" aria-hidden="true"></div><div class="cover-frame"><picture class="cover-picture"><source media="(orientation:portrait)" srcset="assets/clubline-99-cover-mobile.webp?v=${APP_VERSION}"><img class="cover-art" src="assets/clubline-99-cover.webp?v=${APP_VERSION}" alt="Clubline 99: retro football club management artwork"></picture><img class="cover-logo" src="assets/clubline-logo.png?v=1.74.0" alt="CLUBLINE 99"><nav class="cover-menu" aria-label="Main menu"><span class="cover-menu-heading">Your club. Your call.</span><button class="btn primary" data-action="new-game">New Career</button><button class="btn" data-action="continue" ${hasSave()?'':'disabled'}>Continue</button><button class="btn" data-action="title-options">Options</button><a class="btn lab-shortcut" href="match-lab.html?v=1.154.0">Developer · Match test</a><button class="btn" data-action="check-update" ${checkingUpdate?'disabled':''}>${checkingUpdate?'Checking…':'Check for Updates'}</button>${availableVersion?'<button class="btn primary" data-action="load-update">Load update</button>':''}<div class="start-audio" data-audio-controls><label><input type="checkbox" data-audio-setting="musicMuted" ${audioState().musicMuted?'checked':''}> Music off</label><label><input type="checkbox" data-audio-setting="effectsMuted" ${audioState().effectsMuted?'checked':''}> FX off</label></div><span class="cover-build">v${APP_VERSION}</span>${updateMessage?`<p class="cover-update-status" role="status">${html(updateMessage)}</p>`:''}</nav></div>${titleOptionsOpen?`<div class="overlay title-options-overlay" role="dialog" aria-modal="true" aria-label="Options"><div class="modal"><div class="modal-head"><h2>Options</h2><button class="btn slim" data-action="close-title-options">Close ×</button></div>${audioControls()}${notificationOptions()}${backupControls()}${gettingStarted()}${leagueRules()}</div></div>`:''}${restorePreview()}</div>`}
 async function checkForUpdates(){
  if(checkingUpdate)return;
  checkingUpdate=true;updateMessage='';availableVersion=null;render();
@@ -948,7 +948,7 @@ function preparationSummary(){
  return `<section class="preparation-summary" aria-label="Match preparation"><span class="${validLineup()?'ready':'blocked'}">${validLineup()?'✓ XI available':'! XI needs changes'}</span><span>${reviewed?'✓ XI reviewed':'XI review available'}</span><button class="preparation-tactics" data-action="${match?'match-tactics':'route'}" data-section="squad" data-sub="tactics">${tactics?'✓ Tactics reviewed':'Tactics · optional review'} →</button></section>`;
 }
 function validLineup(){const ids=[...career.lineup,...career.bench].filter(Boolean);return career.lineup.length===11&&career.bench.length===7&&career.lineup.every(Boolean)&&new Set(ids).size===ids.length&&career.lineup.some((id,i)=>slotsFor(career.formation)[i]==='GK'&&player(id)?.primary==='GK')&&ids.every(id=>eligible(id))}
-function settleOtherFixtures(forceCurrent=false){for(const r of career.schedule){if(r.date>career.date||r.date===career.date&&!forceCurrent&&!career.matchdaySeen?.includes(career.date))continue;for(const f of r.fixtures){if(f.homeGoals!==null||f.home===career.clubId||f.away===career.clubId)continue;[f.homeGoals,f.awayGoals]=quickScore(f.home,f.away);resolvePlayoff(career,f,quickScore);resolveCup(career,f,quickScore);resolveFA(career,f,quickScore);resolveCL(career,f,quickScore);resolveUC(career,f,quickScore);statsCompetition=f.competition;recordSimulatedTeam(f.home,f.homeGoals,f.awayGoals);recordSimulatedTeam(f.away,f.awayGoals,f.homeGoals);f.simulatedStats=true;statsCompetition=null;}}progressPlayoffs(career,source,clubName);progressCup(career,source,clubName);progressFA(career,source,clubName);progressCL(career,source,clubName);progressUC(career,source,clubName);}
+function settleOtherFixtures(forceCurrent=false){for(const r of career.schedule){if(r.date>career.date||r.date===career.date&&!forceCurrent&&!career.matchdaySeen?.includes(career.date))continue;for(const f of r.fixtures){if(f.homeGoals!==null||f.home===career.clubId||f.away===career.clubId)continue;[f.homeGoals,f.awayGoals]=scoreBackgroundFixture(f);resolvePlayoff(career,f,quickScore);resolveCup(career,f,quickScore);resolveFA(career,f,quickScore);resolveCL(career,f,quickScore);resolveUC(career,f,quickScore);statsCompetition=f.competition;recordSimulatedTeam(f.home,f.homeGoals,f.awayGoals);recordSimulatedTeam(f.away,f.awayGoals,f.homeGoals);f.simulatedStats=true;statsCompetition=null;}}progressPlayoffs(career,source,clubName);progressCup(career,source,clubName);progressFA(career,source,clubName);progressCL(career,source,clubName);progressUC(career,source,clubName);}
 function advance(){
  if(firstWeekEventPending()&&!match){render();return;}
  if(calendarBoardReview()&&!match){boardReviewOpen=calendarBoardReview().id;render();return;}
@@ -1106,7 +1106,37 @@ function tickMatch(quick){
  }
 }
 
-function quickScore(home,away){const baseH=1.25+(club(home).attack-club(away).defence)*.024+.2,baseA=1.12+(club(away).attack-club(home).defence)*.024;const poisson=mean=>{let n=0,p=1,threshold=Math.exp(-Math.max(.2,mean));do{n++;p*=Math.random()}while(p>threshold);return n-1};return [poisson(baseH),poisson(baseA)]}
+const leagueScoreBalance={
+ premier:{home:-.09,away:-.14,lowScoreDraws:.19,strengthEdge:.01},
+ 'scot-premier':{home:-.11,away:.06,lowScoreDraws:.17,strengthEdge:.013}
+};
+function quickScore(home,away,competition){
+ const homeClub=club(home),awayClub=club(away),balance=Object.hasOwn(leagueScoreBalance,competition)?leagueScoreBalance[competition]:null;
+ const strengthGap=homeClub.attack+homeClub.defence-awayClub.attack-awayClub.defence;
+ const strengthEdge=balance?strengthGap*balance.strengthEdge:0;
+ const homeMean=Math.max(.2,1.25+(homeClub.attack-awayClub.defence)*.024+.2+(balance?.home??0)+strengthEdge);
+ const awayMean=Math.max(.2,1.12+(awayClub.attack-homeClub.defence)*.024+(balance?.away??0)-strengthEdge);
+ const poisson=mean=>{
+  let n=0,p=1;
+  const threshold=Math.exp(-mean);
+  do{n++;p*=Math.random()}while(p>threshold);
+  return n-1;
+ };
+ const h=poisson(homeMean),a=poisson(awayMean);
+ // Move equal probability from 1–0 and 0–1 to 0–0 and 1–1.
+ // This increases draws without changing either team's goal distribution.
+ if(balance&&h+a===1){
+  const adjustment=Math.min(balance.lowScoreDraws,1/homeMean,1/awayMean);
+  if(Math.random()<adjustment*(h===1?awayMean:homeMean)){
+   const goals=Math.random()<.5?0:1;
+   return [goals,goals];
+  }
+ }
+ return [h,a];
+}
+function scoreBackgroundFixture(f){
+ return quickScore(f.home,f.away,f.kind==='league'?f.competition:undefined);
+}
 function finishMatch(){
  if(!match||match.phase==='report')return;
  sealTacticalRecord(match);
@@ -1114,7 +1144,7 @@ function finishMatch(){
  const round=career.schedule.find(r=>r.date===match.fixtureDate&&r.fixtures.some(f=>f.home===match.home&&f.away===match.away));
  const fixture=round.fixtures.find(f=>f.home===match.home&&f.away===match.away);
  fixture.homeGoals=match.homeGoals;fixture.awayGoals=match.awayGoals;resolvePlayoff(career,fixture,quickScore);resolveCup(career,fixture,quickScore);resolveFA(career,fixture,quickScore);resolveCL(career,fixture,quickScore);resolveUC(career,fixture,quickScore);match.homeGoals=fixture.homeGoals;match.awayGoals=fixture.awayGoals;match.decision=fixture.decision;match.penalties=fixture.penalties;match.replayRequired=fixture.replayRequired;match.replayDate=fixture.replayDate;if(fixture.decision&&fixture.decision!=='full time')match.events.push({type:'info',minute:fixture.extraTime?120:90,text:fixture.replayRequired?`${cupName(fixture.competition)} replay arranged for ${fmtDate(fixture.replayDate)}.`:`${fixture.kind==='cup'?cupName(fixture.competition)+' tie':'Playoff'} decided by ${fixture.decision}: ${clubName(fixture.winner)} advance.`});
- for(const f of round.fixtures)if(f.homeGoals===null){[f.homeGoals,f.awayGoals]=quickScore(f.home,f.away);resolvePlayoff(career,f,quickScore);resolveCup(career,f,quickScore);resolveFA(career,f,quickScore);resolveCL(career,f,quickScore);resolveUC(career,f,quickScore);}
+ for(const f of round.fixtures)if(f.homeGoals===null){[f.homeGoals,f.awayGoals]=scoreBackgroundFixture(f);resolvePlayoff(career,f,quickScore);resolveCup(career,f,quickScore);resolveFA(career,f,quickScore);resolveCL(career,f,quickScore);resolveUC(career,f,quickScore);}
  for(const f of round.fixtures){if(f.simulatedStats)continue;statsCompetition=f.competition;if(f.home!==career.clubId&&f.home!==opposition(match,career.clubId))recordSimulatedTeam(f.home,f.homeGoals,f.awayGoals);if(f.away!==career.clubId&&f.away!==opposition(match,career.clubId))recordSimulatedTeam(f.away,f.awayGoals,f.homeGoals);f.simulatedStats=true;statsCompetition=null;}
  statsCompetition=fixture.competition;
  const home=match.home===career.clubId&&!match.neutral,us=match.home===career.clubId?match.homeGoals:match.awayGoals,them=match.home===career.clubId?match.awayGoals:match.homeGoals;

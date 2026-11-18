@@ -1,3 +1,5 @@
+import {attributes} from './player-attributes.js?v=1.74.0';
+import {assignSquad} from './squad-selection.js?v=1.87.0';
 // Experimental match-lab plans and fictional squad profiles; independent of careers.
 export const PRESETS={
  balanced:{label:'Balanced',fullbacks:'balanced',keeper:'mixed',passing:'mixed',tempo:'normal',width:'normal',press:'normal',freedom:'balanced',win:'hold',loss:'regroup'},
@@ -20,13 +22,74 @@ export function applyProfile(s,team,key){
  for(const p of s.players.filter(p=>p.team===team)){
   p.base??=Object.fromEntries(['pass','dribbling','finish','tackle','pace','technique','decisions','composure','offball','positioning','teamwork','discipline','stamina','anticipation','handling','reflexes','heading','strength','acceleration','agility','roam'].map(k=>[k,p[k]]));Object.assign(p,p.base);
   const add=(k,n)=>{p[k]=clamp(p[k]+n,k==='pace'?3.5:25,k==='pace'?6.5:95);};
-  const quality=QUALITY[s.teams[team].strength]||0;
+  const shift=s.teams[team].ratingShift;
+  const quality=shift?0:QUALITY[s.teams[team].strength]||0;
   for(const attr of ['pass','dribbling','finish','tackle','technique','decisions','composure','offball','positioning','teamwork','discipline','stamina','anticipation','handling','reflexes','heading','strength','acceleration','agility'])add(attr,quality);add('pace',quality*.018);
+  if(shift){
+   for(const attr of ['pass','technique','dribbling','finish','decisions','offball','composure'])add(attr,shift.attack);
+   for(const attr of ['tackle','positioning','anticipation','handling','reflexes'])add(attr,shift.defence);
+  }
   if(key==='technical'){add('pass',p.role==='CM'?16:8);add('technique',15);add('dribbling',12);add('composure',12);add('decisions',10);add('stamina',-7);}
   if(key==='quick'){add('pace',.7);add('offball',12);add('dribbling',6);add('anticipation',8);add('pass',-8);add('stamina',6);add('positioning',6);}
   if(key==='physical'){add('tackle',12);add('stamina',15);add('teamwork',8);add('discipline',9);add('pass',-18);add('technique',-18);add('dribbling',-10);add('decisions',-9);add('pace',-.25);}
  }
  return true;
+}
+// Centre the club ratings on this pairing. A higher standard on both sides
+// does not by itself inflate every lab player's attributes.
+export function setRatedClubs(s,clubs,homeSide=null,rosterBased=false){
+ if(!Array.isArray(clubs)||clubs.length!==2||!clubs.every(club=>club?.id&&club.name
+  &&[club.attack,club.defence].every(rating=>Number.isFinite(rating)&&rating>=0&&rating<=100)))return;
+ for(const [team,club] of clubs.entries()){
+  const opponent=clubs[1-team],home=team===homeSide;
+  const edge=key=>rosterBased?0:clamp((club[key]-opponent[key])*.19,-4,4);
+  Object.assign(s.teams[team],{
+   name:club.name,clubId:club.id,attack:club.attack,defence:club.defence,
+   rosterBased,venue:home?'home':homeSide===1-team?'away':'neutral',
+   ratingShift:{attack:edge('attack')+(home?.65:0),defence:edge('defence')+(home?.25:0)}
+  });
+ }
+}
+const lineupSlots=['GK','LB','CB','CB','RB','LW','CM','CM','RW','ST','ST'];
+const labRoles={GK:'GK',LB:'FB',RB:'FB',CB:'CB',LW:'W',RW:'W',CM:'CM',DM:'CM',AM:'CM',ST:'ST'};
+const fit=(p,pos)=>pos===p.primary?p.overall:p.positions?.[pos]??0;
+export function labLineup(pool){
+ if(!Array.isArray(pool)||pool.length<16)return null;
+ const byId=new Map(pool.map(p=>[p.id,p]));
+ const starters=assignSquad(pool,lineupSlots,fit).map(id=>byId.get(id));
+ if(starters.some(p=>!p))return null;
+ const used=new Set(starters);
+ const reserves=[];
+ for(const positions of [['GK'],['CB','LB','RB'],['CM','DM','AM'],['LW','RW'],['ST']]){
+  const score=p=>Math.max(...positions.map(pos=>fit(p,pos)));
+  const remaining=pool.filter(p=>!used.has(p)&&(positions[0]==='GK')===(p.primary==='GK'));
+  const chosen=remaining.sort((a,b)=>score(b)-score(a)||b.overall-a.overall||a.id.localeCompare(b.id))[0];
+  if(!chosen)return null;
+  used.add(chosen);reserves.push(chosen);
+ }
+ return [...starters,...reserves];
+}
+export function applyLabLineups(s,lineups){
+ for(const [team,lineup] of lineups.entries()){
+  const players=s.players.filter(p=>p.team===team);
+  for(const [index,p] of players.entries()){
+   const source=lineup[index],a=attributes(source),keeper=source.primary==='GK';
+   const pos=lineupSlots[index]??source.primary;
+   const position=keeper?a.Positioning:(a.Positioning+fit(source,pos))/2;
+   const mapped={
+    pass:keeper?a.Kicking:a.Passing,technique:keeper?a.Handling:(a.Passing+a.Dribbling)/2,
+    dribbling:keeper?35:a.Dribbling,finish:keeper?32:a.Finishing,tackle:keeper?35:a.Tackling,
+    heading:keeper?40:a.Heading,handling:keeper?a.Handling:35,reflexes:keeper?a.Reflexes:35,
+    positioning:position,anticipation:keeper?(a.Reflexes+a.Positioning)/2:a.Interceptions,
+    stamina:a.Stamina,strength:a.Strength,agility:a.Agility,acceleration:(a.Pace+a.Agility)/2,
+    pace:3+a.Pace*.03
+   };
+   for(const [key,value] of Object.entries(mapped))p.base[key]=p.base[key]*.35+value*.65;
+   Object.assign(p,{name:source.name,rosterId:source.id,shirtNumber:source.number??p.number,
+    energy:clamp(source.fitness??100,25,100)});
+   if(p.bench)p.role=labRoles[source.primary]??p.role;
+  }
+ }
 }
 export function assessPlan(s,team=0){
  const squad=s.players.filter(p=>p.team===team&&p.role!=='GK'&&!p.sentOff&&!p.bench&&!p.subbedOff&&!p.injuredOff),plan=s.teams[team].plan;
