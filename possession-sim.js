@@ -1,5 +1,5 @@
-import {judgeChallenge} from './lab-rules.js?v=1.162.0';
-import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.162.0';
+import {judgeChallenge} from './lab-rules.js?v=1.164.0';
+import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.164.0';
 // Experimental, deterministic spatial football model. No DOM, audio or career storage.
 export const STEP=.1;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
@@ -62,7 +62,12 @@ export function matchFlow(s){
   return clean;
  });
 }
-function own(s,p,immunity=.8){if(s.giveAndGo&&p.id!==s.giveAndGo.wallId)s.giveAndGo=null;observeControl(s,p);if(s.possession!==p.team&&s.phase==='play'){s.transition={team:p.team,at:s.time};for(const q of s.players)q.thinkAt=Math.min(q.thinkAt||0,s.time+.2+(100-q.anticipation)/100);}s.offsidePhase=null;s.looseDelivery=null;s.ball.owner=p.id;s.ball.z=0;s.ball.x=p.x+direction(p.team)*.55;s.ball.y=p.y;s.flight=null;s.looseSince=null;s.possession=p.team;s.immunity=s.time+immunity;p.readyAt=s.time+.25+(100-(p.composure??70))*.006;const tempo=s.teams[p.team].plan.tempo;s.decisionAt=s.time+(tempo==='quick'?.68:tempo==='patient'?1.25:1)*(1.55+random(s)*2.8);}
+const ASSIST_DELIVERIES=new Set(['pass','long-ball','cross','cutback','kick']);
+const ASSIST_WINDOW=12;
+function own(s,p,immunity=.8,delivery=null){
+ s.assist=delivery?.team===p.team&&delivery.actorId!==p.id&&ASSIST_DELIVERIES.has(delivery.kind)
+  ?{playerId:delivery.actorId,receiverId:p.id,receivedAt:s.time}:null;
+ if(s.giveAndGo&&p.id!==s.giveAndGo.wallId)s.giveAndGo=null;observeControl(s,p);if(s.possession!==p.team&&s.phase==='play'){s.transition={team:p.team,at:s.time};for(const q of s.players)q.thinkAt=Math.min(q.thinkAt||0,s.time+.2+(100-q.anticipation)/100);}s.offsidePhase=null;s.looseDelivery=null;s.ball.owner=p.id;s.ball.z=0;s.ball.x=p.x+direction(p.team)*.55;s.ball.y=p.y;s.flight=null;s.looseSince=null;s.possession=p.team;s.immunity=s.time+immunity;p.readyAt=s.time+.25+(100-(p.composure??70))*.006;const tempo=s.teams[p.team].plan.tempo;s.decisionAt=s.time+(tempo==='quick'?.68:tempo==='patient'?1.25:1)*(1.55+random(s)*2.8);}
 const slotOf=p=>(p.slot??p.number)-1;
 const anchorFor=(s,p)=>p.role==='GK'?labAnchor(s.teams[p.team].shape,0)
  :s.teams[p.team].customAnchors?.[slotOf(p)]??labAnchor(s.teams[p.team].shape,slotOf(p));
@@ -131,6 +136,7 @@ export function restartDelay(s,kind){
  return range[0]+random(s)*(range[1]-range[0]);
 }
 export function awardRestart(s,team,kind,point=null){
+ s.assist=null;
  s.giveAndGo=null;
  stopFlow(s);
  commitSubstitutions(s);
@@ -550,7 +556,11 @@ function launch(s,p,kind,target,receiver=null,details={}){
  const anticipation=receiver?.anticipation??70;
  const readyDelay=details.style==='one-two-return'?0:details.style==='through-ball'
   ?.04+(100-anticipation)*.003:.18+(100-anticipation)/110;
- s.flight={restartKind,mustLeaveArea:restartKind==='goal-kick'||['indirect','direct'].includes(restartKind)&&inPenalty(p,p.team),kind,team:p.team,actorId:p.id,receiverId:receiver?.id||null,target:{...target},vx:(target.x-start.x)/d*speed,vy:(target.y-start.y)/d*speed,age:0,duration:d/speed,loft,passEvent:s.serial+1,receiverReadyAt:s.time+readyDelay,delivery:details.style||kind,contacted:[]};s.ball.owner=null;
+ const lead=s.assist;
+ const assistId=kind==='shot'&&lead?.receiverId===p.id&&s.time-lead.receivedAt<=ASSIST_WINDOW
+  ?lead.playerId:null;
+ s.assist=null;
+ s.flight={assistId,restartKind,mustLeaveArea:restartKind==='goal-kick'||['indirect','direct'].includes(restartKind)&&inPenalty(p,p.team),kind,team:p.team,actorId:p.id,receiverId:receiver?.id||null,target:{...target},vx:(target.x-start.x)/d*speed,vy:(target.y-start.y)/d*speed,age:0,duration:d/speed,loft,passEvent:s.serial+1,receiverReadyAt:s.time+readyDelay,delivery:details.style||kind,contacted:[]};s.ball.owner=null;
  const st=s.stats[p.team];
  if(details.style==='through-ball')st.throughBalls=(st.throughBalls||0)+1;
  if(details.style==='one-two-start')st.oneTwos=(st.oneTwos||0)+1;
@@ -862,7 +872,7 @@ function aerialContact(s,f,from,to){
  const rank=contenders.map(p=>({p,value:(p.role==='GK'?(p.handling??70):p.heading??p.technique)*.4+p.anticipation*.25+(p.strength??70)*.2-distance(p,to)*10+random(s)*24})).sort((a,b)=>b.value-a.value);const p=rank[0].p;
  if(offsideContact(s,p))return true;s.stats[p.team].aerials=(s.stats[p.team].aerials||0)+1;
  emit(s,'aerial',p.team,p.id,p.role==='GK'?`${p.name} comes to claim the high ball.`:`${p.name} wins the ball in the air.`,{opponentId:rank.find(q=>q.p.team!==p.team)?.p.id||null,deliveryEvent:f.passEvent});
- if(p.role==='GK'){own(s,p);if(p.team===f.team&&f.kind!=='clearance')s.stats[p.team].completed++;return true;}
+ if(p.role==='GK'){own(s,p,.8,f);if(p.team===f.team&&f.kind!=='clearance')s.stats[p.team].completed++;return true;}
  if(p.team!==f.team){
   const pressure=distance(p,nearest(s,1-p.team,p)[0]);
   if(pressure>4&&(p.technique+p.decisions)/2>=65){
@@ -877,12 +887,12 @@ function aerialContact(s,f,from,to){
  if(f.kind==='cross'){
   const point=contactPoint(p,from,to),look=assessHeader(s,p,point,nearest(s,1-p.team,p));
   if(look.chance>0&&random(s)<look.chance){
-   own(s,p);
+   own(s,p,.8,f);
    const error=1.35+(100-(p.heading??70))*.082+look.range*.12+Math.max(0,3-look.marker)*.5;
    const target={x:goalX(p.team)+direction(p.team),y:34+(random(s)-.5)*error*2*direction(p.team)};
    launch(s,p,'shot',target,null,{style:'header',text:`${p.name} heads towards goal!`});return true;
   }
-  own(s,p);
+  own(s,p,.8,f);
   p.controlUntil=s.time+.35+(100-p.technique)*.008;
   const settledAt=Math.max(p.controlUntil,p.readyAt);
   const shot=assessOpenPlayShot(s,p,nearest(s,1-p.team,p));
@@ -893,7 +903,7 @@ function aerialContact(s,f,from,to){
   emit(s,'control',p.team,p.id,`${p.name} brings the cross down.`,{deliveryEvent:f.passEvent,quickChance});
   return true;
  }
- own(s,p);emit(s,'control',p.team,p.id,`${p.name} brings the high ball down.`);return true;
+ own(s,p,.8,f);emit(s,'control',p.team,p.id,`${p.name} brings the high ball down.`);return true;
 }
 function receiveBall(s,p,f,point=s.ball){
  if(offsideContact(s,p))return;
@@ -910,7 +920,7 @@ function receiveBall(s,p,f,point=s.ball){
   s.offsidePhase=null;
   return;
  }
- own(s,p);p.controlUntil=s.time+.25+(100-p.technique)/100;s.decisionAt=Math.max(s.decisionAt,p.controlUntil);if(f.kind!=='clearance')s.stats[p.team].completed++;
+ own(s,p,.8,f);p.controlUntil=s.time+.25+(100-p.technique)/100;s.decisionAt=Math.max(s.decisionAt,p.controlUntil);if(f.kind!=='clearance')s.stats[p.team].completed++;
  if(f.receiverId===p.id){
   const stats=s.stats[p.team];
   if(f.delivery==='through-ball')stats.throughBallsCompleted=(stats.throughBallsCompleted||0)+1;
@@ -923,6 +933,7 @@ function receiveBall(s,p,f,point=s.ball){
  emit(s,'complete',p.team,f.actorId,`${player(s,f.actorId).name} finds ${p.name}, who controls the ball.`,{receiverId:p.id});
 }
 function setRebound(s,p,point,vx,vy,duration,event,origin){
+ s.assist=null;
  s.looseDelivery=null;
  s.looseSince=null;
  s.ball={...point,z:0,owner:null};
@@ -1034,9 +1045,10 @@ function advanceFlight(s){
    if(to.y>=30.34&&to.y<=37.66&&(s.ball.z||0)<=2.44&&!['throw-in','indirect'].includes(f.restartKind)&&!ownRestart){
     s.score[scoringTeam]++;
     if(f.kind==='shot'&&scoringTeam===f.team)s.stats[f.team].shotsOnTarget=(s.stats[f.team].shotsOnTarget||0)+1;
-    emit(s,'goal',scoringTeam,f.actorId,scoringTeam===f.team?`GOAL! ${player(s,f.actorId).name} scores for ${s.teams[scoringTeam].name}.`:
+    const assistingPlayer=scoringTeam===f.team?player(s,f.assistId):null;
+    emit(s,'goal',scoringTeam,f.actorId,scoringTeam===f.team?`GOAL! ${player(s,f.actorId).name} scores for ${s.teams[scoringTeam].name}.${assistingPlayer?` Assist: ${assistingPlayer.name}.`:''}`:
      `Own goal! ${player(s,f.actorId).name} puts the ball into his own net.`,
-     {ownGoal:scoringTeam!==f.team,shotId:f.kind==='shot'?f.passEvent:null,start:{...from},end:{...to}});
+     {ownGoal:scoringTeam!==f.team,assistId:assistingPlayer?.id??null,shotId:f.kind==='shot'?f.passEvent:null,start:{...from},end:{...to}});
     restart(s,1-scoringTeam,'kickoff');
     return;
    }
@@ -1172,7 +1184,7 @@ export function resolveBallTackle(s,challengerId,victimId,sample={}){
   const dy=nearLine&&Math.abs(lateral)>.2
    ?Math.sign(lateral)*(2+length*3)+(sideRoll-.5)*2*dir
    :(sideRoll-.5)*4*dir;
-  s.offsidePhase=null;s.looseDelivery=null;s.ball={x:s.ball.x,y:s.ball.y,z:0,owner:null};s.looseSince=null;s.possession=defender.team;s.immunity=s.time+.35;
+  s.assist=null;s.offsidePhase=null;s.looseDelivery=null;s.ball={x:s.ball.x,y:s.ball.y,z:0,owner:null};s.looseSince=null;s.possession=defender.team;s.immunity=s.time+.35;
   const event=emit(s,'tackle',defender.team,defender.id,`${defender.name} knocks the ball away from ${victim.name}; it is loose.`,{opponentId:victim.id,outcome:'loose'}),duration=.35;
   s.flight={kind:'rebound',team:defender.team,actorId:defender.id,receiverId:null,target:{x:s.ball.x+dir*dx,y:s.ball.y+dy},vx:dir*dx/duration,vy:dy/duration,age:0,duration,loft:0,passEvent:event.id,contacted:[victim.id],origin:'tackle'};
  }
