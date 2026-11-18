@@ -1,5 +1,5 @@
-import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan,labShape} from './lab-tactics.js?v=1.160.0';
-import {createSimulation,stepSimulation,matchFlow,startSecondHalf,simulationSnapshot,setTactic,adjustPlan,instructPlayer,formationPosition,formationGrid,snapFormationPosition,moveFormationPosition,resetFormationPositions,assessBuildUp,onPitch,requestSubstitution,continueAfterInjury,cancelQueuedSubstitutions,suggestedReplacement,STEP} from './possession-sim.js?v=1.160.0';
+import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan,labShape} from './lab-tactics.js?v=1.161.0';
+import {createSimulation,stepSimulation,matchFlow,startSecondHalf,simulationSnapshot,setTactic,adjustPlan,instructPlayer,formationPosition,formationGrid,snapFormationPosition,moveFormationPosition,resetFormationPositions,assessBuildUp,onPitch,requestSubstitution,continueAfterInjury,cancelQueuedSubstitutions,suggestedReplacement,STEP} from './possession-sim.js?v=1.161.0';
 import {registerRealNames,applyRealNames} from './real-names.js?v=1.93.0';
 import {realNamesEnabled} from './preferences.js?v=1.125.0';
 import {scottishPlayable} from './scottish-world.js?v=1.89.0';
@@ -230,7 +230,14 @@ function paint(alpha=1){
  query('[data-lab="reset-shape"]').hidden=!editingShape||!sim.teams[0].customAnchors;
  if(quiet){
   const [blue,red]=sim.stats;
-  query('[data-quiet-update]').textContent=`Shots ${blue.shots}–${red.shots} · On target ${blue.shotsOnTarget}–${red.shotsOnTarget}`;
+  const totalPossession=blue.possession+red.possession;
+  const percent=totalPossession?Math.round(100*blue.possession/totalPossession):0;
+  query('[data-quiet-teams]').textContent=sim.teams.map(team=>team.name).join(' v ');
+  query('[data-quiet-share]').textContent=totalPossession?`${percent}% – ${100-percent}%`:'Awaiting kick-off';
+  const bar=query('[data-quiet-bar]');
+  bar.hidden=!totalPossession;
+  bar.value=percent;
+  query('[data-quiet-update]').textContent=`Shots ${blue.shots}–${red.shots} · On target ${blue.shotsOnTarget}–${red.shotsOnTarget} · Corners ${blue.corners}–${red.corners}`;
  }
  if(!quiet){
   const now=simulationSnapshot(sim),old=new Map(previous.players.map(p=>[p.id,p])),blend=reduced?1:alpha;
@@ -394,7 +401,7 @@ root.addEventListener('click',event=>{
  if(action==='step'&&sim.phase!=='half-time'){pauseReason='';running=false;fastForward=false;const serial=sim.serial,budget=200+(sim.phase==='restart'?Math.ceil(Math.max(0,sim.restartUntil-sim.time)/STEP):0);for(let i=0;i<budget&&sim.serial===serial&&sim.phase!=='ended';i++)advance();previous=simulationSnapshot(sim);accumulator=0;}
  if(action==='sound'){sound=!sound;query('[data-lab="sound"]').textContent=sound?'Sound on':'Sound off';query('[data-lab="sound"]').setAttribute('aria-pressed',String(sound));if(sound)enableAudio();}
  if(action==='export'){
-  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.160.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,formations:sim.teams.map(t=>t.shape),clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?'highlights':'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.161.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,formations:sim.teams.map(t=>t.shape),clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?'highlights':'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  syncAudio();paint(1);
 });

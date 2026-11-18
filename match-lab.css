@@ -53,3 +53,11 @@
 .lab-pitch-wrap [data-shape-spots]{visibility:hidden;pointer-events:none}
 .lab-pitch-wrap.is-forming [data-shape-spots]{visibility:visible}
 .lab-pitch-wrap [data-shape-spots] circle{fill:#fff;opacity:.42}
+
+.lab-quiet .quiet-possession { width:min(95%,300px); }
+.quiet-possession strong { margin-inline-start:6px; }
+.quiet-possession progress { display:block; width:100%; height:12px; margin-top:6px; border:0; border-radius:4px; overflow:hidden; background:#ecad55; appearance:none; }
+.quiet-possession progress::-webkit-progress-bar { background:#ecad55; }
+.quiet-possession progress::-webkit-progress-value { background:#62b7df; }
+.quiet-possession progress::-moz-progress-bar { background:#62b7df; }
+.quiet-possession progress[hidden] { display:none; }

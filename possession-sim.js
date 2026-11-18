@@ -1,5 +1,5 @@
-import {judgeChallenge} from './lab-rules.js?v=1.160.0';
-import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.160.0';
+import {judgeChallenge} from './lab-rules.js?v=1.161.0';
+import {makePlan,PRESETS,PLAN_OPTIONS,INSTRUCTIONS,applyProfile,applyStrength,setRatedClubs,labLineup,applyLabLineups,labShape,labAnchor,labRole} from './lab-tactics.js?v=1.161.0';
 // Experimental, deterministic spatial football model. No DOM, audio or career storage.
 export const STEP=.1;
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));

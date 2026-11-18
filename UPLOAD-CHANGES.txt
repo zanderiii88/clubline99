@@ -1,5 +1,3 @@
-CLUBLINE 99 v1.159.0
+CLUBLINE 99 v1.161.0
 
-Use Clubline-v1.131-onwards-to-v1.159-Update.zip over an existing v1.131–v1.158 installation. Keep existing assets and data. Use Complete for a clean setup. Extract beside index.html and replace matching files.
-
-This update adds drag and keyboard formation editing in the developer match lab. Historical release notes, tests and tools stay in Development.
+Extract Clubline-v1.131-onwards-to-v1.161-Update.zip into an existing v1.131-or-later installation beside index.html. Replace matching files and keep existing assets and data. This update includes the new screen-awake.js file.
