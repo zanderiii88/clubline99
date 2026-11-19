@@ -3,25 +3,39 @@ export const eventAfter=(date,n)=>new Date(Date.parse(date+'T12:00:00Z')+n*86400
 const hash=s=>{let n=2166136261;for(const c of s){n^=c.charCodeAt(0);n=Math.imul(n,16777619)}return n>>>0};
 const clamp=(n,min=0,max=100)=>Math.max(min,Math.min(max,n));
 const choice=(id,label,effects,result)=>({id,label,effects,result});
+const openingStories=['old-shirt','touchline-crowd','keeper-free-kick','old-photos','training-derby','first-home-banners','young-player-drill'];
+function recentHomeLeagueMatch(c){
+ return (c.reports||[]).findLast(r=>r.kind==='league'&&r.home&&!r.neutral&&r.date>=eventAfter(c.date,-7)&&r.date<c.date);
+}
 export const CLUB_STORIES=[
- {id:'mascot-mischief',title:'The mascot wins the training session',text:'The club mascot joined the crossbar challenge after training. Three attempts, three hits. The captain has asked the kit staff to check whether there is a professional hiding inside the costume.',effects:{clubMorale:1,squadHappiness:1},result:'The mascot won the crossbar challenge and celebrated with a lap of honour. The squad are demanding a rematch. Club morale +1; squad happiness +1. No money spent.'},
+ {id:'mascot-mischief',title:'The mascot wins the training session',text:'The club mascot joined the crossbar challenge after training. Three attempts, three hits. The captain has asked the kit staff to check whether there is a professional hiding inside the costume.',effects:{clubMorale:1,squadHappiness:1},result:'The mascot won the crossbar challenge and celebrated with a lap of honour. The squad are demanding a rematch.'},
  {id:'old-shirt',title:'The kit room turns up an old favourite',text:'A preseason stocktake turned up a match shirt that had been tucked away for years.',effects:{clubMorale:1,squadHappiness:1},result:'The kit staff brought the old shirt into the dressing room. By the end of training everyone had heard a different story about who wore it.'},
  {id:'touchline-crowd',title:'Supporters stay for the last drill',text:'A few early visitors stopped to watch the squad finish training.',effects:{clubMorale:1,squadHappiness:1},result:'The last finishing drill drew a small crowd. A round of applause for the final goal put the squad in good spirits.'},
  {id:'keeper-free-kick',title:'The goalkeeper wins the free-kick contest',text:'The keepers and outfield players swapped jobs for the final drill.',effects:{clubMorale:1,squadHappiness:1},result:'One of the keepers curled the last attempt in off the post. The outfield players have asked for a rematch.'},
  {id:'old-photos',title:'Supporters help name the faces',text:'The club dug out a box of unlabelled team photographs.',effects:{clubMorale:1,squadHappiness:1},result:'Regulars helped identify the players in several old team photos. The staff have put their favourites up in the tunnel.'},
  {id:'training-derby',title:'Bib derby settled by a last-minute goal',text:'The coaches ended training with a short match between two mixed sides.',effects:{clubMorale:1,squadHappiness:1},result:'A last-minute goal settled the first training match of the season. The winning side made sure the rest of the staff heard about it.'},
+ {id:'first-home-banners',title:'Supporters get the ground ready',text:'With the first home league fixture approaching, supporters have hung their banners and tidied the turnstile entrances.',result:'Club staff thanked the supporters who helped prepare the ground.',effects:{supporters:2},when:c=>(c.schedule||[]).some(r=>r.date>=c.date&&r.date<=eventAfter(c.date,10)&&r.fixtures.some(f=>f.kind==='league'&&f.home===c.clubId&&!f.neutral&&f.homeGoals==null))},
+ {id:'young-player-drill',title:'A youngster catches the coaches’ eye',text:'{player} stayed after training to work on the final drill.',result:'The coach praised {player} in front of the squad.',effects:{playerHappiness:3},players:(c,p)=>p.age<21&&!c.players?.[p.id]?.injuryDays},
+ {id:'crowd-stays',title:'Supporters stay to applaud',text:'After the recent home league win, supporters stayed behind to applaud the squad.',result:'The players went back out to thank the home crowd.',effects:{supporters:2,clubMorale:1,squadHappiness:1},when:c=>{
+  const r=recentHomeLeagueMatch(c);
+  return r&&r.us>r.them&&r.usableCapacity>0&&r.attendance>=.9*r.usableCapacity;
+ }},
+ {id:'home-frustration',title:'Frustration around the ground',text:'After the recent home league defeat, the local paper carried criticism from supporters.',result:'The criticism reached the dressing room before the next training session.',effects:{supporters:-2,clubMorale:-1},when:c=>{
+  const r=recentHomeLeagueMatch(c);
+  return r&&r.them-r.us>=2;
+ }},
  {id:'charity',title:'A visit to the children’s ward',text:'A local charity asks whether a few players can visit the children’s ward after training.',choices:[choice('visit','Arrange the visit',{cash:-1500,clubMorale:2,supporters:3,squadHappiness:1},'The players made time for the visit. The families and supporters appreciated it.'),choice('later','Politely postpone',{},'The charity understands and hopes to arrange another visit later.')]},
  {id:'disagreement',title:'A training-ground disagreement',text:'Two senior players have had a disagreement during training. The coach suggests a quiet conversation.',choices:[choice('talk','Bring them together',{clubMorale:2,squadHappiness:2},'A calm conversation cleared the air.'),choice('leave','Let them settle it',{clubMorale:-2,squadHappiness:-1},'The tension lingered around the training ground.')]},
  {id:'fundraiser',title:'Supporters rally round',text:'The supporters’ association has organised a small fundraiser for the club.',effects:{cash:4500,supporters:2,clubMorale:1},result:'The supporters handed over their donation. A welcome gesture from the community.'},
  {id:'sponsor',title:'A local sponsorship offer',text:'A local firm offers a one-off sponsorship for an afternoon of player photographs.',choices:[choice('accept','Arrange the photographs',{cash:9000,condition:-1,clubMorale:1},'The afternoon went smoothly and the sponsorship payment arrived.'),choice('decline','Keep the afternoon free',{},'The players kept their afternoon for recovery.')]},
- {id:'homesick',title:'Missing familiar faces',text:'{player} has been finding it difficult to settle away from family and old friends.',young:true,choices:[choice('support','Arrange some support',{cash:-1200,playerHappiness:5,clubMorale:1},'A little practical support helped {player} feel more settled.'),choice('wait','Give them time',{playerHappiness:-2},'{player} still feels a little isolated.')]},
+ {id:'homesick',players:(c,p)=>p.age<25&&(c.players?.[p.id]?.happiness??70)<65,title:'Missing familiar faces',text:'{player} has been finding it difficult to settle away from family and old friends.',choices:[choice('support','Arrange some support',{cash:-1200,playerHappiness:5,clubMorale:1},'A little practical support helped {player} feel more settled.'),choice('wait','Give them time',{playerHappiness:-2},'{player} still feels a little isolated.')]},
  {id:'coach',title:'A guest coaching session',text:'An experienced former coach offers to run a special afternoon session.',choices:[choice('session','Book the session',{cash:-2500,clubMorale:2,squadHappiness:1,condition:-1},'The squad enjoyed a different voice on the training pitch.'),choice('routine','Keep the usual routine',{},'Training continued as planned.')]},
- {id:'bus',title:'The team bus needs repairs',text:'The transport company reports a fault with the team bus. A repair is needed before the next journey.',choices:[choice('repair','Pay for a prompt repair',{cash:-3200,clubMorale:1},'The bus was repaired without disrupting the next trip.'),choice('hire','Arrange a temporary replacement',{cash:-1800,clubMorale:-1},'A hired bus covered the trip, although the players missed their usual comforts.')]},
+ {id:'bus',when:c=>(c.schedule||[]).some(r=>r.date>=c.date&&r.date<=eventAfter(c.date,7)&&r.fixtures.some(f=>f.away===c.clubId&&f.homeGoals==null)),title:'The team bus needs repairs',text:'The transport company reports a fault with the team bus. A repair is needed before the next journey.',choices:[choice('repair','Pay for a prompt repair',{cash:-3200,clubMorale:1},'The bus was repaired without disrupting the next trip.'),choice('hire','Arrange a temporary replacement',{cash:-1800,clubMorale:-1},'A hired bus covered the trip, although the players missed their usual comforts.')]},
  {id:'school',title:'The local school’s football day',text:'A nearby school would love a player to help with its football afternoon.',choices:[choice('help','Send a player and a coach',{cash:-800,supporters:3,playerHappiness:2},'{player} was a hit with the children at the school football day.'),choice('kits','Donate training equipment',{cash:-1200,supporters:2},'The school was delighted with the donated equipment.')]},
  {id:'pub',title:'A supporters’ evening',text:'A supporters’ group invites club staff to a question-and-answer evening at a local pub.',choices:[choice('attend','Attend and hear them out',{cash:-500,supporters:3,clubMorale:1},'Supporters appreciated the club taking their questions seriously.'),choice('statement','Send a written update',{supporters:1},'The written update answered a few concerns.')]},
  {id:'boots',title:'A boot-room windfall',text:'A kit supplier has sent a complimentary batch of training boots and equipment.',effects:{clubMorale:1,squadHappiness:1},result:'The boot-room staff put the new equipment to good use. No financial payment was involved.'},
  {id:'weather',title:'A miserable training afternoon',text:'Persistent rain has left the training ground waterlogged. The coach offers two alternatives.',choices:[choice('indoor','Hire an indoor facility',{cash:-2000,clubMorale:1},'The indoor session kept the routine intact.'),choice('recovery','Give the squad a recovery afternoon',{condition:2,squadHappiness:1},'A recovery afternoon helped the players freshen up. No ability increase was awarded.')]},
- {id:'press',title:'An unhelpful newspaper rumour',text:'A local newspaper claims there is unrest in the dressing room. The players ask how you want to respond.',choices:[choice('calm','Give a calm, brief response',{clubMorale:2,squadHappiness:1},'The measured response took the heat out of the story.'),choice('ignore','Ignore the rumour',{clubMorale:-1},'The rumour faded, but caused a little distraction.')]},
+ {id:'press',when:c=>c.clubLife.morale<=48,title:'An unhelpful newspaper rumour',text:'A local newspaper claims there is unrest in the dressing room. The players ask how you want to respond.',choices:[choice('calm','Give a calm, brief response',{clubMorale:2,squadHappiness:1},'The measured response took the heat out of the story.'),choice('ignore','Ignore the rumour',{clubMorale:-1},'The rumour faded, but caused a little distraction.')]},
  {id:'birthday',title:'A dressing-room celebration',text:'The squad has organised a small celebration for a staff member’s milestone birthday.',effects:{clubMorale:2,squadHappiness:1},result:'A cheerful afternoon brought the dressing room a little closer together.'},
  {id:'garden',title:'The community garden appeal',text:'A neighbourhood group asks the club to support a small community garden near the ground.',choices:[choice('donate','Contribute to the project',{cash:-2000,supporters:3},'The neighbourhood group thanked the club for helping the garden take shape.'),choice('promote','Promote the appeal',{supporters:1},'The club publicised the appeal without committing money.')]},
  {id:'testimonial',title:'A former player’s testimonial',text:'A much-loved former player invites the club to support their testimonial reception.',choices:[choice('support','Help with the reception',{cash:-1800,supporters:2,clubMorale:2},'The club’s support was warmly received by former players and supporters.'),choice('message','Send a message of thanks',{supporters:1},'The club sent its thanks and best wishes.')]},
@@ -67,9 +81,13 @@ function applyEffects(c,league,effects,playerId){
  return {cash:c.balance-before.cash,clubMorale:life.morale-before.morale,supporters:life.supporters-before.supporters,players};
 }
 const wording=(s,name)=>s.replaceAll('{player}',name||'A squad player');
+const storyPlayers=(c,league,def)=>eventSquad(c,league).filter(p=>!def.players||def.players(c,p));
+const relevantStory=(c,league,def)=>(!def.when||def.when(c))&&(!def.players||storyPlayers(c,league,def).length>0);
 export function createClubStory(c,league,definitionId){
  const life=initialiseClubLife(c),def=CLUB_STORIES.find(s=>s.id===definitionId);if(!def||life.stories.some(s=>s.status==='pending'))return null;
- const pool=eventSquad(c,league),young=def.young?pool.filter(p=>p.age<25):pool,chosen=(young.length?young:pool)[hash(`${life.seed}:${c.date}:${def.id}`)%Math.max(1,(young.length?young:pool).length)];
+ const pool=storyPlayers(c,league,def);
+ if(def.when&&!def.when(c)||def.players&&!pool.length)return null;
+ const chosen=pool[hash(`${life.seed}:${c.date}:${def.id}`)%Math.max(1,pool.length)];
  const story={id:`story-${life.seed}-${life.storySerial++}`,definition:def.id,title:def.title,text:wording(def.text,chosen?.name),playerId:chosen?.id||null,playerName:chosen?.name||null,date:c.date,deadline:eventAfter(c.date,7),status:def.choices?'pending':'resolved'};
  life.stories.push(story);life.stories=life.stories.slice(-60);
  if(!def.choices){story.effects=applyEffects(c,league,def.effects,story.playerId);story.result=wording(def.result,story.playerName);story.resolvedOn=c.date;}
@@ -107,7 +125,7 @@ export function settleBooking(c,league,b){
  c.news.push({date:c.date,kind:'stadium-booking',bookingId:b.id,text:`${b.title} completed: ${attendance.toLocaleString('en-GB')} visitors; net ${b.actual.net>=0?'+':'−'}£${Math.abs(b.actual.net).toLocaleString('en-GB')}.`});return true;
 }
 export function activeStadiumEvent(c){return c.clubLife?.bookings.find(b=>['accepted','completed'].includes(b.status)&&b.date===c.date)||null}
-export function advanceClubLife(c,league,{generate=true}={}){
+export function advanceClubLife(c,league,{generate=true,automaticOnly=false}={}){
  const life=initialiseClubLife(c);if(life.lastProcessed===c.date)return;
  life.lastProcessed=c.date;
  for(const b of life.bookings){if(b.status==='offered'&&c.date>b.deadline)b.status='expired';else settleBooking(c,league,b)}
@@ -115,16 +133,23 @@ export function advanceClubLife(c,league,{generate=true}={}){
  // Pick a light opening story once per new career.
  const start=c.seasonStart,openingWeek=start&&c.date>=eventAfter(start,2)&&c.date<=eventAfter(start,6);
  if(openingWeek&&(c.season||1)===1&&!life.firstWeekEvent){
-  const opening=['mascot-mischief','old-shirt','touchline-crowd','keeper-free-kick','old-photos','training-derby'];
-  const story=createClubStory(c,league,opening[(life.seed+Math.floor(Math.random()*opening.length))%opening.length]);
+  const opening=CLUB_STORIES.filter(def=>openingStories.includes(def.id)&&relevantStory(c,league,def));
+  const story=createClubStory(c,league,opening[hash(`${life.seed}:${c.clubId}:opening`)%opening.length].id);
   if(story){life.firstWeekEvent={id:story.id,read:false};c.news.at(-1).important=true;}
  }
  if(!generate)return;
  const matchday=(c.schedule||[]).some(r=>r.date===c.date&&r.fixtures.some(f=>f.home===c.clubId||f.away===c.clubId));
  if(!matchday&&c.date>=life.nextStory&&!life.stories.some(s=>s.status==='pending')){
-  const recent=new Set(life.stories.slice(-8).map(s=>s.definition)),available=CLUB_STORIES.filter(s=>!recent.has(s.id)),definition=available[hash(`${life.seed}:${c.date}:story`)%available.length];createClubStory(c,league,definition.id);life.nextStory=eventAfter(c.date,21+hash(`${life.seed}:${c.date}:gap`)%12);
+  const recent=new Set(life.stories.slice(-8).map(s=>s.definition));
+  const available=CLUB_STORIES.filter(s=>s.id!=='mascot-mischief'&&s.id!=='first-home-banners'
+    &&!recent.has(s.id)&&(!automaticOnly||!s.choices)&&relevantStory(c,league,s));
+  if(available.length){
+   const definition=available[hash(`${life.seed}:${c.date}:story`)%available.length];
+   createClubStory(c,league,definition.id);
+   life.nextStory=eventAfter(c.date,21+hash(`${life.seed}:${c.date}:gap`)%12);
+  }else life.nextStory=eventAfter(c.date,7);
  }
- if(!matchday&&c.date>=life.nextBooking&&!life.bookings.some(b=>b.status==='offered')){
+ if(!automaticOnly&&!matchday&&c.date>=life.nextBooking&&!life.bookings.some(b=>b.status==='offered')){
   const start=hash(`${life.seed}:${c.date}:booking`)%BOOKING_TYPES.length;let offered=null;for(let i=0;i<BOOKING_TYPES.length&&!offered;i++)offered=createBookingOffer(c,league,BOOKING_TYPES[(start+i)%BOOKING_TYPES.length].id);life.nextBooking=eventAfter(c.date,offered?38+hash(`${life.seed}:${c.date}:booking-gap`)%15:7);
  }
 }

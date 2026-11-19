@@ -1,6 +1,6 @@
-import {createAmbience} from './ambience.js?v=1.169.0';
-import {createMatchSoundBridge} from './match-audio.js?v=1.126.0';
-import {SOUND_CREDITS} from './audio-catalogue.js?v=1.125.0';
+import {createAmbience} from './ambience.js?v=1.172.0';
+import {createMatchSoundBridge} from './match-audio.js?v=1.172.0';
+import {SOUND_CREDITS} from './audio-catalogue.js?v=1.172.0';
 // Audio preferences belong to this installation, independently of careers or releases.
 const KEY='clubline-audio-settings';
 export const TRACKS=[["clubline-1994-techno-ballroom", "1994 Techno Ballroom", "melodyayresgriffiths", null], ["clubline-90s-synthwave", "90s Synthwave", "lofidreams", "https://pixabay.com/music/synthwave-90x27s-synthwave-music-384110/"], ["clubline-synth-wave", "Synth Wave", "Marvrix", "https://pixabay.com/music/synthwave-synth-wave-200494/"], ["clubline-90s-game-music", "90s Game Music", "PoorArtistt", "https://pixabay.com/music/video-games-90s-game-music-no-copyright-352850/"], ["clubline-back-to-90s", "Back to 90s", "berrydeep", null]];

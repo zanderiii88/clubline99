@@ -590,6 +590,15 @@
       "duration": 62.0,
       "modifications": "Resampled 24 kHz stereo, level adjusted, two-second crossfaded loop seam",
       "sha256": "3f53af1f300fdee6e65214606ef7197ef67dfa80a87dbce133a7b42522b9a07c"
+    },
+    {
+      "file": "whistle-full-cadence.mp3",
+      "sourceKey": "whistle",
+      "sourceOffsetSeconds": 0.0,
+      "excerptSeconds": 1.113,
+      "duration": 1.608,
+      "modifications": "Re-edited from whistle-single.mp3. Two 0.23\u20130.25 second blows, gaps under 0.1 seconds, and a time-stretched final blow. Pitch preserved.",
+      "sha256": "5c8f90676617140bcffdd78f7cf72114deebaabc7297abaec39fae1077c4f496"
     }
   ]
 }

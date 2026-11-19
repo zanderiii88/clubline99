@@ -1,4 +1,4 @@
-import {createAmbience} from './ambience.js?v=1.169.0';
+import {createAmbience} from './ambience.js?v=1.172.0';
 import {PRESETS,PLAN_OPTIONS,PROFILES,STRENGTHS,assessPlan,labShape,matchShirtColours} from './lab-tactics.js?v=1.169.0';
 import {createSimulation,stepSimulation,matchFlow,startSecondHalf,simulationSnapshot,setTactic,adjustPlan,instructPlayer,formationPosition,formationGrid,snapFormationPosition,moveFormationPosition,resetFormationPositions,assessBuildUp,onPitch,requestSubstitution,continueAfterInjury,cancelQueuedSubstitutions,suggestedReplacement,STEP} from './possession-sim.js?v=1.169.0';
 import {registerRealNames,applyRealNames} from './real-names.js?v=1.93.0';
@@ -102,8 +102,9 @@ if(careerPitch){
  stats.className='career-match-stats';
  const heading=document.createElement('summary');
  heading.textContent='Stats';
- stats.append(heading,query('.lab-support'));
- query('.lab-log summary').textContent='Match incidents';
+ const statsContent=query('.lab-support');
+ statsContent.querySelector('.lab-log summary').textContent='Match incidents';
+ stats.append(heading,statsContent);
  const controls=document.createElement('div');
  controls.className='career-match-controls';
  const panels=document.createElement('div');
@@ -285,7 +286,7 @@ function updateSoundControl(){
 }
 function syncMatchAudio(){
  if(!ambience)return;
- const mode=document.hidden||sim.phase==='ended'?'off':sim.phase==='half-time'?'interval':running?'match':'paused';
+ const mode=document.hidden?'off':sim.phase==='ended'?'changing':sim.phase==='half-time'?'interval':running?'match':'paused';
  ambience.setContext(mode);
 }
 function syncAudio(){configureAudio();syncMatchAudio();}
@@ -310,6 +311,10 @@ function consumeEvents(){
    fastForward=false;
    pauseReason=e.text;
    interrupted=true;
+  }
+  if(e.type==='end'&&sound&&fullMatch){
+   syncMatchAudio();
+   ambience?.react({type:'full',key:`${runGeneration}:${sim.seed}:full-time`,gain:.32});
   }
   if(!sound||!running||scanning()||clip?.event===e)continue;
   if(e.type==='goal'||e.type==='save')syncMatchAudio();
@@ -640,7 +645,7 @@ root.addEventListener('click',event=>{
   checkpointCareer();
  }
  if(action==='export'){
-  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.170.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,formations:sim.teams.map(t=>t.shape),clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?view:'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  const report={prototype:'CLUBLINE 99 spatial match lab',version:'1.172.0',seed:sim.seed,scenario:sim.scenario,setup:{fullMatch,formations:sim.teams.map(t=>t.shape),clubs:ratedFixture()?.map(({id})=>id)??null,homeSide:ratedFixture()?homeSide:null,databaseLineups:sim.teams.every(team=>team.rosterBased),view:highlights()?view:'full',profile,strengths:[...strengths],preset:appliedPreset,plan:appliedPlan,instructions:initialInstructions},state:sim,limits:'Experimental passage with basic restarts and received-pass offside. Full-match tests use fixed pitch orientation and two 45-minute halves. Pending penalties can extend a half. General added time and further calibration remain open. Injury decisions and a five-player lab bench are active. Basic contact fouls, penalties, advantage, cards and temporary knocks are active. No VAR.'};const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`Clubline-match-test-${sim.seed}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  syncAudio();paint(1);
  if(careerPitch&&!running&&!fastForward)checkpointCareer();

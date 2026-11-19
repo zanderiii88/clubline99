@@ -17,7 +17,7 @@ import {validFA} from './fa-cup.js?v=1.93.0';
 import {validMatchdays} from './matchday.js?v=1.93.0';
 import {validCup} from './league-cup.js?v=1.93.0';
 import {validDivisions,validPlayoffs} from './divisions.js?v=1.93.0';
-import {validClubLife} from './club-events.js?v=1.165.0';
+import {validClubLife} from './club-events.js?v=1.173.0';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);

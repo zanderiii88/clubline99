@@ -1,4 +1,4 @@
-import {ambienceForGame} from './ambience.js?v=1.169.0';
+import {ambienceForGame} from './ambience.js?v=1.172.0';
 // Observe only newly displayed action. Never replay history from a loaded match.
 export function createMatchSoundBridge(){
  let previous=null,generation=0;
@@ -11,7 +11,7 @@ export function createMatchSoundBridge(){
   if(same){
    const add=(type,suffix,gain)=>cues.push({type,key:key+':run:'+generation+':'+suffix,gain});
    if(previous.phase!=='live'&&m.phase==='live'&&m.minute===0&&mode==='match')add('kickoff','kickoff',.30);
-   else if(previous.phase==='live'&&m.phase==='report')add('full','full',.32);
+   else if(previous.phase==='live'&&m.phase==='report'&&!previous.pitch)add('full','full',.32);
    else if(m.phase==='live'){
     if(mode==='interval'&&!previous.half)add('half','half',.30);
     else if(previous.half&&mode==='match')add('restart','restart',.25);
@@ -25,6 +25,6 @@ export function createMatchSoundBridge(){
     }
    }
   }
-  previous={key,phase:m.phase,half:mode==='interval',minute:m.minute,count:(m.events||[]).length};return {mode,cues,fresh:!same};
+  previous={key,phase:m.phase,pitch:!!m.pitch,half:mode==='interval',minute:m.minute,count:(m.events||[]).length};return {mode,cues,fresh:!same};
  }};
 }

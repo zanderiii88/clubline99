@@ -1124,3 +1124,22 @@ club-screen-awake small:not(:empty) { display:block; }
 }
 
 #app > .match-exit-overlay { z-index:101; }
+
+/* Keep the review count clear when the surrounding route uses display type. */
+.route-card .attention-badge {
+ flex:none;
+ min-width:24px;
+ height:24px;
+ margin-left:0;
+ padding:0 5px;
+ font:800 .8rem/1 Arial,sans-serif;
+ font-variant-numeric:tabular-nums;
+ letter-spacing:0;
+ text-shadow:none;
+ white-space:nowrap;
+}
+.route-card .attention-badge.review {
+ color:#211700;
+ background:#ffcd59;
+}
+[data-loading] a { color:inherit; margin-inline-start:8px; }

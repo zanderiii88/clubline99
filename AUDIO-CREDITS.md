@@ -100,7 +100,7 @@ Derived files: weights.mp3
 ## Trillerpfeife/ Whistle - Musik-Fan
 Source: https://freesound.org/people/Musik-Fan/sounds/631849/
 Licence: Creative Commons 0 - http://creativecommons.org/publicdomain/zero/1.0/
-Derived files: whistle-single.mp3, whistle-half.mp3, whistle-full.mp3
+Derived files: whistle-single.mp3, whistle-half.mp3, whistle-full.mp3, whistle-full-cadence.mp3
 
 ## Outside gentle wind in trees - moreliketrees
 Source: https://freesound.org/people/moreliketrees/sounds/858679/
@@ -112,7 +112,7 @@ Source: https://freesound.org/people/FunWithSound/sounds/367690/
 Licence: Creative Commons 0 - http://creativecommons.org/publicdomain/zero/1.0/
 Derived files: workout.mp3
 
-Source URLs, preview URLs, raw/derived checksums, excerpt offsets and edits are recorded in assets/audio/recorded/sources.json. Raw source previews are not bundled separately.
+Source URLs, preview URLs, raw/derived checksums, excerpt offsets and edits are recorded in assets/audio/recorded/sources.json. Raw source previews are not bundled separately. The v1.172 full-time cue uses two short blows with close gaps and lengthens the third without changing its pitch.
 
 ## Light continuous background (v1.125)
 

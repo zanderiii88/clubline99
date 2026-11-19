@@ -1,3 +1,3 @@
-CLUBLINE 99 v1.170.0
+CLUBLINE 99 v1.173.0
 
-Extract into a v1.162-or-later installation beside index.html and replace matching files. Include the new assets/surroundings files. Keep the existing assets and data.
+Extract into the live v1.170 installation beside index.html and replace matching files. Keep the existing assets and data. This update also applies over v1.171 or v1.172.
