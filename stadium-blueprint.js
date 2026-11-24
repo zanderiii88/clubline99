@@ -9,6 +9,12 @@ export function validStadiumBlueprint(c){
 }
 export function saveStadiumBlueprint(c,draft){c.stadiumBlueprint={version:1,saved:c.date,sections:structuredClone(draft.sections)}}
 export function restoreStadiumBlueprint(c){if(!c.stadiumBlueprint||!validStadiumBlueprint(c))return null;return {...structuredClone(c.stadium),sections:structuredClone(c.stadiumBlueprint.sections)}}
+// Compare with the stadium as it will stand once paid work has finished.
+export function remainingBlueprintSections(c, draft) {
+ const planned = {...c.stadium.sections};
+ for (const job of c.construction || []) Object.assign(planned, job.sections);
+ return SECTIONS.filter(({id}) => changeCost(planned[id], draft.sections[id]) > 0).map(({id}) => id);
+}
 export function stadiumPhases(c,club,draft){
  const changed=SECTIONS.filter(s=>changeCost(c.stadium.sections[s.id],draft.sections[s.id])>0),all=constructionQuote(c,club,draft);
  const groups=[['N','North stand'],['S','South stand'],['E','East end'],['W','West end'],['corners','Corners']];

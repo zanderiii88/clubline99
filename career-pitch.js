@@ -1,4 +1,4 @@
-import {createSimulation, setTactic, adjustPlan, instructPlayer} from './possession-sim.js?v=1.169.0';
+import {createSimulation, setTactic, adjustPlan, instructPlayer} from './possession-sim.js?v=1.175.0';
 import {labAnchor, labShape} from './lab-tactics.js?v=1.169.0';
 import {formationSlots} from './formations.js?v=1.100.0';
 
