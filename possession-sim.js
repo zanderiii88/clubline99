@@ -177,6 +177,23 @@ export function awardRestart(s,team,kind,point=null){
  emit(s,'restart',team,p.id,`${s.teams[team].name} prepare ${kind==='indirect'?'an':'a'} ${label}.`,{kind,point:{...pos}});
 }
 function restart(s,team,kind,point=null){awardRestart(s,team,kind,point);}
+export function cornerDeliveryOptions(s,taker,options){
+ const opponents=onPitch(s).filter(p=>p.team!==taker.team);
+ const keeper=opponents.find(p=>p.role==='GK');
+ const markers=opponents.filter(p=>p.role!=='GK');
+ const dir=direction(taker.team),nearSide=taker.y<34?-1:1;
+ return options.filter(p=>homeSpace(p,taker.team)>=90&&Math.abs(p.y-34)<=10).map(p=>{
+  const target={x:p.x+dir*.6,y:p.y};
+  const zone=Math.abs(p.y-34)<4?'centre':(p.y-34)*nearSide>0?'near post':'far post';
+  const separation=Math.min(5,...markers.map(marker=>distance(marker,target)));
+  const keeperDistance=keeper?distance(keeper,target):15;
+  const aerial=(p.heading??p.technique)*.6+(p.strength??70)*.25+p.anticipation*.15;
+  // Keep the attacking options open while favouring room and aerial ability.
+  const weight=Math.max(.25,.6+(aerial-50)*.035+separation*.55
+   +clamp((keeperDistance-8)/5,-1,1)*.95);
+  return {p,target,zone,weight};
+ });
+}
 function takeRestart(s){
  const p=player(s,s.restartTaker),kind=s.restartKind;s.pendingRestart=false;s.restartOrigin=kind;
  if(kind==='drop-ball'){s.restartOrigin=null;s.ball.owner=null;s.looseSince=s.time;emit(s,'drop-ball',null,null,'The referee drops the ball; either side can collect it.');return;}
@@ -200,17 +217,20 @@ function takeRestart(s){
   }
  }
  if(kind==='corner'){
-  const targets=options.filter(q=>homeSpace(q,p.team)>=90&&Math.abs(q.y-34)<=10);
+  const targets=cornerDeliveryOptions(s,p,options);
   if(targets.length){
-   const q=targets[Math.floor(random(s)*targets.length)];
-   const aim={x:q.x+direction(p.team)*.6,y:q.y};
-   deliver(s,p,'cross',aim,q,20,'corner',{text:`${p.name} swings the corner in towards ${q.name}.`});
+   let roll=random(s)*targets.reduce((sum,option)=>sum+option.weight,0);
+   const chosen=targets.find(option=>(roll-=option.weight)<=0)??targets.at(-1);
+   const lane=chosen.zone==='centre'?'into the middle':`towards the ${chosen.zone}`;
+   deliver(s,p,'cross',chosen.target,chosen.p,20,'corner',{
+    text:`${p.name} swings the corner ${lane} for ${chosen.p.name}.`,cornerZone:chosen.zone
+   });
    return;
   }
  }
  options.sort((a,b)=>distance(p,a)-distance(p,b));
  const q=options[0];if(!q){s.restartOrigin=null;restart(s,p.team,kind,s.restartPoint);return;}
- launch(s,p,'pass',{x:q.x,y:q.y},q,kind==='corner'?{text:`${p.name} takes the corner short to ${q.name}.`}:{});
+ launch(s,p,'pass',{x:q.x,y:q.y},q,kind==='corner'?{style:'corner',text:`${p.name} takes the corner short to ${q.name}.`}:{});
 }
 function offsideContact(s,p){
  const phase=s.offsidePhase,offender=phase?.team===p.team&&phase.candidates.find(q=>q.id===p.id);if(!offender)return false;
@@ -230,7 +250,7 @@ export function pitchExit(from,to){
  }
  return exit;
 }
-function boundaryRestart(s,lastTeam,exit,cause){
+function boundaryRestart(s,lastTeam,exit,cause,flight=null){
  const {axis,limit,point}=exit;
  const defending=limit===0?0:1;
  const kind=axis==='y'?'throw-in':lastTeam===defending?'corner':'goal-kick';
@@ -238,9 +258,15 @@ function boundaryRestart(s,lastTeam,exit,cause){
  const restartPoint=kind==='throw-in'?{x:point.x,y:limit===0?1:67}:
   kind==='corner'?{x:limit===0?1:104,y:point.y<34?1:67}:null;
  if(kind==='goal-kick')s.stats[team].goalKicks=(s.stats[team].goalKicks||0)+1;
+ const parry=kind==='corner'&&cause==='parry'?
+  s.events.findLast(e=>e.id===flight?.passEvent&&e.type==='save'):null;
+ const keeper=parry&&player(s,parry.actorId);
+ const cornerText=keeper?
+  `${parry.stretched?'Great save! ':''}${keeper.name} turns it behind for a corner.`:
+  `The ball goes behind off a defender. Corner for ${s.teams[team].name}.`;
  emit(s,'ball-out',team,null,kind==='throw-in'?'The ball crosses the touchline.':
-  kind==='corner'?'The ball goes behind off the defending side.':'The ball runs out for a goal kick.',
-  {restartKind:kind,lastTouchTeam:lastTeam,point,cause});
+  kind==='corner'?cornerText:'The ball runs out for a goal kick.',
+  {restartKind:kind,lastTouchTeam:lastTeam,point,cause,...(parry?{saveEventId:parry.id}:{})});
  restart(s,team,kind,restartPoint);
 }
 export function createSimulation({seed=99,duration=180,scenario='open',profile='balanced',preset='balanced',strengths=['standard','standard'],kickoffTeam=0,managedTeam=null,fullMatch=false,clubs=null,homeSide=null,rosters=null,formations=null,selectedLineups=null}={}){
@@ -704,14 +730,19 @@ export function assessOpenPlayShot(s,p,opponents){
  const pressureFactor=.55+.45*clamp((pressure-1)/3,0,1);
  const cleanLook=clamp((19-range)/10,0,1)*clamp((opening-.18)/.32,0,1)
   *clamp((preferred.clearance-.75)/2.25,0,1)*clamp((pressure-1)/3,0,1);
- const chance=.50*openingFactor**1.4*distanceFactor*laneFactor*pressureFactor*(.32+.68*cleanLook);
+ // A central look around the edge of the area can justify a shot before
+ // the close-range bonus applies. Angle, traffic and pressure still matter.
+ const edgeLook=clamp((range-11)/5,0,1)*clamp((26-range)/8,0,1);
+ const room=clamp((pressure-2)/3,0,1);
+ const chance=.67*openingFactor**1.4*distanceFactor*laneFactor*pressureFactor*(.36+.64*cleanLook)
+  +.34*edgeLook*openingFactor**2*laneFactor**2*room;
  return {preferred,depth,range,opening,pressure,chance};
 }
 export function openPlayShotAim(s,p,errorRoll,look=assessOpenPlayShot(s,p,onPitch(s).filter(q=>q.team!==p.team))){
  const dir=direction(p.team),goal=goalX(p.team);
  const quality=p.finish*.75+p.composure*.25;
  const pressureStress=Math.max(0,4-look.pressure)/4;
- const spread=1.05+look.range*.062+(100-quality)*.075
+ const spread=1.05+look.range*.062+Math.max(0,look.range-12)*.16+(100-quality)*.075
   +pressureStress*(1.2+(100-p.composure)*.025)+(100-p.energy)*.018;
  const aim=34+(look.preferred.y-34)*clamp(.55+quality*.006,.6,1);
  const crossing=aim+(errorRoll-.5)*2*spread*dir;
@@ -858,6 +889,13 @@ function chooseAction(s,p){
  }).sort((a,b)=>b.weight-a.weight);
  const nearTouchline=Math.min(p.y,68-p.y)<12;
  const safeOutlet=candidates.some(offer=>offer.distance<18&&offer.margin>1&&offer.space>3);
+ const ownDepth=homeSpace(p,p.team),fromGoalCentre=Math.abs(p.y-34);
+ if((p.role==='FB'||p.role==='CB')&&ownDepth<8&&fromGoalCentre>8&&fromGoalCentre<23&&pressure<3&&!safeOutlet){
+  launch(s,p,'clearance',{x:p.team===0?-2:107,y:p.y+Math.sign(p.y-34)*2},null,{
+   style:'emergency-clearance',text:`${p.name} sends the ball behind under pressure.`
+  });
+  return;
+ }
  if(['FB','CB','W'].includes(p.role)&&homeSpace(p,p.team)<42&&nearTouchline&&pressure<3.6&&!safeOutlet){
   const dir=direction(p.team);
   const side=p.y<34?-1:1;
@@ -993,8 +1031,9 @@ function glanceWideDelivery(s,f,p,point,reach){
  const side=point.y<34?-1:1;
  const fromInside=(p.y-point.y)*side<-.15;
  const outward=fromInside||crossing;
- const vx=f.vx*.36;
- const vy=outward?side*(5+4*reach):f.vy*.55;
+ const nearByline=crossing&&fromInside&&homeSpace(point,p.team)<6;
+ const vx=nearByline?-direction(p.team)*(7+4*reach):f.vx*.36;
+ const vy=nearByline?side*reach:outward?side*(5+4*reach):f.vy*.55;
  const origin=crossing?'cross-block':'pass-deflection';
  const event=emit(s,origin,p.team,p.id,crossing?`${p.name} blocks the wide delivery.`:
   `${p.name} gets a foot to the pass and it breaks loose.`,{opponentId:f.actorId});
@@ -1033,19 +1072,20 @@ function advanceFlight(s){
    f.contacted.push(p.id);
    if(p.role==='GK'){if(random(s)<keeperSaveChance(p,f,contactDistance)){
     const onTarget=shotOffset<=GOAL_HALF_WIDTH;
+    const stretched=onTarget&&contactDistance>reach*.72;
     if(onTarget){
      s.stats[f.team].shotsOnTarget=(s.stats[f.team].shotsOnTarget||0)+1;
      s.stats[p.team].saves++;
     }
     const hold=clamp(.35+(p.handling??70)*.006-contactDistance*.12,.15,.94);
-    if(random(s)<hold){own(s,p);emit(s,'save',p.team,p.id,onTarget?`${p.name} saves and gathers.`:`${p.name} gathers the ball near the post.`,{opponentId:f.actorId,shotId:f.passEvent,onTarget,outcome:'held'});}
+    if(random(s)<hold){own(s,p);emit(s,'save',p.team,p.id,onTarget?`${stretched?'Great save! ':''}${p.name} saves and gathers.`:`${p.name} gathers the ball near the post.`,{opponentId:f.actorId,shotId:f.passEvent,onTarget,stretched,outcome:'held'});}
     else{
      if(onTarget)s.stats[p.team].parries=(s.stats[p.team].parries||0)+1;
      const point=contactPoint(p,from,to);
      const wide=Math.abs(point.y-34)>2.1&&segmentDistance(p,from,to)>1.35;
      const vx=wide?f.vx*.27:direction(p.team)*8;
      const vy=wide?Math.sign(point.y-34)*(7+random(s)*4):(random(s)-.5)*10*direction(p.team);
-     const event=emit(s,'save',p.team,p.id,onTarget?`${p.name} parries! The rebound is loose.`:`${p.name} gets a touch near the post. The ball is loose.`,{opponentId:f.actorId,shotId:f.passEvent,onTarget,outcome:'parried'});
+     const event=emit(s,'save',p.team,p.id,onTarget?`${p.name} parries! The rebound is loose.`:`${p.name} gets a touch near the post. The ball is loose.`,{opponentId:f.actorId,shotId:f.passEvent,onTarget,stretched,outcome:'parried'});
      const duration=wide?.9:.5;
      const push=wouldReachOwnMouth(p.team,point,vx,vy,duration)?direction(p.team)*Math.abs(vx):vx;
      setRebound(s,p,point,push,vy,duration,event,'parry');
@@ -1083,7 +1123,7 @@ function advanceFlight(s){
    }
   }
   if(f.kind==='shot')emit(s,'miss',f.team,f.actorId,`${player(s,f.actorId).name} shoots wide.`,{shotId:f.passEvent,end:{...to},penalty:f.delivery==='penalty',dangerous:f.dangerous,close:exit.axis==='x'&&Math.abs(to.y-34)<6});
-  boundaryRestart(s,f.team,exit,f.origin??f.delivery??f.kind);
+  boundaryRestart(s,f.team,exit,f.origin??f.delivery??f.kind,f);
   return;
  }
  if(f.rolling){

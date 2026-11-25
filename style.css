@@ -1143,3 +1143,43 @@ club-screen-awake small:not(:empty) { display:block; }
  background:#ffcd59;
 }
 [data-loading] a { color:inherit; margin-inline-start:8px; }
+
+.employment-desk {
+ position: fixed;
+ z-index: 2;
+ inset: 0;
+ overflow-y: auto;
+ overscroll-behavior: contain;
+ background: radial-gradient(ellipse at 50% 7%, #33464d, #171f25 65%);
+ color: #f2eddf;
+ padding: max(24px, env(safe-area-inset-top)) 18px max(30px, env(safe-area-inset-bottom));
+}
+.employment-inner { width: min(100%, 570px); margin-inline: auto; }
+.employment-inner header { margin: 0 0 24px; }
+.employment-inner h1 { font-size: clamp(1.9rem, 8vw, 3rem); margin: 4px 0 12px; }
+.employment-date, .employment-record { color: #d4dfe0; margin: 0 0 18px; }
+.job-papers { display: grid; gap: 24px; padding: 4px 6px 12px; }
+.job-paper {
+ position: relative;
+ padding: clamp(18px, 5vw, 36px);
+ color: #262b2a;
+ background: linear-gradient(106deg, #f7eed8, #f3ead2 77%, #e9dcc2);
+ border: 1px solid #c6b697;
+ border-radius: 1px;
+ box-shadow: 0 2px #d9c9a6, 2px 5px #b6aa8c, 4px 10px 19px #0008;
+ font-family: Georgia, serif;
+}
+.job-paper:nth-child(3n+1) { transform: rotate(-.6deg); }
+.job-paper:nth-child(3n+2) { transform: rotate(.5deg); }
+.job-paper h2 { margin: 4px 0 8px; font: 700 clamp(1.35rem, 5.8vw, 2rem)/1.12 Georgia, serif; }
+.job-paper p, .job-paper dd, .job-paper dt { color: inherit; }
+.job-paper .employment-kicker { font: 700 .72rem/1.4 system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #5e5848; margin: 0; }
+.job-paper .job-league { color: #494e40; margin: 0 0 14px; }
+.job-paper dl { border-block: 1px solid #a79a80; padding: 8px 0; margin: 0 0 18px; }
+.job-paper dl div { display: flex; flex-wrap: wrap; gap: 4px 14px; justify-content: space-between; padding: 3px 0; }
+.job-paper dd { margin: 0; font-weight: 700; }
+.job-paper .btn, .employment-actions .btn { min-height: 44px; }
+.job-letter { margin: 12px 5px; }
+.employment-actions { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 0 18px; }
+
+.job-reply { background: linear-gradient(110deg, #eff1e7, #e4e8da); }

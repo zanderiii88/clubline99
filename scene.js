@@ -1,6 +1,6 @@
 import {wembleyFrontage} from './wembley-world.js';
 import {eventInstallation} from './stadium-events.js';
-import {fixedSurroundings,fixedSiteError,surroundingsLayer} from './fixed-surroundings.js?v=1.165.0';
+import {fixedSurroundings,fixedSiteError,surroundingsLayer} from './fixed-surroundings.js?v=1.193.0';
 import {exteriorPeople,pitchPlayers} from './stadium-life.js';
 import {SECTIONS,STANDS,normaliseLayout,defaultLayout} from './stadium-model.js';
 import {groundsStand} from './grounds-geometry.js';
@@ -16,29 +16,46 @@ export function sceneSvg(club,site='aberdeen',crowd=false,evening=false,close=fa
  const pilot=fixed;
  const map=pilot||siteById(site),model=normaliseLayout(layout,club),colour=/^#[0-9a-f]{6}$/i.test(club?.colour||'')?club.colour:'#a03948';
  const ART_WIDTH=map.artWidth||830,ART_HEIGHT=map.artHeight||1895,SCENE_HEIGHT=ART_HEIGHT*SCENE_WIDTH/ART_WIDTH;
- const figureScale=((map.scale||1)*830/ART_WIDTH)/0.6137143383204945;
- const px=SCENE_WIDTH/ART_WIDTH,py=SCENE_HEIGHT/ART_HEIGHT,zStep=2.55*px*(map.scale||1);
+ const renderScale=map.renderScale||1;
+ const figureScale=((map.scale||1)*renderScale*830/ART_WIDTH)/0.6137143383204945;
+ const px=SCENE_WIDTH/ART_WIDTH,py=SCENE_HEIGHT/ART_HEIGHT,zStep=2.55*px*(map.scale||1)*renderScale;
  // All game objects use the same two ground-plane vectors. This keeps the
  // pitch, tiers, designer hit regions and match animation in one site frame.
  const frame={left:Infinity,right:-Infinity,top:Infinity,bottom:-Infinity};
- const project=p=>{const dx=p.x-36,dy=p.y-30,z=p.z||0;const q={x:(map.origin[0]+dx*map.east[0]+dy*map.south[0])*px,y:(map.origin[1]+dx*map.east[1]+dy*map.south[1])*py-z*zStep};frame.left=Math.min(frame.left,q.x);frame.right=Math.max(frame.right,q.x);frame.top=Math.min(frame.top,q.y);frame.bottom=Math.max(frame.bottom,q.y);return q};
+ const project=p=>{const dx=(p.x-36)*renderScale,dy=(p.y-30)*renderScale,z=p.z||0;const q={x:(map.origin[0]+dx*map.east[0]+dy*map.south[0])*px,y:(map.origin[1]+dx*map.east[1]+dy*map.south[1])*py-z*zStep};frame.left=Math.min(frame.left,q.x);frame.right=Math.max(frame.right,q.x);frame.top=Math.min(frame.top,q.y);frame.bottom=Math.max(frame.bottom,q.y);return q};
  const coord=p=>{const q=project(p);return `${q.x.toFixed(2)},${q.y.toFixed(2)}`};
  const poly=(pts,fill,extra='')=>`<polygon points="${pts.map(coord).join(' ')}" fill="${fill}" ${extra}/>`;
  const path=(pts,stroke,width=1,extra='')=>`<path d="M${pts.map(coord).join('L')}" fill="none" stroke="${stroke}" stroke-width="${width}" ${extra}/>`;
  const rect=(x1,y1,x2,y2,z,fill,extra='')=>poly([at(x1,y1,z),at(x2,y1,z),at(x2,y2,z),at(x1,y2,z)],fill,extra);
- const field=[];
- field.push(rect(21.4,20.4,50.6,39.6,.015,'#4e8149'));
- for(let i=0;i<28;i+=3)field.push(rect(22+i,21,Math.min(50,22+i+3),39,.04,(i/3)%2?'#368c53':'#40965b'));
+ const field=[],track=club?.athleticsTrack,pitchScale=track?.pitchScale??1;
+ const pitchPoint=(x,y,z)=>at(36+(x-36)*pitchScale,30+(y-30)*pitchScale,z);
+ const pitchProject=p=>project(pitchPoint(p.x,p.y,p.z));
+ const pitchRect=(x1,y1,x2,y2,z,colour)=>poly([
+  pitchPoint(x1,y1,z),pitchPoint(x2,y1,z),pitchPoint(x2,y2,z),pitchPoint(x1,y2,z)
+ ],colour);
+ if(track){
+  const oval=radius=>[42,30].flatMap((x,end)=>Array.from({length:25},(_,i)=>{
+   const angle=(i/24+end-.5)*Math.PI;
+   return at(x+radius*Math.cos(angle),30+radius*Math.sin(angle),.01);
+  }));
+  field.push(poly(oval(9.65),track.surface,'data-athletics-track="oval"'),poly(oval(7.25),'#66835a'));
+  for(let i=0;i<=8;i++){
+   const lane=oval(7.25+i*.30);
+   field.push(path([...lane,lane[0]],'#eadbd0',.6,'data-track-boundary=""'));
+  }
+ }
+ field.push(pitchRect(21.4,20.4,50.6,39.6,.015,'#4e8149'));
+ for(let i=0;i<28;i+=3)field.push(pitchRect(22+i,21,Math.min(50,22+i+3),39,.04,(i/3)%2?'#368c53':'#40965b'));
  const white='#edf4e6',lw=.18;
- field.push(path([at(22,21,.09),at(50,21,.09),at(50,39,.09),at(22,39,.09),at(22,21,.09)],white,lw));
- field.push(path([at(36,21,.09),at(36,39,.09)],white,lw));
+ field.push(path([pitchPoint(22,21,.09),pitchPoint(50,21,.09),pitchPoint(50,39,.09),pitchPoint(22,39,.09),pitchPoint(22,21,.09)],white,lw));
+ field.push(path([pitchPoint(36,21,.09),pitchPoint(36,39,.09)],white,lw));
  for(const end of [22,50]){
   const dir=end===22?1:-1;
-  for(const [depth,inset] of [[4.6,3.25],[1.8,6.15]])field.push(path([at(end,21+inset,.09),at(end+dir*depth,21+inset,.09),at(end+dir*depth,39-inset,.09),at(end,39-inset,.09)],white,lw));
-  field.push(poly([at(end,28.5,.08),at(end-dir*.8,28.5,.08),at(end-dir*.8,31.5,.08),at(end,31.5,.08)],'none',`stroke="${white}" stroke-width=".18"`));
-  const spot=project(at(end+dir*3.55,30,.1));field.push(`<circle cx="${spot.x.toFixed(2)}" cy="${spot.y.toFixed(2)}" r=".12" fill="${white}"/>`);
+  for(const [depth,inset] of [[4.6,3.25],[1.8,6.15]])field.push(path([pitchPoint(end,21+inset,.09),pitchPoint(end+dir*depth,21+inset,.09),pitchPoint(end+dir*depth,39-inset,.09),pitchPoint(end,39-inset,.09)],white,lw));
+  field.push(poly([pitchPoint(end,28.5,.08),pitchPoint(end-dir*.8,28.5,.08),pitchPoint(end-dir*.8,31.5,.08),pitchPoint(end,31.5,.08)],'none',`stroke="${white}" stroke-width=".18"`));
+  const spot=pitchProject(at(end+dir*3.55,30,.1));field.push(`<circle cx="${spot.x.toFixed(2)}" cy="${spot.y.toFixed(2)}" r=".12" fill="${white}"/>`);
  }
- const circle=Array.from({length:65},(_,i)=>at(36+Math.cos(i/64*Math.PI*2)*2.45,30+Math.sin(i/64*Math.PI*2)*2.45,.1));field.push(path(circle,white,lw));
+ const circle=Array.from({length:65},(_,i)=>pitchPoint(36+Math.cos(i/64*Math.PI*2)*2.45,30+Math.sin(i/64*Math.PI*2)*2.45,.1));field.push(path(circle,white,lw));
  const centre=project(at(36,30,.1));field.push(`<circle cx="${centre.x.toFixed(2)}" cy="${centre.y.toFixed(2)}" r=".12" fill="${white}"/>`);
  function world(s,u,v,z){
   if(s.corner){const a=u/4*Math.PI/2,orig={NW:[20,20,-1,-1],NE:[52,20,1,-1],SW:[20,40,-1,1],SE:[52,40,1,1]}[s.id];return at(orig[0]+orig[2]*v*Math.cos(a),orig[1]+orig[3]*v*Math.sin(a),z)}
@@ -179,6 +196,20 @@ export function sceneSvg(club,site='aberdeen',crowd=false,evening=false,close=fa
    }
    for(const u of [L*.28,L*.72])facade.push(outerFace([[u-(corner?.08:.3),y+.055,.1],[u+(corner?.08:.3),y+.055,.1],[u+(corner?.08:.3),y+.055,2.3],[u-(corner?.08:.3),y+.055,2.3]],'#152a34'));
   }
+  if(club?.venueStyle==='san-siro'&&corner){
+   const height=spec.wallH+2.5;
+   const tower=near?roof:back;
+   const ring=Array.from({length:12},(_,i)=>{
+    const angle=i*Math.PI/6;
+    return [L/2+Math.cos(angle)*.9,D+rear+1.35+Math.sin(angle)*1.15];
+   });
+   for(let i=0;i<12;i++){
+    const [a,b]=[ring[i],ring[(i+1)%12]];
+    tower.push(localFace([[...a,0],[...b,0],[...b,height],[...a,height]],
+     ['#a8a8a1','#92968f','#717b78','#626c68'][Math.floor(i/3)],'data-venue-tower="san-siro"'));
+   }
+   tower.push(localFace(ring.map(p=>[...p,height]),'#bfc0b6'));
+  }
   if(club?.venueStyle==='old-wembley'){
    const y=D+rear+.10,H=spec.wallH;facade.length=0;
    panel(facade,[[0,y,0],[L,y,0],[L,y,H],[0,y,H]],'#d3ccb5','data-structure="national-stone-frontage"');
@@ -203,7 +234,7 @@ export function sceneSvg(club,site='aberdeen',crowd=false,evening=false,close=fa
     panel(bowl,[[0,v,z],[L,v,z],[L,v1,z],[0,v1,z]],rowSeat,`stroke="#8fa6a3" stroke-width=".2"`);
     // Discrete seat backs make seating read as a crowd bowl, not flat stripes.
     if(!cfg.stand.startsWith('terrace')&&!cfg.stand.startsWith('bleacher')&&cfg.stand!=='grass'){
-     for(let u=.25;u<L-.12;u+=.34){
+     for(let u=.25;u<L-.12;u+=(map.renderScale ? .68 : .34)){
       if(!corner&&[L/3,2*L/3].some(aisle=>Math.abs(u-aisle)<.25))continue;
       bowl.push(localFace([[u-.1,v1-.07,z+.06],[u+.1,v1-.07,z+.06],[u+.1,v1-.07,z+.38],[u-.1,v1-.07,z+.38]],rowSeat,`stroke="#542c38" stroke-width=".18"`));
      }
@@ -216,7 +247,7 @@ export function sceneSvg(club,site='aberdeen',crowd=false,evening=false,close=fa
      bowl.push(localFace([[u-.13,v,z+.03],[u+.13,v,z+.03],[u+.13,Math.min(v1,v+t.tread),z+.03],[u-.13,Math.min(v1,v+t.tread),z+.03]],'#5c6a6b'));
      if(i%2===0)bowl.push(localEdge([[u-.12,v,z+.08],[u-.12,Math.min(v1,v+t.tread),z+.08]],'#d5d0bd',.35));
     }
-    if(crowd&&i%2===0)for(let u=.28;u<L;u+=.44){
+    if(crowd&&i%2===0)for(let u=.28;u<L;u+=(map.renderScale ? .88 : .44)){
      const q=project(point(u,v+.08,z+.18)),seed=i*17+Math.round(u*19)+s.id.charCodeAt(0),jump=motion?.scoringTeam===0;
      if(((Math.imul(seed,2654435761)>>>0)/4294967296)>=fill)continue;
      bowl.push(`<g class="stand-fan" data-fan-tier="${ti}" transform="translate(${q.x.toFixed(1)} ${q.y.toFixed(1)})"><g transform="scale(${figureScale})"><g class="fan-body ${seed%5===0?'fan-reactive':''} ${seed%7===0?'fan-idle':''}" style="--jump-duration:${.48+seed%7*.07}s;--jump-delay:-${seed%17*.053}s"><rect x="-2.5" y="-.5" width="5" height="4.8" rx=".2" fill="${seed%5<3?(motion?.neutral?(s.side==='S'||s.side==='E'||s.id==='SE'?motion.awayColour:motion.homeColour):motion?.homeColour||colour):['#819398','#a89977','#536979'][seed%3]}"/><circle cy="-1.7" r="1.6" fill="${seed%3?'#e8c3a1':'#a47758'}"/></g></g></g>`);
@@ -326,7 +357,24 @@ export function sceneSvg(club,site='aberdeen',crowd=false,evening=false,close=fa
    const postV=D-.28;
    out.push(localFace([[u,postV,0],[u,D+.22,0],[u,D+.22,spec.wallH],[u,postV,spec.wallH]],'#5b737e',`stroke="#40535e" stroke-width=".4"`));
   }
-  if(cfg.roof!=='none'){
+  if(club?.venueStyle==='munich'&&s.side==='N'&&cfg.roof!=='none'){
+   // The cable-net roof spans the main stand in two peaks and hangs lower over the seats.
+   const front=u=>[u,1.8,spec.wallH+1.7+Math.cos((s.i*L+u)*Math.PI/8)*.8];
+   const ridge=u=>[u,7.5,spec.wallH+4+Math.abs(Math.sin((s.i*L+u)*Math.PI/16))*6.8];
+   const backEdge=u=>[u,D+1.3,spec.wallH+1.4];
+   for(let k=0;k<6;k++){
+    const a=k*L/6,b=(k+1)*L/6;
+    roof.push(localFace([front(a),front(b),ridge(b),ridge(a)],'#a9c1bd','opacity=".85" data-venue-feature="tent-canopy"'));
+    roof.push(localFace([ridge(a),ridge(b),backEdge(b),backEdge(a)],'#c4d7cd','opacity=".9"'));
+    roof.push(localEdge([front(a),ridge(a),backEdge(a)],'#e5eadc',.55));
+   }
+   roof.push(localEdge([front(0),front(L)],'#dae5da',1.2));
+   if(s.i===2||s.i===6){
+    const tip=[0,D+2.4,spec.wallH+15];
+    roof.push(localEdge([[0,D+2.4,0],tip],'#dce1d9',2.5,'data-venue-feature="canopy-mast"'));
+    roof.push(localEdge([tip,ridge(0),front(0)],'#778e89',1.0));
+   }
+  }else if(cfg.roof!=='none'){
    // Full canopies cover the bowl; truss and cantilever roofs expose the
    // lower rake. The former hard-coded front at .42 hid almost every row.
    const roofFront=(c,sp)=>sp.partialFrontV*({full:.60,cantilever:.69,truss:1,continuous:.84,pitched:.38,columns:.35,boxtruss:.48}[c.roof]??1);
@@ -404,16 +452,36 @@ export function sceneSvg(club,site='aberdeen',crowd=false,evening=false,close=fa
  const closed=id=>works.some(job=>job.sections[id]);
  const layer=near=>{const list=ordered.filter(x=>(['S','E'].includes(x.s.side)||x.s.id==='SE')===near);const result=[...list.filter(x=>!closed(x.s.id)),...list.filter(x=>closed(x.s.id))].map(x=>sectionSvg(x.s)).join('');return near?Object.values(nearLayers).flat().join('')+result:result};
  const far=layer(false),near=layer(true);
- const venueFront=club?.venueStyle==='old-wembley'?wembleyFrontage(project):'';
+ let venueFront='';
+ if(club?.venueStyle==='old-wembley')venueFront=wembleyFrontage(project);
+ if(club?.venueStyle==='amsterdam'){
+  const z=groundsStand(model.sections.N1.stand).wallH;
+  const spans=[18.9,41.1].map(y=>{
+   const rails=Array.from({length:9},(_,i)=>at(16+i*5,y,z+5+Math.sin(i*Math.PI/8)*4));
+   const base=rails.map(p=>at(p.x,p.y,z+3.5));
+   const braces=base.slice(0,-1).map((p,i)=>path([p,rails[i+1],base[i+1]],'#bbd0d5',.85));
+   return path(base,'#516b78',2.2)+path(rails,'#e1e7e4',1.8)+braces.join('');
+  });
+  venueFront='<g data-venue-feature="sliding-roof-trusses">'+spans.join('')+'</g>';
+ }
+ if(club?.venueStyle==='westfalen'){
+  const z=groundsStand(model.sections.N1.stand).wallH+4;
+  const pylons=[[17.7,17.7],[54.3,17.7],[17.7,42.3],[54.3,42.3]].map(([x,y])=>
+   poly([at(x-.36,y),at(x+.36,y),at(x+.2,y,z),at(x-.2,y,z)],'#b6a145')+
+   path([at(x,y,z),at(x<36?20:52,y<30?17:43,z-5)],'#b7bcb3',1.25));
+  venueFront='<g data-venue-feature="inner-corner-pylons">'+pylons.join('')+'</g>';
+ }
  const standFrame={...frame};
- const lights=[[16,15],[56,15],[56,45],[16,45]].map(([x,y],i)=>{const p=project(at(x,y,15)),q=project(at(x,y));return `<g data-stadium-light="${i+1}"><path d="M${q.x},${q.y}L${p.x},${p.y}" stroke="#77878b" stroke-width="1.1"/><rect x="${p.x-3.2}" y="${p.y-1.5}" width="6.4" height="2.8" fill="${evening?'#fff3ad':'#aab7b5'}"/></g>`}).join('');
+ const luz=club?.venueStyle==='old-luz';
+ const lightPositions=luz?[[9,9],[63,9],[63,51],[9,51]]:[[16,15],[56,15],[56,45],[16,45]];
+ const lights=lightPositions.map(([x,y],i)=>{const p=project(at(x,y,luz?51:15)),q=project(at(x,y));return `<g data-stadium-light="${i+1}" ${luz?'data-venue-feature="luz-floodlight"':''}><path d="M${q.x},${q.y}L${p.x},${p.y}" stroke="#77878b" stroke-width="1.1"/><rect x="${p.x-3.2}" y="${p.y-1.5}" width="6.4" height="2.8" fill="${evening?'#fff3ad':'#aab7b5'}"/></g>`}).join('');
  // Low stands must not cause the camera to crop the taller floodlight masts.
  // Bowl-only previews hide those fixtures and retain their tighter framing.
  const stadiumFrame=preview?standFrame:{...frame};
  const hull=points=>{const sorted=points.sort((a,b)=>a.x-b.x||a.y-b.y),cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x),lo=[],hi=[];for(const p of sorted){while(lo.length>1&&cross(lo.at(-2),lo.at(-1),p)<=0)lo.pop();lo.push(p)}for(const p of [...sorted].reverse()){while(hi.length>1&&cross(hi.at(-2),hi.at(-1),p)<=0)hi.pop();hi.push(p)}return lo.slice(0,-1).concat(hi.slice(0,-1))};
  const targets=selection===null?'':SECTIONS.map(s=>{const cfg=model.sections[s.id],spec=groundsStand(cfg.stand),d=spec?.depth||2.3,h=spec?.wallH||1.8,points=[];for(const u of [0,s.bays])for(const v of [0,d])for(const z of [0,h])points.push(project(world(s,u,v,z)));const outline=hull(points).map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');return `<polygon class="designer-hit ${selection.has(s.id)?'is-selected':''} ${motion?.designClosed?.includes(s.id)?'is-closed':motion?.designChanges?.includes(s.id)?'has-preview-change':motion?.designTargets?.includes(s.id)?'has-target-change':''}" data-action="toggle-stand" data-id="${s.id}" role="button" tabindex="0" aria-label="${s.id}: ${safe(STANDS[cfg.stand].label)}${motion?.designClosed?.includes(s.id)?' · Closed for works':''}${motion?.designChanges?.includes(s.id)?' · Preview change':''}${motion?.designTargets?.includes(s.id)?' · Saved target pending':''}" aria-pressed="${selection.has(s.id)}" points="${outline}"/>`}).join('');
  const eventArt=motion?.event?eventInstallation(project,motion.event.type,Number(motion.event.id.split('-')[1])||1,figureScale):'';
- const athletes=['prematch','live'].includes(motion?.phase)?pitchPlayers(project,motion.homeColour||colour,motion.awayColour,motion,figureScale):'';
+ const athletes=['prematch','live'].includes(motion?.phase)?pitchPlayers(pitchProject,motion.homeColour||colour,motion.awayColour,motion,figureScale*pitchScale):'';
  const specs=SECTIONS.filter(s=>!s.corner).map(s=>({s,cfg:model.sections[s.id],sp:groundsStand(model.sections[s.id].stand)}));
  const depth=side=>Math.max(3,...specs.filter(x=>x.s.side===side).map(x=>{const next=works.find(j=>j.sections[x.s.id])?.sections[x.s.id],sp=next?groundsStand(next.stand):null,rear=c=>({compact:0,concourse:1.2,amenities:2,hospitality:2.6}[c?.rear]||0);return Math.max((x.sp?.depth||0)+rear(x.cfg),(sp?.depth||0)+rear(next));}))+1.1;
  const pedestrians=motion?.ambient?exteriorPeople(project,motion.phase||'idle',{left:20-depth('W'),right:52+depth('E'),top:20-depth('N'),bottom:40+depth('S')},figureScale):{far:'',near:''};

@@ -1,3 +1,4 @@
+import {europeanGround} from './european-grounds.js?v=1.193.0';
 import {WEMBLEY_SITE} from './wembley-world.js';
 import {SECTIONS,normaliseLayout} from './stadium-model.js';
 import {groundsStand} from './grounds-geometry.js';
@@ -18,8 +19,33 @@ export function fixedSiteError(club,layout){
  for(const side of sides)if((side==='W'&&20-d<r.x)||(side==='E'&&52+d>r.x+r.w)||(side==='N'&&20-d<r.y)||(side==='S'&&40+d>r.y+r.d))return 'This stand or roof extends beyond this ground’s fixed buildable site. Choose a smaller option.';
  }return null;
 }
-export function surroundingsLayer(site,layer,evening=false){const [x,y,w,h]=site.box;return `<image data-surroundings-layer="${layer}" href="assets/surroundings/${site.assetStem||Object.keys(FIXED_SURROUNDINGS).find(id=>FIXED_SURROUNDINGS[id]===site)}-${layer}.${site.assetExtension||'webp'}?v=${site.assetStem?.startsWith('scotland-')?'1.120.0':'1.74.0'}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" ${evening?'style="filter:brightness(.60) saturate(.9)"':''}/>`;}
+export function surroundingsLayer(site,layer,evening=false){
+ const [x,y,w,h]=site.box,stem=site.assetStem||Object.keys(FIXED_SURROUNDINGS).find(id=>FIXED_SURROUNDINGS[id]===site);
+ const version=site.assetVersion||(stem?.startsWith('scotland-')?'1.120.0':'1.74.0');
+ return `<image data-surroundings-layer="${layer}" href="assets/surroundings/${stem}-${layer}.${site.assetExtension||'webp'}?v=${version}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="none" ${evening?'style="filter:brightness(.60) saturate(.9)"':''}/>`;
+}
 
-export function registerEuropeanSites(clubs){for(const c of clubs)EURO_SITES.set(c.id,{...FIXED_SURROUNDINGS.C06,id:'fixed-'+c.id,name:c.country+' ground preset',assetStem:'C06',seatColour:c.colour});}
+const EUROPEAN_DISTRICTS={
+ EU002:'tiled',EU004:'metro',EU007:'metro',EU009:'metro',EU010:'park',EU011:'park',EU013:'park',EU014:'park',
+ EU018:'waterfront',EU021:'tiled',EU022:'tiled',EU024:'warehouse',EU025:'warehouse',EU030:'waterfront',
+ EU029:'tiled',EU031:'tiled',EU044:'waterfront',EU064:'park',EU066:'park',EU067:'park'
+};
+const EUROPEAN_SEATING={EU011:'#52789a',EU013:'#89a18a',EU064:'#52789a',EU066:'#89a18a'};
+const SMALL_GROUND_DISTRICTS=['park','tiled','warehouse','park'];
+const CITY_GROUND_DISTRICTS=['metro','tiled','warehouse','park'];
+const CONTINENTAL_RESERVE={x:4,y:4,w:66,d:58};
+
+export function registerEuropeanSites(clubs){
+ for(const c of clubs){
+  if(c.country==='Scotland')continue;
+  Object.assign(c,europeanGround(c));
+  const variants=c.capacity<26000?SMALL_GROUND_DISTRICTS:CITY_GROUND_DISTRICTS;
+  const index=Number(c.id.slice(2))%variants.length;
+  const district=EUROPEAN_DISTRICTS[c.id]||variants[index];
+  EURO_SITES.set(c.id,{...FIXED_SURROUNDINGS.C06,id:'fixed-'+c.id,name:c.country+' ground preset',
+   assetStem:'europe-'+district,assetVersion:'1.184.0',seatColour:EUROPEAN_SEATING[c.id]||c.colour,
+   renderScale:.92,reserve:CONTINENTAL_RESERVE});
+ }
+}
 
 export function registerScottishSites(clubs){for(const c of clubs)EURO_SITES.set(c.id,{...FIXED_SURROUNDINGS.C45,id:'fixed-'+c.id,name:c.town+' · '+(c.surroundings||'city')+' surroundings',assetStem:districtArt('scotland-'+(c.surroundings||'city'),c.id),assetExtension:'svg',seatColour:c.colour,reserve:{x:4,y:4,w:66,d:58}});}

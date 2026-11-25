@@ -9,7 +9,7 @@ const translations=new WeakMap();
 export function applyHistoricalManagers(c,enabled=true){
  const w=c?.managerWorld;if(!w)return;
  for(const [clubId,[name,nationality]] of Object.entries(HISTORICAL_MANAGERS)){
-  const m=w.people['M-'+clubId];if(!m||m.id===w.jobs[c.clubId])continue;
+  const m=w.people['M-'+clubId];if(!m||!m.fictional)continue;
   m.parodyName??=m.name;m.realName=name;m.historical=true;m.nationality=nationality;m.name=enabled?name:m.parodyName;
  }
  const old=translations.get(w);if(old?.enabled===enabled)return;

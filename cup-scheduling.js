@@ -1,7 +1,8 @@
 import {bookingWindow} from './club-events.js?v=1.173.0';
-import {assignVenue,inferredVenueId,SEMI_HOSTS} from './venues.js?v=1.93.0';
+import {assignVenue,inferredVenueId,SEMI_HOSTS} from './venues.js?v=1.193.0';
 export const cupAfter=(s,n)=>new Date(Date.parse(s+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
-const sameGround=(a,b)=>a===b||['C20','C34'].includes(a)&&['C20','C34'].includes(b);
+const sharedGrounds=[['C20','C34'],['EU007','EU009'],['EU011','EU064'],['EU013','EU066']];
+const sameGround=(a,b)=>a===b||sharedGrounds.some(clubs=>clubs.includes(a)&&clubs.includes(b));
 function dateFree(c,date,f){
  const venue=inferredVenueId(f);
  for(const r of c.schedule){const gap=Math.abs((Date.parse(r.date)-Date.parse(date))/86400000);

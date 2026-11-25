@@ -1,5 +1,5 @@
 import {rivalryHistory,rivalryQuestion} from './rivalry-history.js?v=1.106.0';
-import {managerFor} from './managers.js?v=1.96.0';
+import {managerFor} from './managers.js?v=1.193.0';
 import {hash} from './player-attributes.js?v=1.74.0';
 
 // Existing transfer-rivalry pairings, shared by recruitment and media.

@@ -19,7 +19,10 @@ export function fixtureVenue(f,league,career=null,homeCapacity=null){
  if(id===HAMPDEN_ID)return {id,name:HAMPDEN_CLUB.ground,capacity:52000,neutral:true,national:true,host:HAMPDEN_CLUB};
  if(id===WEMBLEY_ID)return {id,name:WEMBLEY_CLUB.ground,capacity:80000,neutral:true,national:true};
  const host=league.clubs.find(c=>c.id===id);if(!host)throw Error('Unknown match venue: '+id);
- return {id,name:host.ground,capacity:id===career?.clubId&&homeCapacity!==null?homeCapacity:host.capacity,neutral:!!f.neutral,national:false,host};
+ const ordinaryCapacity=id===career?.clubId&&homeCapacity!==null?homeCapacity:host.capacity;
+ const european=['champions-league','uefa-cup'].includes(f.competition);
+ const capacity=european&&host.europeanMatchCapacity?Math.min(ordinaryCapacity,host.europeanMatchCapacity):ordinaryCapacity;
+ return {id,name:host.ground,capacity,neutral:!!f.neutral,national:false,host};
 }
 export function validVenue(f,league){
  if(!f.venueId)return true; // v1.58 fixtures infer a venue without moving any date/result.

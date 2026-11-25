@@ -2,21 +2,22 @@ import {validStadiumBlueprint} from './stadium-blueprint.js?v=1.174.0';
 import {validStadiumHistory} from './stadium-history.js?v=1.109.0';
 import {validTacticalRecord} from './tactical-review.js?v=1.102.0';
 import {validMedia} from './manager-media.js?v=1.106.0';
-import {validLiveMatch} from './match-control.js?v=1.170.0';
+import {validLiveMatch} from './match-control.js?v=1.181.0';
 import {validClubHistory} from './club-history.js?v=1.80.0';
 import {validPlayerProgress} from './player-progress.js?v=1.165.0';
 import {validNegotiations,SQUAD_ROLES} from './negotiations.js?v=1.90.0';
 import {validLoanReport} from './loans.js?v=1.80.0';
-import {validManagerState} from './managers.js?v=1.96.0';
+import {validManagerState} from './managers.js?v=1.193.0';
 import {COUNTRIES} from './nationalities.js?v=1.89.0';
 import {validSeasonReviews} from './season-review.js?v=1.124.0';
 import {validUC} from './uefa-cup.js?v=1.93.0';
 import {validCL} from './champions-league.js?v=1.93.0';
-import {validVenue} from './venues.js?v=1.93.0';
+import {validVenue} from './venues.js?v=1.193.0';
 import {validFA} from './fa-cup.js?v=1.93.0';
 import {validMatchdays} from './matchday.js?v=1.93.0';
 import {validCup} from './league-cup.js?v=1.93.0';
 import {validDivisions,validPlayoffs} from './divisions.js?v=1.93.0';
+import {validEmployment} from './employment.js?v=1.193.0';
 import {validClubLife} from './club-events.js?v=1.173.0';
 // Portable career data only. Device audio/notification preferences are independent.
 export function createBackup(save,appVersion){return {format:'clubline-career-backup',formatVersion:1,appVersion,exportedAt:new Date().toISOString(),save:structuredClone(save)}}
@@ -34,7 +35,7 @@ export function parseBackup(text,league,formations,styles){
 
  if(c.managerProfile!==undefined&&(!object(c.managerProfile)||['firstName','surname'].some(k=>typeof c.managerProfile[k]!=='string'||c.managerProfile[k].length>30)||typeof c.managerProfile.nationality!=='string'||c.managerProfile.nationality&&!COUNTRIES[c.managerProfile.nationality]))fail();
  if(c.clubInvestment!==undefined){const x=c.clubInvestment,p=x?.pending,validDate=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&Number.isFinite(Date.parse(d));if(x?.upkeepWeekly!==undefined&&(!Number.isFinite(x.upkeepWeekly)||x.upkeepWeekly<0||x.upkeepWeekly>1000000))fail();if(p?.weeklyCost!==undefined&&(!Number.isFinite(p.weeklyCost)||p.weeklyCost<0||p.weeklyCost>1000000))fail();if(!object(x)||!validDate(x.nextAvailable)||p!==null&&(!object(p)||!['training','youth'].includes(p.kind)||p.field!==(p.kind==='youth'?'youthFunding':'trainingFunding')||typeof p.title!=='string'||!Number.isFinite(p.target)||p.target<1||p.target>5||!validDate(p.completion)))fail();}
- if(!validManagerState(c,league)||!validMedia(c,league))fail();
+ if(!validManagerState(c,league)||!validEmployment(c,league)||c.employment?.dismissal&&save.match||!validMedia(c,league))fail();
  if(c.playerIdentities!==undefined){if(!object(c.playerIdentities))fail();for(const x of Object.values(c.playerIdentities))if(!object(x)||typeof x.nationality!=='string'||x.nationality&&!COUNTRIES[x.nationality]||x.name!==undefined&&(typeof x.name!=='string'||x.name.length>100))fail();}
  if(c.managementMode!==undefined&&!['streamlined','in-depth'].includes(c.managementMode))fail();
  if(c.rosterEdition!==league.rosterEdition||c.version!==1||!clubs.has(c.clubId)||!Number.isFinite(c.balance)||!/^\d{4}-\d{2}-\d{2}$/.test(c.date)||!Number.isFinite(Date.parse(c.date))||!formations.includes(c.formation)||!styles.includes(c.style)||!object(c.players)||!object(c.stadium)||!Array.isArray(c.reports)||!Array.isArray(c.news)||!Array.isArray(c.schedule)||!c.schedule.length)fail();

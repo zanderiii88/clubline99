@@ -22,6 +22,17 @@ const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value)
 const count=value=>Number.isInteger(value)&&value>=0;
 const pair=value=>Array.isArray(value)&&value.length===2;
 
+const observationIds=['wide','fatigue','tempo'];
+export function normalisePitchContinuity(playback,time){
+ const handled=playback?.handledAdvice;
+ const penalty=playback?.penalty;
+ return {
+  handledAdvice:Array.isArray(handled)?observationIds.filter(id=>handled.includes(id)):[],
+  penalty:object(penalty)&&Number.isFinite(penalty.until)&&penalty.until>time&&penalty.until<=time+5
+   &&typeof penalty.text==='string'&&penalty.text.length<=300?{until:penalty.until,text:penalty.text}:null
+ };
+}
+
 function validPitchMatch(match,ids){
  const p=match.pitch;
  if(!object(p)||match.phase!=='live'||![0,1].includes(p.homeSide)||!pair(p.clubs)||
@@ -30,7 +41,7 @@ function validPitchMatch(match,ids){
  if(p.playback!==undefined&&(!object(p.playback)||!['full','highlights','extended'].includes(p.playback.view)||
   ![1,2,4,8].includes(p.playback.speed)||p.playback.sound!==undefined&&typeof p.playback.sound!=='boolean'))return false;
  const s=p.sim;
- if(!object(s)||s.version!==19||s.duration!==5400||!Number.isFinite(s.time)||s.time<0||s.time>7200||
+ if(!object(s)||s.version!==19||!Number.isFinite(s.duration)||!Number.isFinite(s.time)||s.time<0||s.time>7200||
   !['restart','play','injury','half-time','ended'].includes(s.phase)||!object(s.fullMatch)||![1,2].includes(s.fullMatch.half)||
   !count(s.seed)||!count(s.rng)||s.managedTeam!==0||!pair(s.score)||!s.score.every(count)||
   !pair(s.teams)||s.teams.some(t=>!object(t)||typeof t.name!=='string'||!object(t.plan))||
@@ -42,6 +53,9 @@ function validPitchMatch(match,ids){
  if(s.players.some(q=>!object(q)||![0,1].includes(q.team)||typeof q.id!=='string'||!ids.has(q.rosterId)||
   typeof q.name!=='string'||!count(q.number)||q.number<1||q.number>18||
   ![q.x,q.y,q.energy,q.pace].every(Number.isFinite)))return false;
+ const secondHalf=s.events.findLast(e=>e.type==='second-half');
+ const expectedDuration=s.fullMatch.half===2&&secondHalf?secondHalf.second+2700:5400;
+ if(Math.abs(s.duration-expectedDuration)>1e-8||s.duration<5400||s.duration>7200)return false;
  const playerIds=new Set(s.players.map(q=>q.id)),rosterIds=new Set(s.players.map(q=>q.rosterId));
  if(playerIds.size!==s.players.length||rosterIds.size!==s.players.length)return false;
  for(const [team,lineup] of [match.lineup,match.oppLineup].entries()){

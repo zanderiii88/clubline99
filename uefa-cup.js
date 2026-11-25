@@ -1,5 +1,5 @@
 import {scottishClub,scottishCareer} from './scottish-world.js?v=1.89.0';
-import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.93.0';
+import {insertCupFixture,cupAfter} from './cup-scheduling.js?v=1.193.0';
 import {divisionTable,domesticClub} from './divisions.js?v=1.93.0';
 import {clQualified} from './champions-league.js?v=1.93.0';
 export const UC_ID='uefa-cup';

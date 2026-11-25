@@ -1,6 +1,6 @@
-# CLUBLINE 99 - v1.159.0
+# CLUBLINE 99 - v1.193.0
 
-Retro football management with Streamlined and In-depth modes. v1.141 improves condition/workload, defensive spacing and pass anticipation, tackle commitment and loose-ball outcomes, and routine-versus-difficult saves in the experimental match lab. Three direct test situations support mobile review. The spatial engine remains separate from career matches and saves. v1.132 is the latest user-confirmed live checkpoint. No VAR.
+Retro football management with Streamlined and In-depth career modes. The v1.175 live checkpoint can be updated with the cumulative patch. In v1.193, the optional job market uses caretaker vacancies and saved applications.
 
 ## Full-match lab test
 

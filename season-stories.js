@@ -1,5 +1,5 @@
 import {divisionOf} from './divisions.js?v=1.93.0';
-import {managerFor} from './managers.js?v=1.96.0';
+import {managerFor} from './managers.js?v=1.193.0';
 import {rivalryHistory} from './rivalry-history.js?v=1.106.0';
 import {clubRivals} from './manager-media.js?v=1.106.0';
 const unique=(rows,key)=>{const seen=new Set();return rows.filter(r=>{const k=key(r);if(seen.has(k))return false;seen.add(k);return true;});};
